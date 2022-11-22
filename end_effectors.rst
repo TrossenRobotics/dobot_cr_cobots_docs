@@ -2,8 +2,6 @@
 End Effector Selection
 ======================
 
-.. TODO: move our selection front and center
-
 Dobot recommends a wide variety of end effectors depending on your application. The end effectors
 shown in the image below are listed because Dobot has verified that these vendors meet their
 performance criteria.
@@ -27,8 +25,6 @@ more convenient shopping experience.
 
 .. Concepts
 .. ========
-
-.. .. TODO: reduce what we have here to our current selection
 
 .. Below are just some of the options you have available to you when selecting an
 .. end effector for your robot application.
