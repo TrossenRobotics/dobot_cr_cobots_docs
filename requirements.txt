@@ -1,0 +1,4 @@
+# pip3 install -r requirements.txt
+
+# waiting until PR is accepted upstream
+git+https://github.com/LSinterbotix/youtube@alignment_support 

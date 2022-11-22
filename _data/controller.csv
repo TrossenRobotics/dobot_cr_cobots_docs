@@ -1,0 +1,14 @@
+Product,Dobot CC161
+Axis Control,6 axes + external axes
+Input Power,"100V~240V AC, 47Hz~63Hz"
+Output Power,"48V DC, Max 20A"
+Communication Interface,"EtherCAT (used for external axis), Ethernet"
+I/O Interface,"- 16 Digital Inputs
+- 16 Digital Inputs/Outputs (Multplexing)
+- 2 Analog Outputs (Voltage: 0V-10V, Current: 4mA-20mA)
+- 2 Analog Inputs (Voltage: 0V-10V, Current: 4mA-20mA)
+- 1 Incremental Encoder ABZ Input"
+Operating Environment,"- Temperature: 0℃ - 45℃
+- Humidity: <95%, and no condensation "
+IP Rating,IP20
+Cooling Method,Forced Air Cooling

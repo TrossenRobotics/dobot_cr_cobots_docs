@@ -1,0 +1,53 @@
+===========================================
+DH-Robotics AG-95 Adaptive Parallel Gripper
+===========================================
+
+.. list-table::
+    :widths: 50 50
+
+    * - .. list-table::
+            :header-rows: 1
+            :align: center
+            :widths: 30 40
+
+            * - Characteristic
+              - Value
+            * - Gripping Force
+              - 45~160 N
+            * - Stroke
+              - 95mm
+            * - Gripping Weight
+              - 3 kg
+            * - Repeat Accuracy (Positioning)
+              - ± 0.03 mm
+            * - Opening / Closing
+              - 0.7 s/0.7 s
+            * - Weight
+              - 1 kg
+            * - Noise Emission
+              - < 50 dB
+            * - Communication Interface
+              - | Standard: Modbus RTU (RS485), Digital I/O
+                | Optional: TCP/IP, USB2.0, CAN2.0A, PROFINET, EtherCAT
+            * - Nominal Voltage
+              - 24 V DC ± 10%
+            * - Nominal Current
+              - 0.8 A
+            * - Max Current
+              - 1.5 A
+            * - IP Rating
+              - IP 54
+            * - Recommended Operating Environment
+              - 0~40°C, < 85% RH
+      - .. image:: _images/ag95.png
+            :align: center
+            :width: 100%
+
+.. image:: _images/ag95drawing.png
+    :align: center
+
+.. image:: _images/ag95load.png
+    :align: center
+
+.. image:: _images/ag95base.png
+    :align: center

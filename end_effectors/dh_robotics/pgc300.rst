@@ -1,0 +1,56 @@
+==================================================
+DH-Robotics PGC 300 Collaborative Parallel Gripper
+==================================================
+
+.. list-table::
+    :widths: 50 50
+
+    * - .. list-table::
+            :header-rows: 1
+            :align: center
+            :widths: 30 40
+
+            * - Characteristic
+              - Value
+            * - Gripping Force
+              - 40~300 N
+            * - Stroke
+              - 60mm
+            * - Gripping Weight
+              - 6 kg
+            * - Repeat Accuracy (Positioning)
+              - ± 0.03 mm
+            * - Opening / Closing
+              - 0.8 s/0.8 s
+            * - Weight
+              - 1.5 kg
+            * - Noise Emission
+              - < 50 dB
+            * - Communication Interface
+              - | Standard: Modbus RTU (RS485), Digital I/O
+                | Optional: TCP/IP, USB2.0, CAN2.0A, PROFINET, EtherCAT
+            * - Nominal Voltage
+              - 24 V DC ± 10%
+            * - Nominal Current
+              - 0.25 A
+            * - Max Current
+              - 0.5 A
+            * - IP Rating
+              - IP 54
+            * - Recommended Operating Environment
+              - 0~40°C, < 85% RH
+      - .. image:: _images/pgc300.png
+            :align: center
+            :width: 100%
+
+.. image:: _images/pgc300drawing.png
+    :align: center
+
+.. image:: _images/pgc300load.png
+    :align: center
+
+.. image:: _images/pgc300base.png
+    :align: center
+
+.. image:: _images/pgc300finger.png
+    :align: center
