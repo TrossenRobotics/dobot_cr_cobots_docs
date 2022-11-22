@@ -2,8 +2,6 @@
 DobotSCStudio
 =============
 
-.. TODO more pictures should go everywhere
-
 This section details how to use DobotSCStudio to control your CR-Series Cobot.
 
 .. toctree::

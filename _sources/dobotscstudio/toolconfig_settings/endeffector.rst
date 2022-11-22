@@ -11,8 +11,6 @@ We will take the plugin to control the DH-Robotics end effectors as an example:
 1.  Click **Install** on the EndEffector page, select ``DH.zip``, then click **Open** to install
     the DH plugin.
 
-.. TODO get better screenshot here, not in chinese
-
 .. image:: _images/installdhplugin.png
     :align: center
 

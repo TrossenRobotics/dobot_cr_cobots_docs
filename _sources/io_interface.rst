@@ -57,8 +57,6 @@ is at or near 0VDC.
 .. image:: io_interface/_images/controller_inputoutput.png
     :align: center
 
-.. TODO
-
 .. Examples
 .. --------
 

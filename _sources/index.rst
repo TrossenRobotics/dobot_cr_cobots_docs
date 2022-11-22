@@ -15,14 +15,15 @@ those with no coding experience.
 What's Here
 ===========
 
-*  :doc:`specifications` - 
-*  :doc:`getting_started` - 
-*  :doc:`end_effectors` - 
-*  :doc:`dobotscstudio` - 
-*  :doc:`io_interface` - 
-*  :doc:`modbus_interface` - 
-*  :doc:`tcpip_protocol` - 
-*  :doc:`cobot_applications` - 
+*  :doc:`specifications` - Specifications for the CR Cobots and related hardware.
+*  :doc:`getting_started` - Guides to walk you through the process of setting up your cobot.
+*  :doc:`end_effectors` - Specification and usage information about related industrial end
+   effectors.
+*  :doc:`dobotscstudio` - Guides on how to use Dobot's Industrial Control software.
+*  :doc:`io_interface` - Guides on how to use the cobot's I/O interface.
+*  :doc:`modbus_interface` - Guides on how to use the cobot's Modbus interface.
+*  :doc:`tcpip_protocol` - Guides on how to use the TCP/IP protocol.
+*  :doc:`cobot_applications` - Guides on how to set up different applications like pick and place.
 
 Choosing the Right Cobot
 ------------------------
@@ -34,8 +35,8 @@ manipulated are the two largest factors in determining which model will work for
 We recommend determining the weight and reach requirements before selecting the appropriate
 platform.
 
-See the :doc:`CR-Series Family Specifications <./specifications>` for more
-specific information about each arm.
+See the :doc:`CR-Series Family Specifications <./specifications>` for more specific information
+about each arm.
 
 Choosing the Right End Effector
 -------------------------------
@@ -50,8 +51,6 @@ what you're looking for, let us know.
 See :ref:`End Effector Selection
 <end-effector-selection-trossen-robotics-end-effector-selection-label>` for more specific
 information about end effector concepts and the selection we offer.
-
-.. TODO maybe we make a videos page where we link to all videos we've made
 
 Table of Contents
 =================
