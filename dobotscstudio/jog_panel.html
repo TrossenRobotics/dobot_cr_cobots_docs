@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jog Panel &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Blockly" href="blockly.html" />
+    <link rel="prev" title="WiFi Setting" href="toolconfig_settings/wifisetting.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="scstudio_setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control_bar.html">Control Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameter_settings.html">Parameter Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolconfig_settings.html">ToolConfig Settings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Jog Panel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#operating-modes">Operating Modes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blockly.html">Blockly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripting.html">Scripting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../dobotscstudio.html">DobotSCStudio</a></li>
+      <li class="breadcrumb-item active">Jog Panel</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotscstudio/jog_panel.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="jog-panel">
+<h1>Jog Panel<a class="headerlink" href="#jog-panel" title="Permalink to this headline"></a></h1>
+<p>The jog panel allows the user to move the robot without having to run a program. This enables you
+to refine movements after getting close with the drag function, or to return to within the joint
+limits after triggering an out of bounds error.</p>
+<p>You can use the Jog Panel to move your robot using two methods. The first method is moving each
+joint individually. The second method is moving the end effector in X, Y, Z, RX, RY, and RZ.</p>
+<p>You can set the mode to run continuously as you hold down a button, or specify the step at which it
+should move when you click on the button.</p>
+<p>You can specify the coordinate system you would like the move the cobot relative to.</p>
+<p>The panel will display the location of the end effector and the joint positions depending on which
+coordinate system you have specified.</p>
+<img alt="../_images/jogpanel.png" class="align-center" src="../_images/jogpanel.png" />
+<div class="section" id="operating-modes">
+<h2>Operating Modes<a class="headerlink" href="#operating-modes" title="Permalink to this headline"></a></h2>
+<table border="1" class="colwidths-given docutils align-default">
+<colgroup>
+<col width="5%" />
+<col width="10%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>Step mode</td>
+<td>You can select the right step in the Step mode. The step supports 0.1, 1, 5, and 10. In
+Cartesian coordinate system, the step unit is mm, and in Joint coordinate system, the step
+unit is degrees.</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Coordinate system</td>
+<td>According to the actual needs, the user can select one of the preset user coordinate
+systems as the current user coordinate system; similarly, select one of the preset tool
+coordinate systems as the current user coordinate system</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Jogging type</td>
+<td>It supports three types: Joint coordinate system, user coordinate system and tool
+coordinate system</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Location data</td>
+<td>Displays the current joint position and tool center position</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>Jogging button</td>
+<td>In the Joint coordinate system: From top to bottom, jog J1, J2,…, and J6 Jog the robot in
+the Cartesian coordinate system: From top to bottom, jog the X, Y, Z, Rx, Ry, and Rz.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="toolconfig_settings/wifisetting.html" class="btn btn-neutral float-left" title="WiFi Setting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="blockly.html" class="btn btn-neutral float-right" title="Blockly" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,2456 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Function Documentation &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Python Wrapper" href="python_wrapper.html" />
+    <link rel="prev" title="TCP/IP Protocol" href="../tcpip_protocol.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Function Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#message-format">Message Format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#format-for-sending-messages">Format for sending messages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#format-for-feedback">Format for Feedback</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#feedback-when-receiving-successfully">Feedback when receiving successfully</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#feedback-when-failing-to-receive">Feedback when failing to receive</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#communication-protocol-dashboard-port">Communication Protocol - Dashboard Port</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enablerobot">EnableRobot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#disablerobot">DisableRobot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#clearerror">ClearError</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resetrobot">ResetRobot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#speedfactor">SpeedFactor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#user">User</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tool">Tool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#robotmode">RobotMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#payload">PayLoad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#do">DO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#doexecute">DOExecute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tooldo">ToolDO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tooldoexecute">ToolDOExecute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ao">AO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aoexecute">AOExecute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accj">AccJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accl">AccL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#speedj">SpeedJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#speedl">SpeedL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#arch">Arch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cp">CP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#limz">LimZ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setarmorientation">SetArmOrientation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#poweron">PowerOn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#runscript">RunScript</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stopscript">StopScript</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pausescript">PauseScript</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#continuescript">ContinueScript</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getholdregs">GetHoldRegs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setholdregs">SetHoldRegs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#communication-protocol-real-time-feedback-port">Communication Protocol — Real-time Feedback Port</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#movj">MovJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#movl">MovL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jointmovj">JointMovJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jump">Jump</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#relmovj">RelMovJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#relmovl">RelMovL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#movlio">MovLIO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#movjio">MovJIO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#arc">Arc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circle">Circle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#servoj">ServoJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#servop">ServoP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python_wrapper.html">Python Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_wrapper.html">C++ Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ros_wrapper.html">ROS Wrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+      <li class="breadcrumb-item active">Function Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/tcpip_protocol/functions.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="function-documentation">
+<h1>Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline"></a></h1>
+<p>This section provides a description of the protocol used to communicate with
+the Dobot through a remote terminal over a network.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Your CR-Series cobot must be running on firmware version <code class="docutils literal notranslate"><span class="pre">3.5.1.9</span></code> or
+greater.</p>
+</div>
+<div class="section" id="message-format">
+<h2>Message Format<a class="headerlink" href="#message-format" title="Permalink to this headline"></a></h2>
+<p>According to the design, CR-Series robots will open 29999 and 30003 server
+ports.</p>
+<p>Port 29999 (hereinafter referred to as Dashboard port) is
+responsible for receiving some simple instructions by sending and
+receiving one by one. That is, <strong>after receiving the agreed message
+format from the client, the Dashboard port will give feedback to the
+client</strong> .</p>
+<p>Port 30003 (hereinafter referred to as the real-time
+feedback port) <strong>feeds back the robot information every 8 ms. It only
+receives the agreed message format from the client but does not give
+feedback.</strong></p>
+<div class="section" id="format-for-sending-messages">
+<h3>Format for sending messages<a class="headerlink" href="#format-for-sending-messages" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Message</span> <span class="n">name</span><span class="p">(</span><span class="n">Param1</span><span class="p">,</span><span class="n">Param2</span><span class="p">,</span><span class="n">Param3</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">Paramn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The message format is shown as above. It consists of a message name,
+parameters in a bracket. Each parameter is separated by an English comma
+“,”. A complete message ends up with right parenthesis.</p>
+<p>Both message commands and message responses are in ASCII format
+(string).</p>
+</div>
+<div class="section" id="format-for-feedback">
+<h3>Format for Feedback<a class="headerlink" href="#format-for-feedback" title="Permalink to this headline"></a></h3>
+<div class="section" id="feedback-when-receiving-successfully">
+<h4>Feedback when receiving successfully<a class="headerlink" href="#feedback-when-receiving-successfully" title="Permalink to this headline"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Message name(Param1,Param2,Param3,...,Paramn)&quot;</span>
+</pre></div>
+</div>
+<p>It returns the message name, as shown above.</p>
+</div>
+<div class="section" id="feedback-when-failing-to-receive">
+<h4>Feedback when failing to receive<a class="headerlink" href="#feedback-when-failing-to-receive" title="Permalink to this headline"></a></h4>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>​&quot;could not understand:&#39;Message name(Param1,Param2,Param3,..,Paramn)&#39;&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="communication-protocol-dashboard-port">
+<h2>Communication Protocol - Dashboard Port<a class="headerlink" href="#communication-protocol-dashboard-port" title="Permalink to this headline"></a></h2>
+<p>The computer can directly send some simple instructions to the
+robot through port 29999. The table below is the Dashboard
+instruction list. The Dashboard commands can be used to control the
+robot, including enabling/disabling and resetting the robot.</p>
+<table border="1" class="docutils align-default">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Commands</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#enablerobot">EnableRobot</a></td>
+<td>enable the robot</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#disablerobot">DisableRobot</a></td>
+<td>disable the robot</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#clearerror">ClearError</a></td>
+<td>clear the error of the robot</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#resetrobot">ResetRobot</a></td>
+<td>the robot stops its current action, and receives enabling again</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#speedfactor">SpeedFactor</a></td>
+<td>set the global speed ratio</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#user">User</a></td>
+<td>select the identified user coordinate system</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tool">Tool</a></td>
+<td>select the identified tool coordinate system</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#robotmode">RobotMode</a></td>
+<td>mode of robot</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#payload">PayLoad</a></td>
+<td>set the current load</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#do">DO</a></td>
+<td>set the status of digital output port</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#doexecute">DOExecute</a></td>
+<td>set the status of digital output port (immediate command)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tooldo">ToolDO</a></td>
+<td>set the status of digital output port of the tool</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tooldoexecute">ToolDOExecute</a></td>
+<td>set the status of digital output port of the tool (immediate command)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#ao">AO</a></td>
+<td>set the voltage of analog output port of controller</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#aoexecute">AOExecute</a></td>
+<td>set the voltage of analog output port of controller (immediate command)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#accj">AccJ</a></td>
+<td>set the joint acceleration rate. This command is valid only when the motion mode is MovJ, MovJIO, MovJR, JointMovJ</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#accl">AccL</a></td>
+<td>set the Cartesian acceleration rate. This command is valid only when the motion mode is MovL, MovLIO, MovLR, Jump, Arc, Circle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#speedj">SpeedJ</a></td>
+<td>set the joint velocity rate. This command is valid only when the motion mode is MovJ, MovJIO, MovJR, JointMovJ</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#speedl">SpeedL</a></td>
+<td>set the Cartesian velocity rate. This command is valid only when the motion mode is MovL, MovLIO, MovLR, Jump, Arc, Circle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#arch">Arch</a></td>
+<td>set the index of arc parameters (StartHeight, zLimit, EndHeight) in the Jump mode</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#cp">CP</a></td>
+<td>set the continuous path rate during movement</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#limz">LimZ</a></td>
+<td>set the maximum lifting height in Jump mode</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#setarmorientation">SetArmOrientation</a></td>
+<td>set the orientation of the arm</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#poweron">PowerOn</a></td>
+<td>Power on the robot</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#runscript">RunScript</a></td>
+<td>run the script</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#stopscript">StopScript</a></td>
+<td>stop the script</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pausescript">PauseScript</a></td>
+<td>pause the script</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#continuescript">ContinueScript</a></td>
+<td>continue the script</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#getholdregs">GetHoldRegs</a></td>
+<td>read the holding register value</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#setholdregs">SetHoldRegs</a></td>
+<td>write in the holding register</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="enablerobot">
+<h3>EnableRobot<a class="headerlink" href="#enablerobot" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">EnableRobot()</span></code></li>
+<li>Description: enable the robot</li>
+<li>Parameters: None</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">EnableRobot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="disablerobot">
+<h3>DisableRobot<a class="headerlink" href="#disablerobot" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">DisableRobot()</span></code></li>
+<li>Description: disable the robot</li>
+<li>Parameters: None</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DisableRobot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="clearerror">
+<h3>ClearError<a class="headerlink" href="#clearerror" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">ClearError()</span></code></li>
+<li>Description: clear the error of the robot</li>
+<li>Parameters: null</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ClearError</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="resetrobot">
+<h3>ResetRobot<a class="headerlink" href="#resetrobot" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">ResetRobot()</span></code></li>
+<li>Description: stop the robot</li>
+<li>Parameters: None</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ResetRobot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="speedfactor">
+<h3>SpeedFactor<a class="headerlink" href="#speedfactor" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">SpeedFactor(ratio)</span></code></li>
+<li>Description: set the global speed ratio</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="18%" />
+<col width="11%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>ratio</td>
+<td>int</td>
+<td>speed ratio, range: 0~100 exclusive</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SpeedFactor</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="user">
+<h3>User<a class="headerlink" href="#user" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">User(index)</span></code></li>
+<li>Description: select the identified user coordinate system</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="16%" />
+<col width="10%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>index</td>
+<td>int</td>
+<td>select the identified user coordinate system, range: 0~9</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">User</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tool">
+<h3>Tool<a class="headerlink" href="#tool" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">Tool(index)</span></code></li>
+<li>Description: select the identified tool coordinate system</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="16%" />
+<col width="10%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>index</td>
+<td>int</td>
+<td>select the identified tool coordinate system, range: 0~9</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Tool</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="robotmode">
+<h3>RobotMode<a class="headerlink" href="#robotmode" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">RobotMode()</span></code></li>
+<li>Description: mode of robot</li>
+<li>Parameters: None</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RobotMode</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Return:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="11%" />
+<col width="48%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Mode</th>
+<th class="head">Description</th>
+<th class="head">Note</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>-1</td>
+<td>ROBOT_MODE_NO_CONTROLLER</td>
+<td>No controller</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>ROBOT_MODE_DISCONNECTED</td>
+<td>Disconnect</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>ROBOT_MODE_CONFIRM_SAFETY</td>
+<td>Configure safety parameters</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>ROBOT_MODE_BOOTING</td>
+<td>Start</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>ROBOT_MODE_POWER_OFF</td>
+<td>Power off</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>ROBOT_MODE_POWER_ON</td>
+<td>Power on</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>ROBOT_MODE_IDLE</td>
+<td>Idle</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>ROBOT_MODE_BACKDRIVE</td>
+<td>Drag</td>
+</tr>
+<tr class="row-even"><td>7</td>
+<td>ROBOT_MODE_RUNNING</td>
+<td>Run</td>
+</tr>
+<tr class="row-odd"><td>8</td>
+<td>ROBOT_MODE_UPDATING_FIRMWAREu</td>
+<td>Update firmware</td>
+</tr>
+<tr class="row-even"><td>9</td>
+<td>ROBOT_MODE_ERROR</td>
+<td>Alarm</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="payload">
+<h3>PayLoad<a class="headerlink" href="#payload" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">PayLoad(weight,inertia)</span></code></li>
+<li>Description: set the current load</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="30%" />
+<col width="23%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>weight</td>
+<td>double</td>
+<td>load weight kg</td>
+</tr>
+<tr class="row-odd"><td>inertia</td>
+<td>double</td>
+<td>load inertia kgm²</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">PayLoad</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="do">
+<h3>DO<a class="headerlink" href="#do" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">DO(index,0/1)</span></code></li>
+<li>Description: set the status of digital output port (queue command)</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="15%" />
+<col width="9%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>index</td>
+<td>int</td>
+<td>digital output index, range: 1~24</td>
+</tr>
+<tr class="row-odd"><td>0/1</td>
+<td>bool</td>
+<td>status of the digital output port. 1: High level; 0: Low level</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DO</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="doexecute">
+<h3>DOExecute<a class="headerlink" href="#doexecute" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">DOExecute(index,0/1)</span></code></li>
+<li>Description: set the status of digital output port (immediate
+command)</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="15%" />
+<col width="9%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>index</td>
+<td>int</td>
+<td>digital output index, range: 1~16</td>
+</tr>
+<tr class="row-odd"><td>0/1</td>
+<td>boo</td>
+<td>status of the digital output port. 1: High level; 0: Low level</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DOExecute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tooldo">
+<h3>ToolDO<a class="headerlink" href="#tooldo" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">ToolDO(index,0/1)</span></code></li>
+<li>Description: set the status of digital output port of the tool (queue
+command)</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="16%" />
+<col width="10%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>index</td>
+<td>int</td>
+<td>digital output index, range: 1 or 2</td>
+</tr>
+<tr class="row-odd"><td>0/1</td>
+<td>bool</td>
+<td>status of digital output port. 1: high level, 0: low level</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ToolDO</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tooldoexecute">
+<h3>ToolDOExecute<a class="headerlink" href="#tooldoexecute" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">ToolDOExecute(index,0/1)</span></code></li>
+<li>Description: set the status of digital output port of the tool
+(immediate command)</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="15%" />
+<col width="9%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>index</td>
+<td>int</td>
+<td>digital output index, range: 1 or 2</td>
+</tr>
+<tr class="row-odd"><td>0/1</td>
+<td>bool</td>
+<td>status of the digital output port. 1: high level; 0: low level</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ToolDOExecute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ao">
+<h3>AO<a class="headerlink" href="#ao" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">AO(index,value)</span></code></li>
+<li>Description: set the voltage of analog output port of controller
+(queue command)</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="19%" />
+<col width="14%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>index</td>
+<td>int</td>
+<td>analog output index, range: 1 or 2</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>double</td>
+<td>voltage of corresponding index, range: 0~10</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AO</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="aoexecute">
+<h3>AOExecute<a class="headerlink" href="#aoexecute" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">AOExecute(index,value)</span></code></li>
+<li>Description: set the voltage of analog output port of controller
+(immediate command)</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="19%" />
+<col width="14%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>index</td>
+<td>int</td>
+<td>analog output index, range: 1 or 2</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>double</td>
+<td>voltage of corresponding index, range: 0~10</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AOExecute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accj">
+<h3>AccJ<a class="headerlink" href="#accj" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">AccJ(R)</span></code></li>
+<li>Description: set the joint acceleration rate. This command is valid
+only when the motion mode is MovJ, MovJIO, MovJR, JointMovJ</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="21%" />
+<col width="13%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>R</td>
+<td>int</td>
+<td>joint acceleration rate, range: 1~100</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AccJ</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accl">
+<h3>AccL<a class="headerlink" href="#accl" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">AccL(R)</span></code></li>
+<li>Description: set the Cartesian acceleration rate. This command is
+valid only when the motion mode is MovL, MovLIO, MovLR, Jump, Arc,
+Circle</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="20%" />
+<col width="12%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>R</td>
+<td>int</td>
+<td>Cartesian acceleration rate, range: 1~100</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AccL</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="speedj">
+<h3>SpeedJ<a class="headerlink" href="#speedj" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">SpeedJ(R)</span></code></li>
+<li>Description: set the joint velocity rate. This command is valid only
+when the motion mode is MovJ, MovJIO, MovJR, JointMovJ</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="22%" />
+<col width="14%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>R</td>
+<td>int</td>
+<td>joint velocity rate, range: 1~100</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SpeedJ</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="speedl">
+<h3>SpeedL<a class="headerlink" href="#speedl" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">SpeedL(R)</span></code></li>
+<li>Description: set the Cartesian velocity rate. This command is valid
+only when the motion mode is MovL, MovLIO, MovLR, Jump, Arc, Circle</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="21%" />
+<col width="13%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>R</td>
+<td>int</td>
+<td>Cartesian velocity rate, range: 1~100</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SpeedL</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="arch">
+<h3>Arch<a class="headerlink" href="#arch" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">Arch(Index)</span></code></li>
+<li>Description: set the index of arc parameters (StartHeight, zLimit,
+EndHeight) in the Jump mode</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="23%" />
+<col width="14%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Index</td>
+<td>int</td>
+<td>arc parameters index, range: 0~9</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Arch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cp">
+<h3>CP<a class="headerlink" href="#cp" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">CP(R)</span></code></li>
+<li>Description: set CP rate. CP means continuous path, that is, when the
+robot arm reaches the end point from the starting point through the
+intermediate point, it passes through the intermediate point in a
+right angle or in a curve. This command is invalid for Jump mode.</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="22%" />
+<col width="14%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>R</td>
+<td>int</td>
+<td>continuous path rate, range: 1~100</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CP</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="limz">
+<h3>LimZ<a class="headerlink" href="#limz" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">LimZ(zValue)</span></code></li>
+<li>Description: set the maximum lifting height in Jump mode</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="12%" />
+<col width="7%" />
+<col width="81%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>zValue</td>
+<td>int</td>
+<td>maximum lifting height which cannot exceed the Z-axis limiting position of the robot</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">LimZ</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setarmorientation">
+<h3>SetArmOrientation<a class="headerlink" href="#setarmorientation" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">SetArmOrientation(LorR,UorD,ForN,Config6)</span></code></li>
+<li>Description: set the orientation of the arm</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="18%" />
+<col width="11%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>LorR</td>
+<td>int</td>
+<td>Arm direction: forward/backward (1/-1)</td>
+</tr>
+<tr class="row-odd"><td>UorD</td>
+<td>int</td>
+<td>Arm direction: up the elbow/down the elbow (1/-1)</td>
+</tr>
+<tr class="row-even"><td>ForN</td>
+<td>int</td>
+<td>Whether the wrist is reversed (1/-1)</td>
+</tr>
+<tr class="row-odd"><td>Config6</td>
+<td>int</td>
+<td>Sixth axis Angle sign</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SetArmOrientation</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="poweron">
+<h3>PowerOn<a class="headerlink" href="#poweron" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">PowerOn()</span></code></li>
+<li>Description: Power on the robot</li>
+<li>Parameters: None</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Once the robot is powered on, you can enable the robot after about 10 seconds.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">PowerOn</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="runscript">
+<h3>RunScript<a class="headerlink" href="#runscript" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">RunScript(projectName)</span></code></li>
+<li>Description: run the script</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="38%" />
+<col width="25%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>projectName</td>
+<td>string</td>
+<td>script name</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RunScript</span><span class="p">(</span><span class="n">demo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="stopscript">
+<h3>StopScript<a class="headerlink" href="#stopscript" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">StopScript()</span></code></li>
+<li>Description: stop the script</li>
+<li>Parameters: None</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">StopScript</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pausescript">
+<h3>PauseScript<a class="headerlink" href="#pausescript" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">PauseScript()</span></code></li>
+<li>Description: pause the script</li>
+<li>Parameters: None</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">PauseScript</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="continuescript">
+<h3>ContinueScript<a class="headerlink" href="#continuescript" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">ContinueScript()</span></code></li>
+<li>Description: continue the script</li>
+<li>Parameters: None</li>
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ContinueScript</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getholdregs">
+<h3>GetHoldRegs<a class="headerlink" href="#getholdregs" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">GetHoldRegs(id,addr,count,type)</span></code></li>
+<li>Description: read the holding register value</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="3%" />
+<col width="2%" />
+<col width="95%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>id</td>
+<td>int</td>
+<td>device ID of slave station, supporting at most five devices, range: 0~4. You should set it to 0 when accessing the internal slave of controller</td>
+</tr>
+<tr class="row-odd"><td>addr</td>
+<td>int</td>
+<td>starting address of the holding registers. range: 3095~4095</td>
+</tr>
+<tr class="row-even"><td>count</td>
+<td>int</td>
+<td>read the specified amount of data of type, range: 1~16</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td>string</td>
+<td>data type: If it is empty, read 16-bit unsigned integer ( two bytes, occupy one register) “U16”：read 16-bit unsigned integer ( two bytes, occupy one register) “U32”：read 32-bit unsigned integer (four bytes, occupy two registers) “F32”：read 32-bit single-precision floating-point number (four bytes, occupy two registers) “F64”：read 64-bit double-precision floating-point number (eight bytes, occupy four registers)</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">GetHoldRegs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3095</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Read a 16-bit unsigned integer starting at address 3095.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setholdregs">
+<h3>SetHoldRegs<a class="headerlink" href="#setholdregs" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">SetHoldRegs(id,addr,count,table,type)</span></code></li>
+<li>Description: write in the holding register</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="3%" />
+<col width="2%" />
+<col width="95%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>id</td>
+<td>int</td>
+<td>device ID of slave station, supporting at most five devices, range: 0~4. You should set it to 0 when accessing the internal slave of controller</td>
+</tr>
+<tr class="row-odd"><td>addr</td>
+<td>int</td>
+<td>starting address of the holding registers. range: 3095~4095</td>
+</tr>
+<tr class="row-even"><td>count</td>
+<td>int</td>
+<td>write the specified amount of data of type, range: 1~16</td>
+</tr>
+<tr class="row-odd"><td>table</td>
+<td>int</td>
+<td>holding register value</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>string</td>
+<td>data type: If it is empty, read 16-bit unsigned integer ( two bytes, occupy one register) “U16”：read 16-bit unsigned integer ( two bytes, occupy one register) “U32”：read 32-bit unsigned integer (four bytes, occupy two registers) “F32”：read 32-bit single-precision floating-point number (four bytes, occupy two registers) “F64”：read 64-bit double-precision floating-point number (eight bytes, occupy four registers)</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 29999</li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SetHoldRegs(0,3095,2,{6000,300}, “U16”)
+# Write two 16-bit unsigned integers: 6000 and 300, starting at address 3095.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="communication-protocol-real-time-feedback-port">
+<h2>Communication Protocol — Real-time Feedback Port<a class="headerlink" href="#communication-protocol-real-time-feedback-port" title="Permalink to this headline"></a></h2>
+<p>Port 30003 (real-time feedback port) is not only used to send
+motion-related protocols, but has other functions. The client can
+receive the robot information every 20ms, as shown in the following
+table. Each packet received through the real-time feedback port has 1440
+bytes, which are arranged in a standard format. The following table
+shows the order of the bytes.</p>
+<table border="1" class="docutils align-default">
+<colgroup>
+<col width="12%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+<col width="9%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Meaning</th>
+<th class="head">Type</th>
+<th class="head">Number of values</th>
+<th class="head">Size in bytes</th>
+<th class="head">Byte position value</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Message Size</td>
+<td>unsigned short</td>
+<td>1</td>
+<td>2</td>
+<td>0000 ~ 0001</td>
+<td>Total message length in bytes</td>
+</tr>
+<tr class="row-odd"><td>&#160;</td>
+<td>unsigned short</td>
+<td>3</td>
+<td>6</td>
+<td>0002 ~ 0007</td>
+<td>Reserved bits</td>
+</tr>
+<tr class="row-even"><td>Digital input bits</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0008 ~ 0015</td>
+<td>Current state of the digital inputs</td>
+</tr>
+<tr class="row-odd"><td>Digital outputs</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0016 ~ 0023</td>
+<td>digital output</td>
+</tr>
+<tr class="row-even"><td>Robot Mode</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0024 ~ 0031</td>
+<td>Robot mode</td>
+</tr>
+<tr class="row-odd"><td>Controller Timer</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0032 ~ 0039</td>
+<td>Controller realtime thread execution time</td>
+</tr>
+<tr class="row-even"><td>Time</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0040 ~ 0047</td>
+<td>Time elapsed since the controller was started</td>
+</tr>
+<tr class="row-odd"><td>test_value</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0048 ~ 0055</td>
+<td>Standard values for memory structure test: 0x0123 4567 89AB CDEF</td>
+</tr>
+<tr class="row-even"><td>Safety Mode</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0056 ~ 0063</td>
+<td>Safety mode</td>
+</tr>
+<tr class="row-odd"><td>Speed scaling</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0064 ~ 0071</td>
+<td>Speed scaling of the trajectory limiter</td>
+</tr>
+<tr class="row-even"><td>Linear momentum norm</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0072 ~ 0079</td>
+<td>Norm of Cartesian linear momentum</td>
+</tr>
+<tr class="row-odd"><td>V main</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0080 ~ 0087</td>
+<td>Masterboard: Main voltage</td>
+</tr>
+<tr class="row-even"><td>V robot</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0088 ~ 0095</td>
+<td>Masterboard: Robot voltage (48V)</td>
+</tr>
+<tr class="row-odd"><td>I robot</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0096 ~ 0103</td>
+<td>Masterboard: Robot current</td>
+</tr>
+<tr class="row-even"><td>Program state</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0104 ~ 0111</td>
+<td>Program state</td>
+</tr>
+<tr class="row-odd"><td>Safety Status</td>
+<td>double</td>
+<td>1</td>
+<td>8</td>
+<td>0112 ~ 0119</td>
+<td>Safety status</td>
+</tr>
+<tr class="row-even"><td>Tool Accelerometer values</td>
+<td>double</td>
+<td>3</td>
+<td>24</td>
+<td>0120 ~ 0143</td>
+<td>Tool x,y and z accelerometer values</td>
+</tr>
+<tr class="row-odd"><td>Elbow position</td>
+<td>double</td>
+<td>3</td>
+<td>24</td>
+<td>0144 ~ 0167</td>
+<td>Elbow position</td>
+</tr>
+<tr class="row-even"><td>Elbow velocity</td>
+<td>double</td>
+<td>3</td>
+<td>24</td>
+<td>0168 ~ 0191</td>
+<td>Elbow velocity</td>
+</tr>
+<tr class="row-odd"><td>q target</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0192 ~ 0239</td>
+<td>Target joint positions</td>
+</tr>
+<tr class="row-even"><td>qd target</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0240 ~ 0287</td>
+<td>Target joint velocities</td>
+</tr>
+<tr class="row-odd"><td>qdd target</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0288 ~ 0335</td>
+<td>Target joint accelerations</td>
+</tr>
+<tr class="row-even"><td>I target</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0336 ~ 0383</td>
+<td>Target joint currents</td>
+</tr>
+<tr class="row-odd"><td>M target</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0384 ~ 0431</td>
+<td>Target joint moments (torques)</td>
+</tr>
+<tr class="row-even"><td>q actual</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0432 ~ 0479</td>
+<td>Actual joint positions</td>
+</tr>
+<tr class="row-odd"><td>qd actual</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0480 ~ 0527</td>
+<td>Actual joint velocities</td>
+</tr>
+<tr class="row-even"><td>I actual</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0528 ~ 0575</td>
+<td>Actual joint currents</td>
+</tr>
+<tr class="row-odd"><td>I control</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0576 ~ 0623</td>
+<td>Joint control currents(temporally replaced by 0)</td>
+</tr>
+<tr class="row-even"><td>Tool vector actual</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0624 ~ 0671</td>
+<td>Actual Cartesian coordinates of the tool: (x,y,z,rx,ry,rz), where rx, ry and rz is a rotation vector representation of the tool orientation</td>
+</tr>
+<tr class="row-odd"><td>TCP speed actual</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0672 ~ 0719</td>
+<td>Actual speed of the tool given in Cartesian coordinates</td>
+</tr>
+<tr class="row-even"><td>TCP force</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0720 ~ 0767</td>
+<td>Generalised forces in the TCP</td>
+</tr>
+<tr class="row-odd"><td>Tool vector target</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0768 ~ 0815</td>
+<td>Target Cartesian coordinates of the tool: (x,y,z,rx,ry,rz), where rx, ry and rz is a rotation vector representation of the tool orientation</td>
+</tr>
+<tr class="row-even"><td>TCP speed target</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0816 ~ 0863</td>
+<td>Target speed of the tool given in Cartesian coordinates</td>
+</tr>
+<tr class="row-odd"><td>Motor temperatures</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0864 ~ 0911</td>
+<td>Temperature of each joint in degrees celsius</td>
+</tr>
+<tr class="row-even"><td>Joint Modes</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>0912 ~ 0959</td>
+<td>Joint control modes</td>
+</tr>
+<tr class="row-odd"><td>V actual</td>
+<td>double</td>
+<td>6</td>
+<td>48</td>
+<td>960 ~ 1007</td>
+<td>Actual joint voltages</td>
+</tr>
+<tr class="row-even"><td>&#160;</td>
+<td>double</td>
+<td>54</td>
+<td>432</td>
+<td>1008 ~ 1439</td>
+<td>Reserved bits</td>
+</tr>
+<tr class="row-odd"><td>TOTAL</td>
+<td>&#160;</td>
+<td>183</td>
+<td>1440</td>
+<td>&#160;</td>
+<td>183 values in a 1440-byte package</td>
+</tr>
+</tbody>
+</table>
+<p>Robot Mode returns the mode of robo as follows:</p>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="11%" />
+<col width="48%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Mode</th>
+<th class="head">Description</th>
+<th class="head">Note</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>-1</td>
+<td>ROBOT_MODE_NO_CONTROLLER</td>
+<td>No controller</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>ROBOT_MODE_DISCONNECTED</td>
+<td>Disconnect</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>ROBOT_MODE_CONFIRM_SAFETY</td>
+<td>Configure safety parameter</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>ROBOT_MODE_BOOTING</td>
+<td>Start</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>ROBOT_MODE_POWER_OFF</td>
+<td>Power off</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>ROBOT_MODE_POWER_ON</td>
+<td>Power on</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>ROBOT_MODE_IDLE</td>
+<td>Idle</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>ROBOT_MODE_BACKDRIVE</td>
+<td>Drag</td>
+</tr>
+<tr class="row-even"><td>7</td>
+<td>ROBOT_MODE_RUNNING</td>
+<td>Run</td>
+</tr>
+<tr class="row-odd"><td>8</td>
+<td>ROBOT_MODE_UPDATING_FIRMWARE</td>
+<td>Update firmware</td>
+</tr>
+<tr class="row-even"><td>9</td>
+<td>ROBOT_MODE_ERROR</td>
+<td>Alarm</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Description:<ul>
+<li>If the robot is powered off, the mode is 3.</li>
+<li>If the robot is powered on but not enabled, the mode is 4;</li>
+<li>If the robot is enabled successfully, the mode is 5.</li>
+<li>If the robot enters drag mode (enabled state), the mode is 6;</li>
+<li>If the robot moves, the mode is 7;</li>
+<li>Priority: Power on &lt; Idle &lt; Drag = Run &lt; Power off &lt; Alarm</li>
+<li>Alarm is the top priority. When other modes exist simultaneously, if there is an alarm, the mode is set to 9 first;</li>
+</ul>
+</li>
+</ul>
+<p>The following table shows the motion command protocols supported by the
+real-time feedback port. The real-time feedback port only receives
+commands but does not give feedback.</p>
+<table border="1" class="docutils align-default">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Command</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#movj">MovJ</a></td>
+<td>point to point movement, the target point is Cartesian point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#movl">MovL</a></td>
+<td>linear movement, the target point is Cartesian point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jointmovj">JointMovJ</a></td>
+<td>point to point movement, the target point is joint point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jump">Jump</a></td>
+<td>Jump movement, only supports Cartesian points</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#relmovj">RelMovJ</a></td>
+<td>move to the Cartesian offset position in a point-to-point mode</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#relmovl">RelMovL</a></td>
+<td>move to the Cartesian offset position in a straight line</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#movlio">MovLIO</a></td>
+<td>set the status of digital output port in straight line movement (can set several groups)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#movjio">MovJIO</a></td>
+<td>set the status of digital output port in point-to-point movement, and the target point is Cartesian point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#arc">Arc</a></td>
+<td>arc movement, needs to combine with other motion commands</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#circle">Circle</a></td>
+<td>circular movement, needs to combine with other motion commands</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#servoj">ServoJ</a></td>
+<td>dynamic following command based on joint space</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#servop">ServoP</a></td>
+<td>dynamic following command based on Cartesian space</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="movj">
+<h3>MovJ<a class="headerlink" href="#movj" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">MovJ(X,Y,Z,A,B,C)</span></code></li>
+<li>Description: point to point movement, the target point is Cartesian
+point</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="24%" />
+<col width="18%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>X</td>
+<td>double</td>
+<td>X-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Y</td>
+<td>double</td>
+<td>Y-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Z</td>
+<td>double</td>
+<td>Z-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>A</td>
+<td>double</td>
+<td>A-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>B</td>
+<td>double</td>
+<td>B-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>C</td>
+<td>double</td>
+<td>C-axis coordinates, unit: °</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MovJ</span><span class="p">(</span><span class="o">-</span><span class="mi">500</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="movl">
+<h3>MovL<a class="headerlink" href="#movl" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">MovL(X,Y,Z,A,B,C)</span></code></li>
+<li>Description: linear movement, the target point is Cartesian point</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="24%" />
+<col width="18%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>X</td>
+<td>double</td>
+<td>X-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Y</td>
+<td>double</td>
+<td>Y-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Z</td>
+<td>double</td>
+<td>Z-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>A</td>
+<td>double</td>
+<td>A-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>B</td>
+<td>double</td>
+<td>B-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>C</td>
+<td>double</td>
+<td>C-axis coordinates, unit: °</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MovL</span><span class="p">(</span><span class="o">-</span><span class="mi">500</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="jointmovj">
+<h3>JointMovJ<a class="headerlink" href="#jointmovj" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">JointMovJ(J1,J2,J3,J4,J5,J6)</span></code></li>
+<li>Description: point to point movement, the target point is joint point</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="26%" />
+<col width="20%" />
+<col width="54%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>J1</td>
+<td>double</td>
+<td>J1 coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>J2</td>
+<td>double</td>
+<td>J2 coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>J3</td>
+<td>double</td>
+<td>J3 coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>J4</td>
+<td>double</td>
+<td>J4 coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>J5</td>
+<td>double</td>
+<td>J5 coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>J6</td>
+<td>double</td>
+<td>J6 coordinates, unit: °</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">JointMovJ</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="jump">
+<h3>Jump<a class="headerlink" href="#jump" title="Permalink to this headline"></a></h3>
+<p>Not yet implemented!</p>
+</div>
+<div class="section" id="relmovj">
+<h3>RelMovJ<a class="headerlink" href="#relmovj" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">RelMovJ(offset1,offset2,offset3,offset4,offset5,offset6)</span></code></li>
+<li>Description: move to the Cartesian offset position in a
+point-to-point mode</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="26%" />
+<col width="20%" />
+<col width="54%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>offset1</td>
+<td>double</td>
+<td>J1-axis offset, unit: °</td>
+</tr>
+<tr class="row-odd"><td>offset2</td>
+<td>double</td>
+<td>J2-axis offset, unit: °</td>
+</tr>
+<tr class="row-even"><td>offset3</td>
+<td>double</td>
+<td>J3-axis offset, unit: °</td>
+</tr>
+<tr class="row-odd"><td>offset4</td>
+<td>double</td>
+<td>J4-axis offset, unit: °</td>
+</tr>
+<tr class="row-even"><td>offset5</td>
+<td>double</td>
+<td>J5-axis offset, unit: °</td>
+</tr>
+<tr class="row-odd"><td>offset6</td>
+<td>double</td>
+<td>J6-axis offset, unit: °</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RelMovJ</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="relmovl">
+<h3>RelMovL<a class="headerlink" href="#relmovl" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">RelMovL(offsetX,offsetY,offsetZ)</span></code></li>
+<li>Description: move to the Cartesian offset position in a straight line</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="15%" />
+<col width="12%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>offsetX</td>
+<td>double</td>
+<td>X-axis offset in the Cartesian coordinate system; unit: mm</td>
+</tr>
+<tr class="row-odd"><td>offsetY</td>
+<td>double</td>
+<td>Y-axis offset in the Cartesian coordinate system; unit: mm</td>
+</tr>
+<tr class="row-even"><td>offsetZ</td>
+<td>double</td>
+<td>Z-axis offset in the Cartesian coordinate system; unit: mm</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RelMovL</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="movlio">
+<h3>MovLIO<a class="headerlink" href="#movlio" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">MovLIO(X,Y,Z,A,B,C,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status})</span></code></li>
+<li>Description: set the status of digital output port in straight line
+movement, and the target point is Cartesian point</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="4%" />
+<col width="3%" />
+<col width="93%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>X</td>
+<td>double</td>
+<td>X-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Y</td>
+<td>double</td>
+<td>Y-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Z</td>
+<td>double</td>
+<td>Z-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>A</td>
+<td>double</td>
+<td>A-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>B</td>
+<td>double</td>
+<td>B-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>C</td>
+<td>double</td>
+<td>C-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>Mode</td>
+<td>int</td>
+<td>mode of Distance. 0: distance percentage; 1: distance away from the starting point or target point</td>
+</tr>
+<tr class="row-odd"><td>Distance</td>
+<td>int</td>
+<td>move specified distance. If Mode is 0, Distance refers to the distance percentage between the starting point and target point; range: 0~100. If Distance value is positive, it refers to the distance away from the starting point; If Distance value is negative, it refers to the distance away from the target point</td>
+</tr>
+<tr class="row-even"><td>Index</td>
+<td>int</td>
+<td>digital output index, range: 1~24</td>
+</tr>
+<tr class="row-odd"><td>Status</td>
+<td>int</td>
+<td>digital output status, range: 0 or 1</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MovLIO</span><span class="p">(</span><span class="o">-</span><span class="mi">500</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">,{</span><span class="mi">0</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="movjio">
+<h3>MovJIO<a class="headerlink" href="#movjio" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">MovJIO(X,Y,Z,A,B,C,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status})</span></code></li>
+<li>Description: set the status of digital output port in point-to-point
+movement, and the target point is Cartesian point</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="4%" />
+<col width="3%" />
+<col width="93%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>X</td>
+<td>double</td>
+<td>X-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Y</td>
+<td>double</td>
+<td>Y-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Z</td>
+<td>double</td>
+<td>Z-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>A</td>
+<td>double</td>
+<td>A-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>B</td>
+<td>double</td>
+<td>B-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>C</td>
+<td>double</td>
+<td>C-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>Mode</td>
+<td>int</td>
+<td>mode of Distance. 0: distance percentage; 1: distance away from the starting point or target point</td>
+</tr>
+<tr class="row-odd"><td>Distance</td>
+<td>int</td>
+<td>move specified distance. If Mode is 0, Distance refers to the distance percentage between the starting point and target point; range: 0~100. If Distance value is positive, it refers to the distance away from the starting point; If Distance value is negative, it refers to the distance away from the target point</td>
+</tr>
+<tr class="row-even"><td>Index</td>
+<td>int</td>
+<td>digital output index, range: 1~24</td>
+</tr>
+<tr class="row-odd"><td>Status</td>
+<td>int</td>
+<td>digital output status, range: 0 or 1</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MovJIO</span><span class="p">(</span><span class="o">-</span><span class="mi">500</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">,{</span><span class="mi">0</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="arc">
+<h3>Arc<a class="headerlink" href="#arc" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">Arc(X1,Y1,Z1,A1,B1,C1,X2,Y2,Z2,A2,B2,C2)</span></code></li>
+<li>Description: move from the current position to a target position in
+an arc interpolated mode under the Cartesian coordinate system
+This command needs to combine with other motion commands to obtain
+the starting point of an arc trajectory</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="17%" />
+<col width="13%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>X1</td>
+<td>double</td>
+<td>X1-axis coordinates of arc center point, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Y1</td>
+<td>double</td>
+<td>Y1-axis coordinates of arc center point, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Z1</td>
+<td>double</td>
+<td>Z1-axis coordinates of arc center point, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>A1</td>
+<td>double</td>
+<td>A1-axis coordinates of arc center point, unit: °</td>
+</tr>
+<tr class="row-even"><td>B1</td>
+<td>double</td>
+<td>B1-axis coordinates of arc center point, unit: °</td>
+</tr>
+<tr class="row-odd"><td>C1</td>
+<td>double</td>
+<td>C1-axis coordinates of arc center point, unit: °</td>
+</tr>
+<tr class="row-even"><td>X2</td>
+<td>double</td>
+<td>X2-axis coordinates of arc ending point, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Y2</td>
+<td>double</td>
+<td>Y2-axis coordinates of arc ending point, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Z2</td>
+<td>double</td>
+<td>Z2-axis coordinates of arc ending point, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>A2</td>
+<td>double</td>
+<td>A2-axis coordinates of arc ending point, unit: °</td>
+</tr>
+<tr class="row-even"><td>B2</td>
+<td>double</td>
+<td>B2-axis coordinates of arc ending point, unit: °</td>
+</tr>
+<tr class="row-odd"><td>C2</td>
+<td>double</td>
+<td>C2-axis coordinates of arc ending point, unit: °</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+</div>
+<div class="section" id="circle">
+<h3>Circle<a class="headerlink" href="#circle" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">Circle(count,X1,Y1,Z1,A1,B1,C1,X2,Y2,Z2,A2,B2,C2)</span></code></li>
+<li>Description: circular movement. This command needs to combine with
+other motion commands</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="23%" />
+<col width="18%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>count</td>
+<td>int</td>
+<td>number of circles</td>
+</tr>
+<tr class="row-odd"><td>X1</td>
+<td>double</td>
+<td>X1-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Y1</td>
+<td>double</td>
+<td>Y1-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Z1</td>
+<td>double</td>
+<td>Z1-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>A1</td>
+<td>double</td>
+<td>A1-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>B1</td>
+<td>double</td>
+<td>B1-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>C1</td>
+<td>double</td>
+<td>C1-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>X2</td>
+<td>double</td>
+<td>X2-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Y2</td>
+<td>double</td>
+<td>Y2-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Z2</td>
+<td>double</td>
+<td>Z2-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>A2</td>
+<td>double</td>
+<td>A2-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>B2</td>
+<td>double</td>
+<td>B2-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>C2</td>
+<td>double</td>
+<td>C2-axis coordinates, unit: °</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+</div>
+<div class="section" id="servoj">
+<h3>ServoJ<a class="headerlink" href="#servoj" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">ServoJ(J11,J12,J13,J14,J15,J16)</span></code></li>
+<li>Description: dynamic following command based on joint space</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="23%" />
+<col width="18%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>J11</td>
+<td>double</td>
+<td>J11 coordinates of P1, unit: °</td>
+</tr>
+<tr class="row-odd"><td>J12</td>
+<td>double</td>
+<td>J12 coordinates of P1, unit: °</td>
+</tr>
+<tr class="row-even"><td>J13</td>
+<td>double</td>
+<td>J13 coordinates of P1, unit: °</td>
+</tr>
+<tr class="row-odd"><td>J14</td>
+<td>double</td>
+<td>J14 coordinates of P1, unit: °</td>
+</tr>
+<tr class="row-even"><td>J15</td>
+<td>double</td>
+<td>J15 coordinates of P1, unit: °</td>
+</tr>
+<tr class="row-odd"><td>J16</td>
+<td>double</td>
+<td>J16 coordinates of P1, unit: °</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ServoJ</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="servop">
+<h3>ServoP<a class="headerlink" href="#servop" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>Function: <code class="docutils literal notranslate"><span class="pre">ServoP(X1,Y1,Z1,A1,B1,C1)</span></code></li>
+<li>Description: dynamic following command based on Cartesian space</li>
+<li>Parameters:</li>
+</ul>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="23%" />
+<col width="18%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>X1</td>
+<td>double</td>
+<td>X1-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>Y1</td>
+<td>double</td>
+<td>Y1-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-even"><td>Z1</td>
+<td>dou</td>
+<td>Z1-axis coordinates, unit: mm</td>
+</tr>
+<tr class="row-odd"><td>A1</td>
+<td>double</td>
+<td>A1-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-even"><td>B1</td>
+<td>double</td>
+<td>B1-axis coordinates, unit: °</td>
+</tr>
+<tr class="row-odd"><td>C1</td>
+<td>double</td>
+<td>C1-axis coordinates, unit: °</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li>Supporting port: 30003</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ServoP</span><span class="p">(</span><span class="o">-</span><span class="mi">500</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tcpip_protocol.html" class="btn btn-neutral float-left" title="TCP/IP Protocol" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python_wrapper.html" class="btn btn-neutral float-right" title="Python Wrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

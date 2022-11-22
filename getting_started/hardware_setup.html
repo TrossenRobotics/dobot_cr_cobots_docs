@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hardware Setup &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Software Setup" href="software_setup.html" />
+    <link rel="prev" title="Cobot Installation and Mounting" href="mounting.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../getting_started.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mounting.html">Cobot Installation and Mounting</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Hardware Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#video-tutorial">Video Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html">Software Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networking.html">Networking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../getting_started.html">Getting Started</a></li>
+      <li class="breadcrumb-item active">Hardware Setup</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/getting_started/hardware_setup.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="hardware-setup">
+<h1>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Permalink to this headline"></a></h1>
+<p>This section details the hardware setup for your CR-Series Cobot.</p>
+<ol class="arabic simple">
+<li>Unbox the robot and mount it securely in your workstation. More details on how to mount your
+robot can be found in the <a class="reference internal" href="mounting.html"><span class="doc">Mounting</span></a> section.</li>
+<li>Plug the power and control cable from the back of the controller to the port on the robot.</li>
+</ol>
+<img alt="../_images/power_cable.png" class="align-center" src="../_images/power_cable.png" style="width: 50%;" />
+<img alt="../_images/power_cable_robot.png" class="align-center" src="../_images/power_cable_robot.png" style="width: 50%;" />
+<ol class="arabic simple" start="3">
+<li>Plug the wall power cable into a wall outlet and to the back of the controller.</li>
+</ol>
+<img alt="../_images/wall_power_controller.png" class="align-center" src="../_images/wall_power_controller.png" style="width: 50%;" />
+<ol class="arabic simple" start="4">
+<li>Uncap the middle connector at the top of the controller. Plug in the emergency stop connector.
+Make sure the white dots at the top of the connectors are aligned.</li>
+</ol>
+<img alt="../_images/white_dot_connector.png" class="align-center" src="../_images/white_dot_connector.png" style="width: 50%;" />
+<img alt="../_images/white_dot_cable.png" class="align-center" src="../_images/white_dot_cable.png" style="width: 50%;" />
+<img alt="../_images/plug_in_estop.png" class="align-center" src="../_images/plug_in_estop.png" style="width: 50%;" />
+<ol class="arabic simple" start="5">
+<li>If using wifi, plug your wifi dongle into the usb port.</li>
+</ol>
+<img alt="../_images/wifi_dongle.png" class="align-center" src="../_images/wifi_dongle.png" style="width: 50%;" />
+<ol class="arabic simple" start="6">
+<li>If using ethernet, plug your ethernet cable into the ethernet port.</li>
+</ol>
+<img alt="../_images/ethernet.png" class="align-center" src="../_images/ethernet.png" style="width: 50%;" />
+<ol class="arabic simple" start="7">
+<li>Flick the switch at the bottom of the controller to the on position.</li>
+</ol>
+<img alt="../_images/flip_switch_on.png" class="align-center" src="../_images/flip_switch_on.png" style="width: 50%;" />
+<ol class="arabic simple" start="8">
+<li>Turn the controller on.</li>
+</ol>
+<img alt="../_images/turn_controller_on.png" class="align-center" src="../_images/turn_controller_on.png" style="width: 50%;" />
+<ol class="arabic simple" start="9">
+<li>Watch for the blinking lights on the button panel of the robot, indicating that the robot is
+powered on.</li>
+</ol>
+<img alt="../_images/blinking_light.png" class="align-center" src="../_images/blinking_light.png" style="width: 50%;" />
+<div class="section" id="video-tutorial">
+<h2>Video Tutorial<a class="headerlink" href="#video-tutorial" title="Permalink to this headline"></a></h2>
+<div class="video_wrapper align-center" style="text-align: center">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/SxMt3-MuoYE" style="border: 0; height: 345px; width: 560px">
+</iframe></div></div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mounting.html" class="btn btn-neutral float-left" title="Cobot Installation and Mounting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="software_setup.html" class="btn btn-neutral float-right" title="Software Setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

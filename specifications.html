@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Specifications &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CR3" href="specifications/cr3.html" />
+    <link rel="prev" title="Dobot CR-Series Cobots" href="index.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Specifications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#in-depth-cr-series-arm-specifications">In-Depth CR-Series Arm Specifications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specifications/cr3.html">CR3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specifications/cr5.html">CR5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specifications/cr10.html">CR10</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specifications/cr16.html">CR16</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#whole-family-specifications">Whole Family Specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#controller-specifications">Controller Specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#end-effector">End Effector</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#end-effector-size">End Effector Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-description">Load Description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#certifications">Certifications</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Specifications</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/specifications.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="specifications">
+<h1>Specifications<a class="headerlink" href="#specifications" title="Permalink to this headline"></a></h1>
+<div class="section" id="in-depth-cr-series-arm-specifications">
+<h2>In-Depth CR-Series Arm Specifications<a class="headerlink" href="#in-depth-cr-series-arm-specifications" title="Permalink to this headline"></a></h2>
+<p>This section provides links to each of the CR-Series Arms’ more detailed specifications.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specifications/cr3.html">CR3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specifications/cr5.html">CR5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specifications/cr10.html">CR10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specifications/cr16.html">CR16</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="whole-family-specifications">
+<h2>Whole Family Specifications<a class="headerlink" href="#whole-family-specifications" title="Permalink to this headline"></a></h2>
+<table border="1" class="colwidths-given docutils align-center">
+<colgroup>
+<col width="8%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Cobot Name</th>
+<th class="head">Maximum Reach</th>
+<th class="head">Repeatability</th>
+<th class="head">Maximum Payload</th>
+<th class="head">Product Weight</th>
+<th class="head">Total Workspace</th>
+<th class="head">Recommended Workspace</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>CR3</td>
+<td>795mm</td>
+<td>±0.02mm</td>
+<td>3kg</td>
+<td>16.5kg</td>
+<td>1590mm</td>
+<td>1113mm</td>
+</tr>
+<tr class="row-odd"><td>CR5</td>
+<td>1096mm</td>
+<td>±0.02mm</td>
+<td>5kg</td>
+<td>23kg</td>
+<td>2192mm</td>
+<td>1534mm</td>
+</tr>
+<tr class="row-even"><td>CR10</td>
+<td>1525mm</td>
+<td>±0.03mm</td>
+<td>10kg</td>
+<td>38kg</td>
+<td>3050mm</td>
+<td>2135mm</td>
+</tr>
+<tr class="row-odd"><td>CR16</td>
+<td>1223mm</td>
+<td>±0.03mm</td>
+<td>16kg</td>
+<td>37kg</td>
+<td>2446mm</td>
+<td>1712mm</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="controller-specifications">
+<h2>Controller Specifications<a class="headerlink" href="#controller-specifications" title="Permalink to this headline"></a></h2>
+<img alt="_images/controller.png" class="align-right" src="_images/controller.png" />
+<table border="1" class="colwidths-given docutils align-center">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Product</td>
+<td>Dobot CC161</td>
+</tr>
+<tr class="row-even"><td>Axis Control</td>
+<td>6 axes + external axes</td>
+</tr>
+<tr class="row-odd"><td>Input Power</td>
+<td>100V~240V AC, 47Hz~63Hz</td>
+</tr>
+<tr class="row-even"><td>Output Power</td>
+<td>48V DC, Max 20A</td>
+</tr>
+<tr class="row-odd"><td>Communication Interface</td>
+<td>EtherCAT (used for external axis), Ethernet</td>
+</tr>
+<tr class="row-even"><td>I/O Interface</td>
+<td><ul class="first last simple">
+<li>16 Digital Inputs</li>
+<li>16 Digital Inputs/Outputs (Multplexing)</li>
+<li>2 Analog Outputs (Voltage: 0V-10V, Current: 4mA-20mA)</li>
+<li>2 Analog Inputs (Voltage: 0V-10V, Current: 4mA-20mA)</li>
+<li>1 Incremental Encoder ABZ Input</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>Operating Environment</td>
+<td><ul class="first last simple">
+<li>Temperature: 0℃ - 45℃</li>
+<li>Humidity: &lt;95%, and no condensation</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td>IP Rating</td>
+<td>IP20</td>
+</tr>
+<tr class="row-odd"><td>Cooling Method</td>
+<td>Forced Air Cooling</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="end-effector">
+<h2>End Effector<a class="headerlink" href="#end-effector" title="Permalink to this headline"></a></h2>
+<div class="section" id="end-effector-size">
+<h3>End Effector Size<a class="headerlink" href="#end-effector-size" title="Permalink to this headline"></a></h3>
+<img alt="_images/endeffector_size.png" class="align-center" src="_images/endeffector_size.png" style="width: 80%;" />
+</div>
+<div class="section" id="load-description">
+<h3>Load Description<a class="headerlink" href="#load-description" title="Permalink to this headline"></a></h3>
+<p>The robot actuator can bear the load of the cylinder whose center of mass is located at an axial
+distance of LD80mm from the center of the end effector and a radial distance of LR60mm and no more
+than maximum payload.</p>
+<img alt="_images/endeffector_load.png" class="align-center" src="_images/endeffector_load.png" />
+</div>
+</div>
+<div class="section" id="certifications">
+<h2>Certifications<a class="headerlink" href="#certifications" title="Permalink to this headline"></a></h2>
+<p>The Dobot CR-Series cobots and their controllers are  UL 1740 certified by SGS North America. You
+can download the certificate and procedure below.</p>
+<ul class="simple">
+<li><a class="reference download internal" download="" href="_downloads/90b7aaf32fd3b6702e2b381c7e4ab8cd/SGS_UL_CERTIFICATE.pdf"><code class="xref download docutils literal notranslate"><span class="pre">SGS</span> <span class="pre">UL</span> <span class="pre">Certificate</span> <span class="pre">of</span> <span class="pre">Compliance</span></code></a></li>
+<li><a class="reference download internal" download="" href="_downloads/228060f75579cc82b77671264220ec9c/SGS_UL_PROCEDURE.pdf"><code class="xref download docutils literal notranslate"><span class="pre">SGS</span> <span class="pre">UL</span> <span class="pre">Procedure</span></code></a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Dobot CR-Series Cobots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="specifications/cr3.html" class="btn btn-neutral float-right" title="CR3" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controller Setting &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Remote Control" href="remote_control.html" />
+    <link rel="prev" title="I/O Monitor" href="io_monitor.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../dobotscstudio.html">DobotSCStudio</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../scstudio_setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../control_bar.html">Control Bar</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../parameter_settings.html">Parameter Settings</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="setting_user_coordinate_system.html">Setting User Coordinate System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setting_tool_coordinate_system.html">Setting Tool Coordinate System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="home_point.html">Home Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io_monitor.html">I/O Monitor</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Controller Setting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reboot">Reboot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#update">Update</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="remote_control.html">Remote Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="robotparams.html">RobotParams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="safesetting.html">Safe Setting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../toolconfig_settings.html">ToolConfig Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jog_panel.html">Jog Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../blockly.html">Blockly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../scripting.html">Scripting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../dobotscstudio.html">DobotSCStudio</a></li>
+          <li class="breadcrumb-item"><a href="../parameter_settings.html">Parameter Settings</a></li>
+      <li class="breadcrumb-item active">Controller Setting</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotscstudio/parameter_settings/controller_setting.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="controller-setting">
+<h1>Controller Setting<a class="headerlink" href="#controller-setting" title="Permalink to this headline"></a></h1>
+<div class="section" id="reboot">
+<h2>Reboot<a class="headerlink" href="#reboot" title="Permalink to this headline"></a></h2>
+<p>When the controller firmware has been updated or the controller is abnormal, you need to reboot the
+controller. To do this, press the <strong>Reboot</strong> button in this menu.</p>
+<img alt="../../_images/rebootpage.png" class="align-center" src="../../_images/rebootpage.png" />
+</div>
+<div class="section" id="update">
+<h2>Update<a class="headerlink" href="#update" title="Permalink to this headline"></a></h2>
+<p>When the controller firmware needs to be updated, you can import the latest firmware on this page.
+After importing the firmware, please reboot the controller. Please contact a Dobot support engineer
+to obtain the latest firmware.</p>
+<img alt="../../_images/updatepage.png" class="align-center" src="../../_images/updatepage.png" />
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="io_monitor.html" class="btn btn-neutral float-left" title="I/O Monitor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="remote_control.html" class="btn btn-neutral float-right" title="Remote Control" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

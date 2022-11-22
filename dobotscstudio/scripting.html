@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scripting &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="I/O Interface" href="../io_interface.html" />
+    <link rel="prev" title="Blockly" href="blockly.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="scstudio_setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control_bar.html">Control Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameter_settings.html">Parameter Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolconfig_settings.html">ToolConfig Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jog_panel.html">Jog Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blockly.html">Blockly</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scripting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#project-description">Project Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#programming-interface-description">Programming Interface Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#programming-description">Programming Description</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creating-project">Creating Project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#import-project">Import Project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teaching-points">Teaching Points</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#writing-a-program">Writing a Program</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../dobotscstudio.html">DobotSCStudio</a></li>
+      <li class="breadcrumb-item active">Scripting</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotscstudio/scripting.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="scripting">
+<h1>Scripting<a class="headerlink" href="#scripting" title="Permalink to this headline"></a></h1>
+<p>DobotSCStudio offers a traditional script-based programming interface used to control the robot
+using the Lua language.</p>
+<img alt="../_images/luabasic.png" class="align-center" src="../_images/luabasic.png" />
+<div class="section" id="project-description">
+<h2>Project Description<a class="headerlink" href="#project-description" title="Permalink to this headline"></a></h2>
+<p>Programs are managed in project form, including teaching points list, global variables, and program
+files. The diagram below describes the structure of a project.</p>
+<ul class="simple">
+<li>Multiple threads are supported in scripts. Up to 5 threads can be executed simultaneously.
+<code class="docutils literal notranslate"><span class="pre">scr0.lua</span></code> is the main thread. Other threads are sub threads, which run programs parallel to
+the main thread.</li>
+<li>Motion commands cannot be called in subthreads. Only the main thread supports motion commands.</li>
+<li>In addition, the global variable module is only used to define global variables and module
+functions. The motion commands cannot be called here.</li>
+</ul>
+</div>
+<div class="section" id="programming-interface-description">
+<h2>Programming Interface Description<a class="headerlink" href="#programming-interface-description" title="Permalink to this headline"></a></h2>
+<p>When programming a robot, your authority level must be programmer or higher. The image below shows
+the programming panel.</p>
+<img alt="../_images/lualabelled.png" class="align-center" src="../_images/lualabelled.png" />
+<table border="1" class="colwidths-given docutils align-default">
+<colgroup>
+<col width="7%" />
+<col width="21%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>Project Files</td>
+<td>A directory tree of files related to all open projects</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Common Button</td>
+<td>Buttons used to interact with the programming area</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Programming Area</td>
+<td>A text editor used to create your routines, program functions, and
+define variables.</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Running Button</td>
+<td>Buttons used to interact with the project used build, run, stop, etc.</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>Debug Panel</td>
+<td>Displays the debug output of the program</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="programming-description">
+<h2>Programming Description<a class="headerlink" href="#programming-description" title="Permalink to this headline"></a></h2>
+<div class="section" id="creating-project">
+<h3>Creating Project<a class="headerlink" href="#creating-project" title="Permalink to this headline"></a></h3>
+<p><strong>Prerequisites</strong>:</p>
+<ul class="simple">
+<li>The robot has been powered on.</li>
+</ul>
+<p><strong>Procedure</strong>:</p>
+<ol class="arabic simple">
+<li>Navigate to the script page.</li>
+<li>Start a new project by pressing the button displaying a page and a “+”. Give your project a
+title and, if desired, select a template. Click <strong>OK</strong>.</li>
+<li>Set the number of threads based on site requirements. Click <strong>thread</strong> and right-click <strong>New
+thread file</strong>.</li>
+<li>(Optional) Import the existing taught positions list.</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>If you want to reuse a taught positions list from an existing project, right-click
+<strong>Point</strong> and click <strong>Import Points File</strong>.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="import-project">
+<h3>Import Project<a class="headerlink" href="#import-project" title="Permalink to this headline"></a></h3>
+<p>If you need to reuse project files from another robot, you can export project files from the robot
+to your local computer and then import them into the current robot.</p>
+<p><strong>Prerequisites</strong>:</p>
+<ul class="simple">
+<li>The robot has been powered on.</li>
+</ul>
+<p><strong>Procedure</strong>:</p>
+<ol class="arabic simple">
+<li>Click <strong>Workspace</strong> and right-click <strong>Import Project</strong>.</li>
+<li>Select a project to be imported.<ul>
+<li>In the <strong>Import Project</strong> page, there are two files: <code class="docutils literal notranslate"><span class="pre">prj.json</span></code> and <code class="docutils literal notranslate"><span class="pre">point.json</span></code>.
+Select the project file <code class="docutils literal notranslate"><span class="pre">prj.json</span></code>.</li>
+</ul>
+</li>
+<li>Click <strong>Open</strong>.</li>
+</ol>
+</div>
+<div class="section" id="teaching-points">
+<h3>Teaching Points<a class="headerlink" href="#teaching-points" title="Permalink to this headline"></a></h3>
+<p><strong>Prerequisites</strong>:</p>
+<ul class="simple">
+<li>The project has been created or imported.</li>
+</ul>
+<p><strong>Procedure</strong>:</p>
+<ul class="simple">
+<li>After creating a project, teach positions on the point page for calling
+commands when programming a robot. If the existing taught positions list has
+been imported, this operation can be skipped.</li>
+</ul>
+<ol class="arabic simple">
+<li>Enable the robot.</li>
+<li>Click <strong>Jog</strong> buttons to move the robot to a point.</li>
+<li>Go to points tab and add the robot’s current point to the list.<ul>
+<li>You can select a taught position and double-click the parameters on the line to modify the
+relevant information.</li>
+<li>You can also press the <strong>Cover</strong> button to replace the selected point with the robot’s
+current point.</li>
+</ul>
+</li>
+<li>Continue adding points until all relevant points are in the list.</li>
+<li>Click <strong>Save</strong> to save all points.</li>
+</ol>
+<img alt="../_images/teachpoints.png" class="align-center" src="../_images/teachpoints.png" />
+</div>
+<div class="section" id="writing-a-program">
+<h3>Writing a Program<a class="headerlink" href="#writing-a-program" title="Permalink to this headline"></a></h3>
+<p><strong>Prerequisites</strong>:</p>
+<ul class="simple">
+<li>The project has been created or imported.</li>
+<li>The points have been taught.</li>
+</ul>
+<p><strong>Procedure</strong>:</p>
+<ul class="simple">
+<li>Program your robot’s routine according to your needs. The available commands
+and syntax are available in the Syntax panel. You can also view the
+<a class="reference external" href="https://www.trossenrobotics.com/Shared/DOBOT/CR_Lua_Guide.pdf" rel="noopener noreferrer" target="_blank">Lua Scripting Guide</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="blockly.html" class="btn btn-neutral float-left" title="Blockly" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../io_interface.html" class="btn btn-neutral float-right" title="I/O Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

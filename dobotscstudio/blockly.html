@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blockly &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Scripting" href="scripting.html" />
+    <link rel="prev" title="Jog Panel" href="jog_panel.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="scstudio_setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control_bar.html">Control Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameter_settings.html">Parameter Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toolconfig_settings.html">ToolConfig Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jog_panel.html">Jog Panel</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Blockly</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#blockly-commands">Blockly Commands</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#motion-commands">Motion Commands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#i-o-commands">I/O Commands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modbus-commands">Modbus Commands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tcp-commands">TCP Commands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#variables-commands">Variables Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scripting.html">Scripting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../dobotscstudio.html">DobotSCStudio</a></li>
+      <li class="breadcrumb-item active">Blockly</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotscstudio/blockly.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="blockly">
+<h1>Blockly<a class="headerlink" href="#blockly" title="Permalink to this headline"></a></h1>
+<p>The Blockly section of DobotSCStudio allows you to quickly and conveniently program your robot
+using the Blockly/Scratch block-based visual programming language.</p>
+<img alt="../_images/blocklybasic.png" class="align-center" src="../_images/blocklybasic.png" style="width: 800px;" />
+<p><strong>Prerequisites</strong>:</p>
+<ul class="simple">
+<li>The robot has been powered on</li>
+</ul>
+<p><strong>Procedure</strong>:</p>
+<ol class="arabic simple">
+<li>Press the page with the plus icon to start a new project.</li>
+<li>Drag the blocks to the code area to start programming.</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Set the corresponding parameters of each block according to actual needs. For the
+description of blocks, please refer to <a class="reference external" href="https://www.trossenrobotics.com/Shared/DOBOT/CR_Blockly_Guide.pdf" rel="noopener noreferrer" target="_blank">Blockly User Manual (CR Robot)</a>.</li>
+<li>In the point page, you can save teaching point that can be called when writing a program.</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Save the project, naming it if saving for the first time.</li>
+<li>Enable the robot arm.</li>
+</ol>
+<div class="section" id="blockly-commands">
+<h2>Blockly Commands<a class="headerlink" href="#blockly-commands" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="commands">
+<p class="topic-title">Commands</p>
+<ul class="simple">
+<li><a class="reference internal" href="#motion-commands" id="id1">Motion Commands</a></li>
+<li><a class="reference internal" href="#i-o-commands" id="id2">I/O Commands</a></li>
+<li><a class="reference internal" href="#modbus-commands" id="id3">Modbus Commands</a></li>
+<li><a class="reference internal" href="#tcp-commands" id="id4">TCP Commands</a></li>
+<li><a class="reference internal" href="#variables-commands" id="id5">Variables Commands</a></li>
+</ul>
+</div>
+<div class="section" id="motion-commands">
+<h3><a class="toc-backref" href="#id1">Motion Commands</a><a class="headerlink" href="#motion-commands" title="Permalink to this headline"></a></h3>
+<p><strong>Line Move</strong></p>
+<img alt="../_images/blockly_linemove.png" src="../_images/blockly_linemove.png" />
+<p>Description: Move from the current position to a target position in straight line mode</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">TargetPoint</span></code> - Indicate target point, which is obtained from the TeachPoint page</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Joint Move</strong></p>
+<img alt="../_images/blockly_jointmove.png" src="../_images/blockly_jointmove.png" />
+<p>Description: Move from the current position to a target position in point to point mode</p>
+<p>Parameters: Indicate the joint angle of the target position, the joint angles is set by Joint data command,</p>
+<p>Returns: None</p>
+<p><strong>Coordinate Move</strong></p>
+<img alt="../_images/blockly_coordmove.png" src="../_images/blockly_coordmove.png" />
+<p>Description: Move from the current position to a target position in point to point mode</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">TargetPoint</span></code> - Indicate target point, which is obtained from the TeachPoint page</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Line Offset Move</strong></p>
+<img alt="../_images/blockly_lineoffsetmove.png" src="../_images/blockly_lineoffsetmove.png" />
+<p>Description: Move the corresponding offset in X, Y and Z directions from the
+current position in straight line mode</p>
+<p>Parameters:</p>
+<blockquote>
+<div><code class="docutils literal notranslate"><span class="pre">X</span></code> - Indicate offset of X axis
+<code class="docutils literal notranslate"><span class="pre">Y</span></code> - Indicate offset of Y axis
+<code class="docutils literal notranslate"><span class="pre">Z</span></code> - Indicate offset of Z axis</div></blockquote>
+<p>Returns: None</p>
+<p><strong>Joint Offset Move</strong></p>
+<img alt="../_images/blockly_jointoffsetmove.png" src="../_images/blockly_jointoffsetmove.png" />
+<p>Description: Move the joint offset in each axis from the current position in the Joint coordinate system</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">joint</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">joint</span> <span class="pre">6</span></code> - Indicate angular offset of J1 - J6 axes</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Coordinate Offset Move</strong></p>
+<img alt="../_images/blockly_coordoffsetmove.png" src="../_images/blockly_coordoffsetmove.png" />
+<p>Description: Move the joint offset in each axis from the current position in point to point mode</p>
+<p>Parameters:</p>
+<blockquote>
+<div><code class="docutils literal notranslate"><span class="pre">X</span></code> - Indicate coordinate offset of the X axis
+<code class="docutils literal notranslate"><span class="pre">Y</span></code> - Indicate coordinate offset of the Y axis
+<code class="docutils literal notranslate"><span class="pre">Z</span></code> - Indicate coordinate offset of the Z axis</div></blockquote>
+<p>Returns: None</p>
+<p><strong>Arc</strong></p>
+<img alt="../_images/blockly_arc.png" src="../_images/blockly_arc.png" />
+<p>Description: Move from the current position to a target position in an arc interpolated mode</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">point1</span></code> - Indicate the arc’s middle point, obtained from the TeachPoint page</li>
+<li><code class="docutils literal notranslate"><span class="pre">point2</span></code> - Indicate the arc’s end point, obtained from the TeachPoint page</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Circle</strong></p>
+<img alt="../_images/blockly_circle.png" src="../_images/blockly_circle.png" />
+<p>Description: Move from the current position to a target position in a circular interpolated mode</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">point1</span></code> - Indicate the circle’s middle point, obtained from the TeachPoint page</li>
+<li><code class="docutils literal notranslate"><span class="pre">point2</span></code> - Indicate the circle’s end point, obtained from the TeachPoint page</li>
+<li><code class="docutils literal notranslate"><span class="pre">count</span></code> - number of whole circles, value range: 1 - 999</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Joint Data</strong></p>
+<img alt="../_images/blockly_jointdata.png" src="../_images/blockly_jointdata.png" />
+<p>Description: Set the joint angle</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">joint</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">joint</span> <span class="pre">6</span></code> - Indicate joint angle of J1 - J6 axes</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Get Current Joint Data</strong></p>
+<img alt="../_images/blockly_getjointdata.png" src="../_images/blockly_getjointdata.png" />
+<p>Description: Get the current position of the robot joints</p>
+<p>Parameters: None</p>
+<p>Returns: Joint angle of J1 - J6 axes</p>
+<p><strong>Get Current Coordinate Data</strong></p>
+<img alt="../_images/blockly_getcoorddata.png" src="../_images/blockly_getcoorddata.png" />
+<p>Description: Get the current pose of the robot</p>
+<p>Parameters: None</p>
+<p>Returns: Cartesian coordinates of the current pose</p>
+</div>
+<div class="section" id="i-o-commands">
+<h3><a class="toc-backref" href="#id2">I/O Commands</a><a class="headerlink" href="#i-o-commands" title="Permalink to this headline"></a></h3>
+<p><strong>Set Digital Output</strong></p>
+<img alt="../_images/blockly_setdo.png" src="../_images/blockly_setdo.png" />
+<p>Description: Set the status of a digital output port</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">end</span></code> - controller or tool</li>
+<li><code class="docutils literal notranslate"><span class="pre">DO</span></code> - Digital output index. When you select controller, the value range is DO1 - DO16; when you select tool, the value range is DO1 - DO2</li>
+<li><code class="docutils literal notranslate"><span class="pre">Status</span></code> - set the DO to on or off</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Wait Digital Input</strong></p>
+<img alt="../_images/blockly_waitdi.png" src="../_images/blockly_waitdi.png" />
+<p>Description: If any of the following conditions are met, the program continues to execute:
+- The status of DI is the same as the status set by the instruction
+- The status of DI is different from the state set by the instruction, while the waiting time exceeds the preset time</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">end</span></code> - controller or tool</li>
+<li><code class="docutils literal notranslate"><span class="pre">DI</span></code> - digital input index. When you select controller, the value range is DI1 - DI32; when you select tool, the value range is DI1 - DI2</li>
+<li><code class="docutils literal notranslate"><span class="pre">Status</span></code> - Indicate status of DI</li>
+<li><code class="docutils literal notranslate"><span class="pre">Time</span></code> - Set the waiting time, if the waiting time value is 0, it will wait until the condition is met</li>
+</ul>
+<p>Returns:</p>
+<p><strong>Set Analog Output</strong></p>
+<img alt="../_images/blockly_setao.png" src="../_images/blockly_setao.png" />
+<p>Description: Set the value of analog output port</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Port</span></code> - analog output index</li>
+<li><code class="docutils literal notranslate"><span class="pre">Parameters</span></code> - the value of the analog output</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Digital Input</strong></p>
+<img alt="../_images/blockly_setdi.png" src="../_images/blockly_setdi.png" />
+<p>Description: Get the current I/O status, can be used as a conditional in certain instructions</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">end</span></code> - controller or tool</li>
+<li><code class="docutils literal notranslate"><span class="pre">DI</span></code> - digital input index. When you select controller, the value range is DI1 - DI32; when you select tool, the value range is DI1 - DI2</li>
+<li><code class="docutils literal notranslate"><span class="pre">Status</span></code> - indicate status of DI</li>
+<li><code class="docutils literal notranslate"><span class="pre">Time</span></code> - set the waiting time, if the waiting time value is 0, it will wait forever until the condition is met</li>
+</ul>
+<p>Returns: Whether the condition is True or False</p>
+<p><strong>Get Analog Input</strong></p>
+<img alt="../_images/blockly_getai.png" src="../_images/blockly_getai.png" />
+<p>Description: Get the value of analog input port</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">end</span></code> - controller or tool</li>
+<li><code class="docutils literal notranslate"><span class="pre">DI</span></code> - analog input index</li>
+</ul>
+<p>Returns: value of analog input port</p>
+</div>
+<div class="section" id="modbus-commands">
+<h3><a class="toc-backref" href="#id3">Modbus Commands</a><a class="headerlink" href="#modbus-commands" title="Permalink to this headline"></a></h3>
+<p><strong>Get Input Register Address</strong></p>
+<img alt="../_images/blockly_getinputreg.png" src="../_images/blockly_getinputreg.png" />
+<p>Description: Read the input register value with the specified data type from the Modbus slave</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Address</span></code> - Starting address of the input registers. Value range: 0 - 4095</li>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code> - Data type<ul>
+<li><code class="docutils literal notranslate"><span class="pre">Empty</span></code> - Read 16-bit unsigned integer (two bytes, occupy one register)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“U16”</span></code> - Read 16-bit unsigned integer (two bytes, occupy one register)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“U32”</span></code> - Read 32-bit unsigned integer (four bytes, occupy two registers)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“F32”</span></code> - Read 32-bit single-precision floating-point number (four bytes, occupy two registers)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“F64”</span></code> - Read 64-bit double-precision floating-point number (eight bytes, occupy four registers)</li>
+</ul>
+</li>
+</ul>
+<p>Returns: input register value</p>
+<p><strong>Get Holding Register Address</strong></p>
+<img alt="../_images/blockly_getholdreg.png" src="../_images/blockly_getholdreg.png" />
+<p>Description: Read the holding register value from the Modbus slave according to the specified data type</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Address</span></code> - starting address of the holding registers. Value range: 0 - 4095</li>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code> - Data type<ul>
+<li><code class="docutils literal notranslate"><span class="pre">Empty</span></code> - Read 16-bit unsigned integer (two bytes, occupy one register)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“U16”</span></code> - Read 16-bit unsigned integer (two bytes, occupy one register)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“U32”</span></code> - Read 32-bit unsigned integer (four bytes, occupy two registers)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“F32”</span></code> - Read 32-bit single-precision floating-point number (four bytes, occupy two registers)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“F64”</span></code> - Read 64-bit double-precision floating-point number (eight bytes, occupy four registers)</li>
+</ul>
+</li>
+</ul>
+<p>Returns: holding register value</p>
+<p><strong>Get Discrete Input Register Address</strong></p>
+<img alt="../_images/blockly_getdiscreg.png" src="../_images/blockly_getdiscreg.png" />
+<p>Description: Read the discrete input register value from Modbus slave</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Address</span></code> - starting address of the discrete inputs register. Value range: 0-4095</li>
+</ul>
+<p>Returns: discrete input register value</p>
+<p><strong>Get Coils Register Address</strong></p>
+<img alt="../_images/blockly_getcoils.png" src="../_images/blockly_getcoils.png" />
+<p>Description: Read the coil register value from the Modbus slave</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Address</span></code> - starting address of the coils register.. Value range: 0-4095</li>
+</ul>
+<p>Returns: coil register value</p>
+<p><strong>Set Coils Register Address</strong></p>
+<img alt="../_images/blockly_setcoils.png" src="../_images/blockly_setcoils.png" />
+<p>Description: Set the coil register in the Modbus slave</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Address</span></code> - Starting address of the coils register. Value range: 6 - 4095</li>
+<li><code class="docutils literal notranslate"><span class="pre">Value</span></code> - the value written into the coil register</li>
+</ul>
+<p>Returns: None</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This command is not supported when the coil register address is from 0 to 5</p>
+</div>
+<p><strong>Set Holding Register Address</strong></p>
+<img alt="../_images/blockly_setholdreg.png" src="../_images/blockly_setholdreg.png" />
+<p>Description: Set the holding register value in the Modbus slave</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Address</span></code> - Starting address of the holding registers to set. Value range: 0 - 4095</li>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code> - Data type<ul>
+<li><code class="docutils literal notranslate"><span class="pre">Empty</span></code> - Read 16-bit unsigned integer (two bytes, occupy one register)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“U16”</span></code> - Set 16-bit unsigned integer (two bytes, occupy one register)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“U32”</span></code> - Set 32-bit unsigned integer (four bytes, occupy two registers)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“F32”</span></code> - Set 32-bit single-precision floating-point number (four bytes, occupy two registers)</li>
+<li><code class="docutils literal notranslate"><span class="pre">“F64”</span></code> - Set 64-bit double-precision floating-point number (eight bytes, occupy four registers)</li>
+</ul>
+</li>
+</ul>
+<p>Returns: None</p>
+</div>
+<div class="section" id="tcp-commands">
+<h3><a class="toc-backref" href="#id4">TCP Commands</a><a class="headerlink" href="#tcp-commands" title="Permalink to this headline"></a></h3>
+<p><strong>Open Socket</strong></p>
+<img alt="../_images/blockly_opensocket.png" src="../_images/blockly_opensocket.png" />
+<p>Description: Create a TCP network with the robot as a client</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">IP</span></code> - IP address of the server</li>
+<li><code class="docutils literal notranslate"><span class="pre">port</span></code> - port of the server</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Get Open Socket Result</strong></p>
+<img alt="../_images/blockly_opensocketres.png" src="../_images/blockly_opensocketres.png" />
+<p>Description: Get the connection result</p>
+<p>Parameters: None</p>
+<p>Returns:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">0</span></code> - TCP connection is successful</li>
+<li><code class="docutils literal notranslate"><span class="pre">1</span></code> - Input parameters are incorrect</li>
+<li><code class="docutils literal notranslate"><span class="pre">2</span></code> - Socket object is not found</li>
+<li><code class="docutils literal notranslate"><span class="pre">3</span></code> - Timeout setting is incorrect</li>
+<li><code class="docutils literal notranslate"><span class="pre">4</span></code> - If the robot is set as a client, it indicates that the connection is wrong. If the robot is set as a server, it indicates that receiving data is wrong</li>
+</ul>
+<p><strong>Create Socket</strong></p>
+<img alt="../_images/blockly_createsocket.png" src="../_images/blockly_createsocket.png" />
+<p>Description: Create a TCP network, robot as a server</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">IP</span></code> - address of the server</li>
+<li><code class="docutils literal notranslate"><span class="pre">port</span></code> - Server port</li>
+</ul>
+<p>Returns:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The port cannot be set to 502 and 8080. Otherwise, it will be in conflict with the Modbus
+default port or the port used in the conveyor tracking application, causing the creation to fail</p>
+</div>
+<p><strong>Get Create Socket Result</strong></p>
+<img alt="../_images/blockly_createsocketres.png" src="../_images/blockly_createsocketres.png" />
+<p>Description: Get the connection result</p>
+<p>Parameters: None</p>
+<p>Returns:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">0</span></code> - TCP network created successfully</li>
+<li><code class="docutils literal notranslate"><span class="pre">1</span></code> - TCP network creation failed</li>
+<li><code class="docutils literal notranslate"><span class="pre">Socket</span></code> - Socket object</li>
+</ul>
+<p><strong>Socket Send Variable</strong></p>
+<img alt="../_images/blockly_sendsocket.png" src="../_images/blockly_sendsocket.png" />
+<p>Description: Send data through socket communication</p>
+<p>Parameters: Variable: data to be sent</p>
+<p>Returns: None</p>
+<p><strong>Close Socket</strong></p>
+<img alt="../_images/blockly_closesocket.png" src="../_images/blockly_closesocket.png" />
+<p>Description: Release a TCP network</p>
+<p>Parameters: None</p>
+<p>Returns: None</p>
+<p><strong>Get Socket Send Result</strong></p>
+<img alt="../_images/blockly_sendsocketres.png" src="../_images/blockly_sendsocketres.png" />
+<p>Description: Get the result of the data communication through the Socket</p>
+<p>Parameters: None</p>
+<p>Returns:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">0</span></code> - Sending data succeeded</li>
+<li><code class="docutils literal notranslate"><span class="pre">1</span></code> - Sending data failed</li>
+</ul>
+<p><strong>Get Variable</strong></p>
+<img alt="../_images/blockly_getsocketvar.png" src="../_images/blockly_getsocketvar.png" />
+<p>Description: Obtain data through Socket communication</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Type</span></code> - string or number</li>
+<li><code class="docutils literal notranslate"><span class="pre">Name</span></code> - Variable used to hold data</li>
+<li><code class="docutils literal notranslate"><span class="pre">waiting</span></code> - time: Set the waiting time, if the waiting time value is 0, it will wait forever until data is received</li>
+</ul>
+<p>Returns: None</p>
+</div>
+<div class="section" id="variables-commands">
+<h3><a class="toc-backref" href="#id5">Variables Commands</a><a class="headerlink" href="#variables-commands" title="Permalink to this headline"></a></h3>
+<p><strong>Make a Variable</strong></p>
+<img alt="../_images/blockly_makevar.png" src="../_images/blockly_makevar.png" />
+<p>Description: Make a variable</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Variable</span> <span class="pre">Name</span></code> - Name of the variable to be created.</li>
+</ul>
+<p>Returns: Defined Variable</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must start with a letter, and you can’t use special characters like spaces in variable names</p>
+</div>
+<p><strong>Set Variable</strong></p>
+<img alt="../_images/blockly_setvar.png" src="../_images/blockly_setvar.png" />
+<p>Description: Set the value of a variable</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Name</span></code> - name of the variable to be set</li>
+<li><code class="docutils literal notranslate"><span class="pre">parameter</span></code> - value of a variable</li>
+</ul>
+<p>Returns: None</p>
+<p><strong>Change Variable</strong></p>
+<img alt="../_images/blockly_changevar.png" src="../_images/blockly_changevar.png" />
+<p>Description: Modify the value of a variable</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Name</span></code> - name of the variable to be changed</li>
+<li><code class="docutils literal notranslate"><span class="pre">parameter</span></code> - The value of an increase or decrease</li>
+</ul>
+<p>Returns: None</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="jog_panel.html" class="btn btn-neutral float-left" title="Jog Panel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="scripting.html" class="btn btn-neutral float-right" title="Scripting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

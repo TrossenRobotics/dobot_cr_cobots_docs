@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DH-Robotics End Effectors &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DH-Robotics AG-95 Adaptive Parallel Gripper" href="dh_robotics/ag95.html" />
+    <link rel="prev" title="End Effector Selection" href="../end_effectors.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../end_effectors.html#trossen-robotics-end-effector-selection">Trossen Robotics End Effector Selection</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DH-Robotics End Effectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ag-series-adaptive-parallel-grippers">AG-Series Adaptive Parallel Grippers</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/ag95.html">DH-Robotics AG-95 Adaptive Parallel Gripper</a></li>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/ag145.html">DH-Robotics AG-145 Adaptive Parallel Gripper</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#pgc-series-collaborative-parallel-grippers">PGC-Series Collaborative Parallel Grippers</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/pgc50.html">DH-Robotics PGC 50 Collaborative Parallel Gripper</a></li>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/pgc140.html">DH-Robotics PGC 140 Collaborative Parallel Gripper</a></li>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/pgc300.html">DH-Robotics PGC 300 Collaborative Parallel Gripper</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#rgi-series-rotary-cobot-grippers">RGI-Series Rotary Cobot Grippers</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/rgi14.html">DH-Robotics RGI-14 Rotary Cobot Gripper</a></li>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/rgi30.html">DH-Robotics RGI-14 Rotary Cobot Gripper</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#pge-series-slim-parallel-grippers">PGE-Series Slim Parallel Grippers</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/pge5.html">DH-Robotics PGE-5 Slim Parallel Gripper</a></li>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/pge8.html">DH-Robotics PGE-8 Slim Parallel Gripper</a></li>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/pge15.html">DH-Robotics PGE-15 Slim Parallel Gripper</a></li>
+<li class="toctree-l5"><a class="reference internal" href="dh_robotics/pge50.html">DH-Robotics PGE-15 Slim Parallel Gripper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../end_effectors.html">End Effector Selection</a></li>
+      <li class="breadcrumb-item active">DH-Robotics End Effectors</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/end_effectors/dh_robotics.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="dh-robotics-end-effectors">
+<h1>DH-Robotics End Effectors<a class="headerlink" href="#dh-robotics-end-effectors" title="Permalink to this headline"></a></h1>
+<div class="section" id="ag-series-adaptive-parallel-grippers">
+<h2>AG-Series Adaptive Parallel Grippers<a class="headerlink" href="#ag-series-adaptive-parallel-grippers" title="Permalink to this headline"></a></h2>
+<p>The AG-Series of grippers for industrial robots / cobots are ideal for loading, pick &amp; place,
+assembly, machine inspection, electronics and more. The linkage-type adaptive grippers are
+plug-n-play with most brands of collaborative robots and offer the ability to grip round, spherical
+objects with the use of the flexible finger design.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/ag95.html">DH-Robotics AG-95 Adaptive Parallel Gripper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/ag145.html">DH-Robotics AG-145 Adaptive Parallel Gripper</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="pgc-series-collaborative-parallel-grippers">
+<h2>PGC-Series Collaborative Parallel Grippers<a class="headerlink" href="#pgc-series-collaborative-parallel-grippers" title="Permalink to this headline"></a></h2>
+<p>The PGC-Series is suitable for harsh working environments with the high protection of IP54 and IP67
+and features an integrated controller allowing the gripper to be used without an external
+controller. The gripper is self-locking and able to maintain the gripping of objects when the power
+is off. The series also features intelligent feedback for monitoring gripping and rotation status
+as well as drop detection.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/pgc50.html">DH-Robotics PGC 50 Collaborative Parallel Gripper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/pgc140.html">DH-Robotics PGC 140 Collaborative Parallel Gripper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/pgc300.html">DH-Robotics PGC 300 Collaborative Parallel Gripper</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="rgi-series-rotary-cobot-grippers">
+<h2>RGI-Series Rotary Cobot Grippers<a class="headerlink" href="#rgi-series-rotary-cobot-grippers" title="Permalink to this headline"></a></h2>
+<p>The RGI series of rotary grippers for industrial robots / cobots are ideal for test tube opening
+and closing, parts assembly and widely used in medical and laboratory automation. The RGI series
+grippers use standardized communication and command interfaces which make them easy to implement
+into existing equipment.</p>
+<p>The series features adjustable parameters allowing adjustment to gripping force, position speed as
+well as rotation parameters like torque, speed and angle. The grippers also allow feedback
+including gripping &amp; rotation status as well as drop detection. The finger mounts allow users to
+mount customized fingers to suit any application.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/rgi14.html">DH-Robotics RGI-14 Rotary Cobot Gripper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/rgi30.html">DH-Robotics RGI-14 Rotary Cobot Gripper</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="pge-series-slim-parallel-grippers">
+<h2>PGE-Series Slim Parallel Grippers<a class="headerlink" href="#pge-series-slim-parallel-grippers" title="Permalink to this headline"></a></h2>
+<p>The PGE Series Slim Parallel Grippers offer a compact design and are perfect for light duty
+automation such as loading, pick &amp; place, assembly and more. The PGE-15 features an integrated
+drive controller, allowing the gripper to be used without an external controller and intelligent
+feedback such as grasping status detection, real-time position detection and drop detection.</p>
+<p>The PGE-15 also offers extremely precise force control, with a rated force repeatability of 0.1N.
+This gripper pairs perfectly with the <a class="reference external" href="https://www.trossenrobotics.com/dobot-mg400-industrial-desktop-robot" rel="noopener noreferrer" target="_blank">DOBOT MG400</a> Industrial Desktop Robot Arm for a complete,
+compact automation solution.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/pge5.html">DH-Robotics PGE-5 Slim Parallel Gripper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/pge8.html">DH-Robotics PGE-8 Slim Parallel Gripper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/pge15.html">DH-Robotics PGE-15 Slim Parallel Gripper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dh_robotics/pge50.html">DH-Robotics PGE-15 Slim Parallel Gripper</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../end_effectors.html" class="btn btn-neutral float-left" title="End Effector Selection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dh_robotics/ag95.html" class="btn btn-neutral float-right" title="DH-Robotics AG-95 Adaptive Parallel Gripper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

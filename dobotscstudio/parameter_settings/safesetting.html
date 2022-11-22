@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safe Setting &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ToolConfig Settings" href="../toolconfig_settings.html" />
+    <link rel="prev" title="RobotParams" href="robotparams.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../dobotscstudio.html">DobotSCStudio</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../scstudio_setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../control_bar.html">Control Bar</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../parameter_settings.html">Parameter Settings</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="setting_user_coordinate_system.html">Setting User Coordinate System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setting_tool_coordinate_system.html">Setting Tool Coordinate System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="home_point.html">Home Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io_monitor.html">I/O Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="controller_setting.html">Controller Setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="remote_control.html">Remote Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="robotparams.html">RobotParams</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Safe Setting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#brake">Brake</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#power">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#collision-detection">Collision Detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#electronic-skin">Electronic Skin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#home">Home</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installsetting">InstallSetting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dragsensitivity">DragSensitivity</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../toolconfig_settings.html">ToolConfig Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jog_panel.html">Jog Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../blockly.html">Blockly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../scripting.html">Scripting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../dobotscstudio.html">DobotSCStudio</a></li>
+          <li class="breadcrumb-item"><a href="../parameter_settings.html">Parameter Settings</a></li>
+      <li class="breadcrumb-item active">Safe Setting</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotscstudio/parameter_settings/safesetting.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="safe-setting">
+<h1>Safe Setting<a class="headerlink" href="#safe-setting" title="Permalink to this headline"></a></h1>
+<div class="section" id="brake">
+<h2>Brake<a class="headerlink" href="#brake" title="Permalink to this headline"></a></h2>
+<p>If you want to drag joints by hand, please enable the braking function. Namely, open each joint
+brake on the <strong>Parameter &gt; SafeSetting &gt; Brake</strong> page.</p>
+<img alt="../../_images/brake.jpg" class="align-center" src="../../_images/brake.jpg" />
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deactivating a joint’s brake will cause the distal linkages to fall due to gravity. Make sure
+you’re holding the robot to prevent harm to the robot and to any nearby equipment.</p>
+</div>
+</div>
+<div class="section" id="power">
+<h2>Power<a class="headerlink" href="#power" title="Permalink to this headline"></a></h2>
+<p>When the emergency stop switch is pressed, the robot will power off. You can click <strong>Power</strong> on the
+<strong>Parameter &gt; SafeSetting &gt; Power</strong> page to power on the robot.</p>
+<img alt="../../_images/power.jpg" class="align-center" src="../../_images/power.jpg" />
+</div>
+<div class="section" id="collision-detection">
+<h2>Collision Detection<a class="headerlink" href="#collision-detection" title="Permalink to this headline"></a></h2>
+<p>Collision detection is mainly used for reducing the impact on the robot arm, and to avoid damage to
+the robot arm or external equipment. If collision detection is activated, the robot arm will stop
+running automatically when the robot detects that it has collided with an object.</p>
+<p>You can enable collision detection function on the <strong>Parameter &gt; SafeSetting &gt; Collision
+Detection</strong> page and set the collision level. You can also enable the <strong>Automatically start
+dragging after collision</strong> option. This will allow you to drag the robot to a safe position after
+it collides with an obstacle.</p>
+<p>There are five levels to select. The higher the level, the higher the sensitivity to collisions.</p>
+<img alt="../../_images/collisiondetection.jpg" class="align-center" src="../../_images/collisiondetection.jpg" />
+</div>
+<div class="section" id="electronic-skin">
+<h2>Electronic Skin<a class="headerlink" href="#electronic-skin" title="Permalink to this headline"></a></h2>
+<p>Electronic skin allows robot to respond in real time when robot meets an obstacle, helping the
+robot avoid obstacles during operation.</p>
+<p>You can enable electronic skin function on the <strong>Parameter &gt; SafeSetting &gt; Electronic Skin</strong> page
+and set the robot status when meeting an obstacle. For example, the robot can avoid the obstacle or
+stop running. You can also set the electronic skin parameters on this page.</p>
+<table border="1" class="docutils align-default">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><table border="1" class="first last docutils align-default">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Avoid Velocity</td>
+<td><p class="first">Avoidance velocity when meeting obstacles</p>
+<p>Unit: mm/s</p>
+<p class="last">Value range: 1~500. Recommended value: 100</p>
+</td>
+</tr>
+<tr class="row-odd"><td>Avoid Distance</td>
+<td><p class="first">Avoidance distance</p>
+<p>Unit: mm</p>
+<p class="last">Value range: 0~200. Recommended value: 80</p>
+</td>
+</tr>
+<tr class="row-even"><td>Avoid Acceleration</td>
+<td><p class="first">Avoidance acceleration when meeting obstacles</p>
+<p>Unit: mm/s2</p>
+<p class="last">Value range: 1~50000. Recommended value: 1000</p>
+</td>
+</tr>
+<tr class="row-odd"><td>Resume Velocity</td>
+<td><p class="first">Recovery velocity after bypassing obstacles</p>
+<p>Unit: mm/s</p>
+<p class="last">Value range: 1~500. Recommended value: 100</p>
+</td>
+</tr>
+<tr class="row-even"><td>Resume Acceleration</td>
+<td><p class="first">Recovery acceleration after bypassing obstacles</p>
+<p>Unit: mm/s2</p>
+<p class="last">Value range: 1~50000. Recommended value: 1000</p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td><img alt="../../_images/electronicskin.jpg" class="first last align-center" src="../../_images/electronicskin.jpg" />
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="home">
+<h2>Home<a class="headerlink" href="#home" title="Permalink to this headline"></a></h2>
+<p>After some parts (motors, reduction gear units) of the robot have been replaced or the robot has
+been hit, the origin of the robot will be changed. You need to reset the origin. Put the robot in
+the original position where the keyways of the adjacent joints are aligned, enable robot motor, and
+click the <strong>0</strong> button.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Your authority level must be Administrator to perform this operation.</p>
+</div>
+<img alt="../../_images/homing.jpg" class="align-center" src="../../_images/homing.jpg" />
+</div>
+<div class="section" id="installsetting">
+<h2>InstallSetting<a class="headerlink" href="#installsetting" title="Permalink to this headline"></a></h2>
+<p>If the robot is ceiling mounted, wall mounted or mounted at an angle, you need to set the rotation
+angle and slop angle while the robot is in its disabled state.</p>
+<ul class="simple">
+<li><strong>Slop angle</strong>: Angle that robot rotates counterclockwise around X-axis at the origin point.</li>
+<li><strong>Rotation angle</strong>: Angle that robot rotates counterclockwise around Z-axis at the origin point.</li>
+</ul>
+<img alt="../../_images/installsetting.jpg" class="align-center" src="../../_images/installsetting.jpg" />
+</div>
+<div class="section" id="dragsensitivity">
+<h2>DragSensitivity<a class="headerlink" href="#dragsensitivity" title="Permalink to this headline"></a></h2>
+<p>The Drag Sensitivity parameters are used to adjust the sensitivity of the joints of the robot arm
+during running or dragging. You can set these parameters on the <strong>Parameter &gt; SafeSetting &gt;
+DragSensitivity</strong> page, and click <strong>Save</strong>, as shown in the image below.</p>
+<img alt="../../_images/dragsensitivity.png" class="align-center" src="../../_images/dragsensitivity.png" />
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="robotparams.html" class="btn btn-neutral float-left" title="RobotParams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../toolconfig_settings.html" class="btn btn-neutral float-right" title="ToolConfig Settings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

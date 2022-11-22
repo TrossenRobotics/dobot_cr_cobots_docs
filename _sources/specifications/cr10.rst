@@ -1,0 +1,28 @@
+====
+CR10
+====
+
+.. image:: _images/cr10.png
+    :align: right
+
+.. list-table::
+
+    * - Product Weight
+      - Maximum Payload
+      - Max Reach
+      - Rated Voltage
+      - Repeatability
+      - Communication
+    * - 38kg
+      - 10kg
+      - 1525mm
+      - 48VDC
+      - ±0.03mm
+      -
+          - TCP/IP
+          - Modbus
+          - EtherCAT
+          - WiFi
+
+.. image:: _images/cr10_drawing.png
+  :align: center

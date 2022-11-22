@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Networking &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.webp"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="End Effector Selection" href="../end_effectors.html" />
+    <link rel="prev" title="Software Setup" href="software_setup.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../getting_started.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mounting.html">Cobot Installation and Mounting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware_setup.html">Hardware Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html">Software Setup</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Networking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#connecting-to-the-controller-with-a-network-cable">Connecting to the Controller with a Network Cable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connecting-to-the-controller-over-wifi">Connecting to the Controller over WiFi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssh-into-the-controller">SSH into the Controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../getting_started.html">Getting Started</a></li>
+      <li class="breadcrumb-item active">Networking</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/getting_started/networking.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="networking">
+<h1>Networking<a class="headerlink" href="#networking" title="Permalink to this headline"></a></h1>
+<div class="section" id="connecting-to-the-controller-with-a-network-cable">
+<h2>Connecting to the Controller with a Network Cable<a class="headerlink" href="#connecting-to-the-controller-with-a-network-cable" title="Permalink to this headline"></a></h2>
+<p>DobotSCStudio can communicate with the controller directly through a network
+cable.</p>
+<p><strong>Procedure</strong></p>
+<ol class="arabic simple">
+<li>Connect one end of the network cable to the LAN interface on the controller and the other end
+to the PC.</li>
+<li>Navigate to the <strong>Control Panel</strong> on your workstation and go to the <strong>Network and Sharing
+Center</strong>.</li>
+<li>Click <strong>Local Area Connection</strong> on the <strong>Network and Sharing Center</strong> page.</li>
+<li>Click <strong>Properties</strong>.</li>
+<li>Double click <strong>Internet Protocol Verion 4 (TCP/IPv4)</strong>.</li>
+<li>Select <strong>Use the following IP address</strong> and change the IP address and subnet mask of the PC.<ul>
+<li><strong>IP address</strong>: <code class="docutils literal notranslate"><span class="pre">192.168.1.12</span></code></li>
+<li><strong>Subnet mask</strong>: <code class="docutils literal notranslate"><span class="pre">255.255.255.0</span></code></li>
+</ul>
+</li>
+</ol>
+<img alt="../_images/ipaddressmodification.png" class="align-center" src="../_images/ipaddressmodification.png" />
+<ol class="arabic simple" start="7">
+<li>Click <strong>OK</strong>.</li>
+<li>Click the dropdown arrow on the upper right of the DobotSCStudio and select <strong>IP settings…</strong></li>
+<li>Set the controller’s IP address to <code class="docutils literal notranslate"><span class="pre">192.168.5.1</span></code> and click <strong>OK</strong>.</li>
+</ol>
+<img alt="../_images/scstudioipsetting.png" class="align-center" src="../_images/scstudioipsetting.png" />
+</div>
+<div class="section" id="connecting-to-the-controller-over-wifi">
+<h2>Connecting to the Controller over WiFi<a class="headerlink" href="#connecting-to-the-controller-over-wifi" title="Permalink to this headline"></a></h2>
+<p><strong>Procedure</strong></p>
+<ol class="arabic simple">
+<li>Connect to the Dobot WiFi. It will start with <code class="docutils literal notranslate"><span class="pre">Dobot_WIFI_</span></code>. The default WiFi password is
+<code class="docutils literal notranslate"><span class="pre">1234567890</span></code>.</li>
+<li>Click the dropdown arrow on the upper right of the DobotSCStudio and select <strong>IP settings…</strong></li>
+<li>Set the controller’s IP address to <code class="docutils literal notranslate"><span class="pre">192.168.1.6</span></code> and click <strong>OK</strong>.</li>
+</ol>
+<img alt="../_images/scstudioipsettingwifi.png" class="align-center" src="../_images/scstudioipsettingwifi.png" />
+</div>
+<div class="section" id="ssh-into-the-controller">
+<h2>SSH into the Controller<a class="headerlink" href="#ssh-into-the-controller" title="Permalink to this headline"></a></h2>
+<p>Occasionally, you may need to SSH into your controller to edit configuration files, load
+trajectories, etc.</p>
+<p><strong>Procedure</strong></p>
+<ol class="arabic">
+<li><p class="first">Make sure your remote computer is connected to the cobot’s network. You can verify this by
+opening a terminal (CMD, PowerShell, GNOME Terminal, etc.) and pinging the IP of the connection
+method you used.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ping <span class="m">192</span>.168.1.6 <span class="c1"># or 192.168.5.1 if using an Ethernet connection</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run the ssh command to SSH into the controller’s computer. The controller’s username is
+<code class="docutils literal notranslate"><span class="pre">root</span></code> and the password is <code class="docutils literal notranslate"><span class="pre">dobot</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh root@192.168.1.6 <span class="c1"># or root@192.168.5.1 if using an Ethernet connection</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Your terminal will now open a shell on the controller’s computer.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[root /]$</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="software_setup.html" class="btn btn-neutral float-left" title="Software Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../end_effectors.html" class="btn btn-neutral float-right" title="End Effector Selection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <!-- Socials -->
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
