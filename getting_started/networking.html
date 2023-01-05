@@ -10,7 +10,7 @@
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.webp"/>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -162,13 +162,13 @@ trajectories, etc.</p>
 <li><p class="first">Make sure your remote computer is connected to the cobot’s network. You can verify this by
 opening a terminal (CMD, PowerShell, GNOME Terminal, etc.) and pinging the IP of the connection
 method you used.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ping <span class="m">192</span>.168.1.6 <span class="c1"># or 192.168.5.1 if using an Ethernet connection</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ping<span class="w"> </span><span class="m">192</span>.168.1.6<span class="w"> </span><span class="c1"># or 192.168.5.1 if using an Ethernet connection</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Run the ssh command to SSH into the controller’s computer. The controller’s username is
 <code class="docutils literal notranslate"><span class="pre">root</span></code> and the password is <code class="docutils literal notranslate"><span class="pre">dobot</span></code>.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh root@192.168.1.6 <span class="c1"># or root@192.168.5.1 if using an Ethernet connection</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh<span class="w"> </span>root@192.168.1.6<span class="w"> </span><span class="c1"># or root@192.168.5.1 if using an Ethernet connection</span>
 </pre></div>
 </div>
 </li>
@@ -192,7 +192,7 @@ method you used.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Trossen Robotics.</p>
+    <p>&#169; Copyright 2023, Trossen Robotics.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
