@@ -19,7 +19,8 @@ What's Here
 *  :doc:`getting_started` - Guides to walk you through the process of setting up your cobot.
 *  :doc:`end_effectors` - Specification and usage information about related industrial end
    effectors.
-*  :doc:`dobotscstudio` - Guides on how to use Dobot's Industrial Control software.
+*  :doc:`dobotstudiopro` - Guides on how to use Dobot's Industrial Control software.
+*  :doc:`dobotscstudio` - Guides on how to use Dobot's legacy Industrial Control software.
 *  :doc:`io_interface` - Guides on how to use the cobot's I/O interface.
 *  :doc:`modbus_interface` - Guides on how to use the cobot's Modbus interface.
 *  :doc:`tcpip_protocol` - Guides on how to use the TCP/IP protocol.
@@ -61,6 +62,7 @@ Table of Contents
    specifications.rst
    getting_started.rst
    end_effectors.rst
+   dobotstudiopro.rst
    dobotscstudio.rst
    io_interface.rst
    modbus_interface.rst
