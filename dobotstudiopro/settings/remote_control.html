@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remote Control &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Home Calibration" href="home_calibration.html" />
+    <link rel="prev" title="Power Voltage (CCBOX)" href="power_voltage.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  <div class="sidebartitle-docs-home">
+    <a href="https://docs.trossenrobotics.com/" target="_blank" class="icon icon-home">
+      &nbsp;Trossen Robotics Docs Home
+    </a>
+    <div class="sidebartitle-docs-home-hr">
+      <hr>
+    </div>
+  </div>
+  
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../dobotstudiopro.html">DobotStudio Pro</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../main_interface.html">Main Interface</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../settings.html">Settings</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic.html">Basic Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="communication.html">Communication Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coordinate_system.html">Coordinate System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="load_parameters.html">Load Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motion_parameters.html">Motion Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power_voltage.html">Power Voltage (CCBOX)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Remote Control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#online-mode">Online Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#remote-modbus">Remote Modbus</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#procedure">Procedure</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#remote-io">Remote IO</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#prerequisite">Prerequisite</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id1">Procedure</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#tcp-ip-secondary-development">TCP/IP Secondary Development</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="home_calibration.html">Home Calibration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="automatic_identification.html">Automatic Identification</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../io_monitoring.html">I/O Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modbus.html">Modbus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../global_variables.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dobot_plus.html">Dobot+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../programming.html">Programming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../best_practices.html">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../dobotstudiopro.html">DobotStudio Pro</a></li>
+          <li class="breadcrumb-item"><a href="../settings.html">Settings</a></li>
+      <li class="breadcrumb-item active">Remote Control</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotstudiopro/settings/remote_control.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="remote-control">
+<h1>Remote Control<a class="headerlink" href="#remote-control" title="Permalink to this headline"></a></h1>
+<p>External equipment can send commands to the robot (control and running program files) in different
+remote control modes like remote I/O mode and remote Modbus mode.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>You do not need to restart the robot control system when switching remote control mode.</li>
+<li>No matter what mode the robot control system is in, the emergency stop switch is always
+effective.</li>
+<li>If the robot is running in the remote control mode, the project will stop running
+automatically when you switch to other working modes.</li>
+</ul>
+</div>
+<div class="section" id="online-mode">
+<h2>Online Mode<a class="headerlink" href="#online-mode" title="Permalink to this headline"></a></h2>
+<p>The default control mode. The robot is controlled using DobotStudio Pro.</p>
+</div>
+<div class="section" id="remote-modbus">
+<h2>Remote Modbus<a class="headerlink" href="#remote-modbus" title="Permalink to this headline"></a></h2>
+<p>In this mode, external equipment can control the robot arm over Modbus.</p>
+<img alt="../../_images/remote_modbus.jpg" class="align-center" src="../../_images/remote_modbus.jpg" />
+<p>The specific functions of Modbus registers are shown above. You can click Modify to edit it. The
+procedure of running the project in the remote Modbus mode is described below.</p>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>The project to be run in the remote mode has been prepared.</li>
+<li>The robot is connected to the external equipment through the LAN interface. You can connect the
+equipment directly or through a router. The IP address of the robot and the external equipment
+must be on the same network segment without IP address conflict. The default IP address of the
+robot is <code class="docutils literal notranslate"><span class="pre">192.168.5.1</span></code>. You can configure the IP address in <a class="reference internal" href="communication.html"><span class="doc">Communication Settings</span></a>.</li>
+<li>The robot arm is powered on.</li>
+</ul>
+</div>
+<div class="section" id="procedure">
+<h3>Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li>Set <strong>Current mode</strong> to <strong>Remote-Modbus</strong>, and select an offline project (block program or
+script) to run.</li>
+<li>If you need to start multiple different projects through Modbus, click <strong>Advanced Setting</strong>. In
+the Advanced Settings menu, you can set <strong>Hold register address</strong> of the project and configure
+the list of projects, as shown in the following figure.</li>
+</ol>
+<img alt="../../_images/remote_modbus_advanced_setting.jpg" class="align-center" src="../../_images/remote_modbus_advanced_setting.jpg" />
+<ol class="arabic simple" start="3">
+<li>Click <strong>Apply</strong> to set the arm in remote Modbus mode. Only the emergency stop command is
+available through the DobotStudio Pro software.</li>
+<li>Trigger the starting signal from the external equipment. The robot will execute the selected
+project file.</li>
+<li>If the stop signal is triggered, the robot arm will stop moving and be disabled.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="remote-io">
+<h2>Remote IO<a class="headerlink" href="#remote-io" title="Permalink to this headline"></a></h2>
+<p>In this mode, external equipment can control the robot arm using IO.</p>
+<img alt="../../_images/remote_io.jpg" class="align-center" src="../../_images/remote_io.jpg" />
+<p>The specific IO interface definition of the control system is shown in the figure above. You can
+click <strong>Modify</strong> to edit it.</p>
+<p>When using the CCBOX type control cabinet, safe I/O and universal I/O share the same terminal. The
+terminal configured as safe I/O cannot be configured as remote I/O.</p>
+<p>Clicking <strong>Advanced Setting</strong> allows configuration of multiple projects through group I/O.</p>
+<img alt="../../_images/remote_io_advanced_setting.jpg" class="align-center" src="../../_images/remote_io_advanced_setting.jpg" />
+<ol class="arabic simple">
+<li>Click <strong>+</strong> or <strong>-</strong> to increase or decrease the number of addresses assigned to group I/O. The
+more the assigned addresses are, the more configurable projects are.<ul>
+<li>0 address: Optional projects cannot be configured.</li>
+<li>1 address: 1 optional project can be configured.</li>
+<li>2 addresses: 3 optional projects can be configured.</li>
+<li>3 addresses: 7 optional projects can be configured.</li>
+<li>4 addresses: 15 optional projects can be configured.</li>
+</ul>
+</li>
+<li>You can modify the assigned address through the drop-down list. The address assigned to group
+I/O cannot be duplicated with remote I/O or safe I/O (CCBOX).</li>
+<li>After assigning addresses, you can set optional projects (at least one) for each group IO
+value.</li>
+<li>In remote I/O mode, before running the project, select the corresponding optional project by
+setting the corresponding (blue refers to ON, and gray refers to OFF) group IO value.</li>
+<li>Take assigning DI1~ DI4 in the figure above as an example:<ul>
+<li>DI1 is ON, DI2, DI3 and DI4 are OFF: select the first optional project;</li>
+<li>DI1 and DI2 are ON, DI3 and DI4 are OFF: select the third optional project;</li>
+<li>DI1 - DI4 are all ON: select the 15th optional project.</li>
+</ul>
+</li>
+<li>When all group IOs are set to OFF, it means selecting the main project configured in the
+previous page.</li>
+<li>Click <strong>Save</strong> to complete the configuration.</li>
+</ol>
+<p>The procedure of running the project in the remote I/O mode is shown below.</p>
+<div class="section" id="prerequisite">
+<h3>Prerequisite<a class="headerlink" href="#prerequisite" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li>The project to be run in the remote mode has been prepared.</li>
+<li>The external equipment is connected to the robot arm via the I/O interface.</li>
+<li>The robot arm is powered on.</li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h3>Procedure<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li>Set <strong>Current mode</strong> to <strong>Remote I/O</strong>, and select an offline project (block program or script)
+for running.</li>
+<li>Click <strong>Apply</strong> to set the robot arm to Remote IO Mode. Only the emergency stop command is
+available.</li>
+<li>(Optional) Trigger group I/O on external devices and select a project to execute.</li>
+<li>Trigger the starting signal. The robot will execute the selected project file.</li>
+<li>If the stop signal is triggered, the robot arm will stop moving and be disabled.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="tcp-ip-secondary-development">
+<h2>TCP/IP Secondary Development<a class="headerlink" href="#tcp-ip-secondary-development" title="Permalink to this headline"></a></h2>
+<p>See <a class="reference internal" href="../../tcpip_protocol.html"><span class="doc">TCP/IP Protocol</span></a> for details.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="power_voltage.html" class="btn btn-neutral float-left" title="Power Voltage (CCBOX)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="home_calibration.html" class="btn btn-neutral float-right" title="Home Calibration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

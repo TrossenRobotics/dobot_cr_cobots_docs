@@ -2,7 +2,11 @@
 DobotSCStudio
 =============
 
-This section details how to use DobotSCStudio to control your CR-Series Cobot.
+.. attention::
+
+    DobotSCStudio has been deprecated in favor of :doc:`DobotStudio Pro <./dobotstudiopro>`.
+
+This section details how to use the legacy DobotSCStudio to control your CR-Series Cobot.
 
 .. toctree::
     :maxdepth: 1

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Coordinate System &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Tool Coordinate System" href="tool.html" />
+    <link rel="prev" title="Coordinate System" href="../coordinate_system.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  <div class="sidebartitle-docs-home">
+    <a href="https://docs.trossenrobotics.com/" target="_blank" class="icon icon-home">
+      &nbsp;Trossen Robotics Docs Home
+    </a>
+    <div class="sidebartitle-docs-home-hr">
+      <hr>
+    </div>
+  </div>
+  
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../dobotstudiopro.html">DobotStudio Pro</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../main_interface.html">Main Interface</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../settings.html">Settings</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../basic.html">Basic Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../communication.html">Communication Settings</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../coordinate_system.html">Coordinate System</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">User Coordinate System</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#creating-a-user-coordinate-system">Creating a User Coordinate System</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#other-operations">Other operations</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#modify-a-coordinate-system">Modify a coordinate system</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#copy-a-coordinate-system">Copy a coordinate system</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="tool.html">Tool Coordinate System</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../load_parameters.html">Load Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../motion_parameters.html">Motion Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../power_voltage.html">Power Voltage (CCBOX)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../remote_control.html">Remote Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../home_calibration.html">Home Calibration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../automatic_identification.html">Automatic Identification</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../io_monitoring.html">I/O Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../modbus.html">Modbus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../global_variables.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dobot_plus.html">Dobot+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../programming.html">Programming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../best_practices.html">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../dobotstudiopro.html">DobotStudio Pro</a></li>
+          <li class="breadcrumb-item"><a href="../../settings.html">Settings</a></li>
+          <li class="breadcrumb-item"><a href="../coordinate_system.html">Coordinate System</a></li>
+      <li class="breadcrumb-item active">User Coordinate System</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotstudiopro/settings/coordinate_system/user.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="user-coordinate-system">
+<h1>User Coordinate System<a class="headerlink" href="#user-coordinate-system" title="Permalink to this headline"></a></h1>
+<p>When the position of a workpiece is changed or a robot program needs to be reused in multiple
+processing systems of the same type, user coordinate systems can be created to simplify
+programming. DobotStudio Pro supports up to ten user coordinate systems. User coordinate system 0
+is defined as the base coordinate system and cannot be changed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When creating a user coordinate system, make sure that the reference coordinate system is the
+base coordinate system 0.</p>
+</div>
+<p>A user coordinate system is created by a three-point calibration method. The robot is moved to
+three points: A (x1, y1, z1), B (x2, y2, z2), and C (x3, y3, z3). Point A is defined as the origin.
+The line from point A to point B defines the positive direction of X-axis. The line at which point
+C is perpendicular to X-axis defines the positive direction of Y-axis. The Z-axis is defined via
+the right-hand rule.</p>
+<img alt="../../../_images/right_hand_rule.png" class="align-center" src="../../../_images/right_hand_rule.png" />
+<div class="section" id="creating-a-user-coordinate-system">
+<h2>Creating a User Coordinate System<a class="headerlink" href="#creating-a-user-coordinate-system" title="Permalink to this headline"></a></h2>
+<ol class="arabic simple">
+<li>Click <strong>Add</strong></li>
+</ol>
+<img alt="../../../_images/user_coord_sys_add.jpg" class="align-center" src="../../../_images/user_coord_sys_add.jpg" />
+<ol class="arabic simple" start="2">
+<li>Select <strong>Three points setting</strong> in the “Add User Frame: index2” page.</li>
+</ol>
+<img alt="../../../_images/user_coord_sys_three_pts.jpg" class="align-center" src="../../../_images/user_coord_sys_three_pts.jpg" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>When creating a user coordinate system, make sure that the reference coordinate system is
+the base coordinate system 0.</li>
+<li>Long pressing <strong>Run To</strong> moves the robot to the set points.</li>
+</ul>
+</div>
+<ol class="arabic simple" start="3">
+<li>Jog the robot to the point P1 and click <strong>obtain</strong> on the P1 panel.</li>
+<li>Jog the robot to the point P2 and click <strong>obtain</strong> on the P2 panel.</li>
+<li>Jog the robot to the point P3 and click <strong>obtain</strong> on the P3 panel.</li>
+<li>Click <strong>OK</strong>. The user coordinate system is created successfully.</li>
+</ol>
+<p>The user coordinate system can be selected when jogging the robot arm.</p>
+<img alt="../../../_images/user_coord_sys_select.jpg" class="align-center" src="../../../_images/user_coord_sys_select.jpg" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When creating or modifying a user coordinate system, you can also select <strong>Input settings</strong> and
+directly enter X, Y, Z, Rx, Ry and Rz values.</p>
+</div>
+</div>
+<div class="section" id="other-operations">
+<h2>Other operations<a class="headerlink" href="#other-operations" title="Permalink to this headline"></a></h2>
+<div class="section" id="modify-a-coordinate-system">
+<h3>Modify a coordinate system<a class="headerlink" href="#modify-a-coordinate-system" title="Permalink to this headline"></a></h3>
+<p>Select a coordinate system and click <strong>Modify</strong>. The procedure to modify an existing coordinate
+system is the same as adding a new coordinate system.</p>
+</div>
+<div class="section" id="copy-a-coordinate-system">
+<h3>Copy a coordinate system<a class="headerlink" href="#copy-a-coordinate-system" title="Permalink to this headline"></a></h3>
+<p>Create a new coordinate system based another by selecting a coordinate system and clicking
+<strong>copy</strong>. This new system will be the same as the copied one.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../coordinate_system.html" class="btn btn-neutral float-left" title="Coordinate System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tool.html" class="btn btn-neutral float-right" title="Tool Coordinate System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

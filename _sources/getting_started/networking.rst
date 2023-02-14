@@ -16,7 +16,7 @@ cable.
     Center**.
 3.  Click **Local Area Connection** on the **Network and Sharing Center** page.
 4.  Click **Properties**.
-5.  Double click **Internet Protocol Verion 4 (TCP/IPv4)**.
+5.  Double click **Internet Protocol Version 4 (TCP/IPv4)**.
 6.  Select **Use the following IP address** and change the IP address and subnet mask of the PC.
 
     -   **IP address**: ``192.168.1.12``
@@ -46,7 +46,7 @@ Connecting to the Controller over WiFi
     :align: center
 
 SSH into the Controller
---------------------------
+-----------------------
 
 Occasionally, you may need to SSH into your controller to edit configuration files, load
 trajectories, etc.

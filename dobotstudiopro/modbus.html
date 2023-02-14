@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modbus &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Global Variables" href="global_variables.html" />
+    <link rel="prev" title="I/O Monitoring" href="io_monitoring.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  <div class="sidebartitle-docs-home">
+    <a href="https://docs.trossenrobotics.com/" target="_blank" class="icon icon-home">
+      &nbsp;Trossen Robotics Docs Home
+    </a>
+    <div class="sidebartitle-docs-home-hr">
+      <hr>
+    </div>
+  </div>
+  
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../dobotstudiopro.html">DobotStudio Pro</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_interface.html">Main Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io_monitoring.html">I/O Monitoring</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Modbus</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modbus-overview">Modbus Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connecting-to-modbus-slave">Connecting to Modbus Slave</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="global_variables.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dobot_plus.html">Dobot+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="programming.html">Programming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="best_practices.html">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../dobotstudiopro.html">DobotStudio Pro</a></li>
+      <li class="breadcrumb-item active">Modbus</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotstudiopro/modbus.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="modbus">
+<h1>Modbus<a class="headerlink" href="#modbus" title="Permalink to this headline"></a></h1>
+<div class="section" id="modbus-overview">
+<h2>Modbus Overview<a class="headerlink" href="#modbus-overview" title="Permalink to this headline"></a></h2>
+<p>The Modbus module. The robot serves as Modbus master. This menu is used to connect Modbus slave.</p>
+<img alt="../_images/modbus.png" class="align-center" src="../_images/modbus.png" />
+<table border="1" class="colwidths-given docutils align-center">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">No.</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>Click to hide the panel, and click <strong>Modbus</strong> on the right toolbar to restore it.</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Click to connect Modbus slave. See <a class="reference internal" href="#modbus-connect-slave"><span class="std std-ref">Connecting to the Modbus Slave</span></a> for details.</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Click to fold the control panel, and click again to unfold the panel.</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Display register information of connected slaves.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="connecting-to-modbus-slave">
+<span id="modbus-connect-slave"></span><h2>Connecting to Modbus Slave<a class="headerlink" href="#connecting-to-modbus-slave" title="Permalink to this headline"></a></h2>
+<img alt="../_images/modbus_slave.png" class="align-center" src="../_images/modbus_slave.png" />
+<ul class="simple">
+<li><strong>Slave IP</strong>: IP address of Modbus device.</li>
+<li><strong>Port</strong>: Port number of Modbus communication.</li>
+<li><strong>Slave ID</strong>: Slave device ID.</li>
+<li><strong>Function</strong>: Select the function type of the slave device.</li>
+<li><strong>Address/Quantity</strong>: Address and number of registers.</li>
+<li><strong>Scanning rate</strong>: Time interval of scanning the slave station by the robot arm.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="io_monitoring.html" class="btn btn-neutral float-left" title="I/O Monitoring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="global_variables.html" class="btn btn-neutral float-right" title="Global Variables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

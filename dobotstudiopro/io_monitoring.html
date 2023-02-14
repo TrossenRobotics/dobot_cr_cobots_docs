@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I/O Monitoring &mdash; Dobot CR-Series Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tr_style.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Modbus" href="modbus.html" />
+    <link rel="prev" title="Automatic Identification" href="settings/automatic_identification.html" />
+   
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PZQLS2V"
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  <div class="sidebartitle-docs-home">
+    <a href="https://docs.trossenrobotics.com/" target="_blank" class="icon icon-home">
+      &nbsp;Trossen Robotics Docs Home
+    </a>
+    <div class="sidebartitle-docs-home-hr">
+      <hr>
+    </div>
+  </div>
+  
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_dobot_cr.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end_effectors.html">End Effector Selection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../dobotstudiopro.html">DobotStudio Pro</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_interface.html">Main Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">I/O Monitoring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#i-o-panel-overview">I/O Panel Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i-o-extension">I/O Extension</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i-o-configuration">I/O Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#monitoring">Monitoring</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modbus.html">Modbus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="global_variables.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dobot_plus.html">Dobot+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="programming.html">Programming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="best_practices.html">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dobotscstudio.html">DobotSCStudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_interface.html">I/O Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modbus_interface.html">Modbus Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcpip_protocol.html">TCP/IP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobot_applications.html">Cobot Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Interbotix X-Series Manipulators Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../dobotstudiopro.html">DobotStudio Pro</a></li>
+      <li class="breadcrumb-item active">I/O Monitoring</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/TrossenRobotics/dobot_cr_cobots_docs/blob/main/dobotstudiopro/io_monitoring.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="i-o-monitoring">
+<h1>I/O Monitoring<a class="headerlink" href="#i-o-monitoring" title="Permalink to this headline"></a></h1>
+<div class="section" id="i-o-panel-overview">
+<h2>I/O Panel Overview<a class="headerlink" href="#i-o-panel-overview" title="Permalink to this headline"></a></h2>
+<p>You can monitor and set the I/O status of the controller and the end tool in this menu. For the I/O
+definition, refer to the IO description in the corresponding robot hardware guide. As different
+controllers vary in the number of I/O ports, the screenshots in this document are for reference
+only.</p>
+<img alt="../_images/io_monitoring.png" class="align-center" src="../_images/io_monitoring.png" />
+<table border="1" class="colwidths-given docutils align-center">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">No.</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>Click to hide the panel. Click <strong>I/O</strong> in the right toolbar to display the panel.</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Click to add extended I/O. This can be used for monitoring Modbus communication. See
+<a class="reference internal" href="#dobotstudiopro-io-extension"><span class="std std-ref">I/O extension</span></a> for details.</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Click to set an I/O alias or set the visibility of an I/O. See <a class="reference internal" href="#dobotstudiopro-io-config"><span class="std std-ref">I/O configuration</span></a> for details.</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Click to fold the control panel. Click again to unfold the panel.</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>IO monitoring area. See <a class="reference internal" href="#dobotstudiopro-io-monitoring"><span class="std std-ref">Monitoring</span></a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="i-o-extension">
+<span id="dobotstudiopro-io-extension"></span><h2>I/O Extension<a class="headerlink" href="#i-o-extension" title="Permalink to this headline"></a></h2>
+<img alt="../_images/io_extension.png" class="align-center" src="../_images/io_extension.png" />
+<ul class="simple">
+<li><strong>ID</strong>: Slave device ID.</li>
+<li><strong>Name</strong>: Name of the slave device.</li>
+<li><strong>IP address</strong>: The IP address of the Modbus device.</li>
+<li><strong>Port</strong>: Port number of Modbus communication.</li>
+<li><strong>DI/DO</strong>: Configure the register address and number of DI/DO after selecting the function.</li>
+</ul>
+<p>After clicking <strong>OK</strong>, a new I/O will appear in the bottom of I/O panel. This only takes effect
+only after the controller is restarted.</p>
+<p>Click <strong>x</strong> on the top right of the tab will delete this extension.</p>
+</div>
+<div class="section" id="i-o-configuration">
+<span id="dobotstudiopro-io-config"></span><h2>I/O Configuration<a class="headerlink" href="#i-o-configuration" title="Permalink to this headline"></a></h2>
+<img alt="../_images/io_config.png" class="align-center" src="../_images/io_config.png" />
+<ul class="simple">
+<li>Select the I/O to display on the monitoring page.</li>
+<li>Enter the alias of the IO on the right side. The alias will be displayed on the monitoring
+page. You can also call the corresponding I/O through the alias in block programming and script
+programming.</li>
+<li>With a CCBOX-type controller, you can set digital input/output type to PNP (high-level active)
+or NPN (low-level active), as shown in the figure below.</li>
+</ul>
+<img alt="../_images/io_pnp_npn.png" class="align-center" src="../_images/io_pnp_npn.png" />
+</div>
+<div class="section" id="monitoring">
+<span id="dobotstudiopro-io-monitoring"></span><h2>Monitoring<a class="headerlink" href="#monitoring" title="Permalink to this headline"></a></h2>
+<p>Controller I/O and Tool I/O page supports the following functions.</p>
+<ul class="simple">
+<li><strong>Output</strong>: Set the digital output or analog output.</li>
+<li><strong>Monitor</strong>: Monitor the status of the input and output.</li>
+<li><strong>Simulate</strong>: Simulate digital input status for debugging, as shown below.</li>
+</ul>
+<img alt="../_images/io_sim.png" class="align-center" src="../_images/io_sim.png" />
+<p>You can set the functions of each safe I/O interface in the Safe I/O page. For details on the safe
+I/O, refer to the I/O description in the corresponding robot hardware guide.</p>
+<p>With a CCBOX-type controller, safe I/O and universal I/O share the same terminal. The terminal
+configured as safe I/O cannot be configured as remote I/O.</p>
+<img alt="../_images/io_safe.png" class="align-center" src="../_images/io_safe.png" />
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="settings/automatic_identification.html" class="btn btn-neutral float-left" title="Automatic Identification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modbus.html" class="btn btn-neutral float-right" title="Modbus" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Trossen Robotics.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+     
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
