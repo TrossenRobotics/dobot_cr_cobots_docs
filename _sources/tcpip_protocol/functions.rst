@@ -1,1247 +1,3270 @@
-======================
-Function Documentation
-======================
+===================
+Protocol Definition
+===================
 
-This section provides a description of the protocol used to communicate with 
-the Dobot through a remote terminal over a network.
+This section provides a description of the protocol used to communicate with the Dobot CR-Series
+cobot through a remote workstation over a network.
 
 .. note::
 
-    Your CR-Series cobot must be running on firmware version ``3.5.1.9`` or 
-    greater.
+    Your CR-Series cobot must be running on firmware ``v3.5.1.19`` or greater.
 
 Message Format
 ==============
 
-According to the design, CR-Series robots will open 29999 and 30003 server
-ports. 
+CR robots use ports ``29999``, ``30003``, ``30004``, ``30005`` and ``30006``.
 
-Port 29999 (hereinafter referred to as Dashboard port) is
-responsible for receiving some simple instructions by sending and
-receiving one by one. That is, **after receiving the agreed message
-format from the client, the Dashboard port will give feedback to the
-client** .
+*   Server port ``29999`` (hereinafter referred to as Dashboard Port) is responsible for receiving
+    some simple commands by sending and receiving one by one. That is, after receiving the agreed
+    message format from the client, the Dashboard Port will give feedback to the client.
+*   Server port ``30003`` (hereinafter referred to as the Real-time Feedback Port) feeds back the
+    robot information. It only receives the agreed message format from the client but does not give
+    feedback. (Note: Port ``30003`` port is split into port ``30003`` and port ``30004``, which is
+    expected to be implemented in controller version 3.5.2. Controller version 3.5.1 currently has
+    only one ``30003`` port for real-time feedback or sending motion commands.)
+*   Server port ``30004`` (hereinafter referred to as Real-time Feedback Port) feeds back robot
+    information every 8ms. Port ``30005`` provides robot information every 200ms. Port ``30006`` is
+    a configurable port to feed back robot information. By default, port ``30006`` provides
+    feedback every 50ms.
 
-Port 30003 (hereinafter referred to as the real-time
-feedback port) **feeds back the robot information every 8 ms. It only
-receives the agreed message format from the client but does not give
-feedback.**
+.. note::
 
-Format for sending messages
----------------------------
+    Commands are not case-sensitive. ``ENABLEROBOT()``, ``enablerobot()``, and ``eNabLErobOt()``
+    are treated the same and will all enable the robot.
 
-.. code-block:: python
+Format When Sending Messages
+----------------------------
 
-  Message name(Param1,Param2,Param3,...,Paramn)
+::
 
-The message format is shown as above. It consists of a message name,
-parameters in a bracket. Each parameter is separated by an English comma
-“,”. A complete message ends up with right parenthesis.
+    Message name(Param_1,Param_2,Param_3,...Param_n)
 
-Both message commands and message responses are in ASCII format
-(string).
+The message format is shown as above. It consists of a message name with parameters in a bracket.
+Each parameter is separated by an English comma “,”. A complete message ends with a right
+parenthesis.
 
-Format for Feedback
--------------------
+Both message commands and message responses are in ASCII format (string).
 
-Feedback when receiving successfully
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Format When Receiving Messages
+------------------------------
 
-.. code-block:: python
-  
-  "Message name(Param1,Param2,Param3,...,Paramn)"
+::
 
-It returns the message name, as shown above.
+    "ErrorID,{value,...,value_n},Message name(Param_1,Param_2,Param_3,...Param_n);"
 
-Feedback when failing to receive
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The return message format is shown above. An ``ErrorID`` of zero indicates that the command was
+received successfully. If the ErrorID is non-zero value, it indicates an error has occurred in the
+command. See `Error Code Descriptions`_ for a detailed description.
 
-.. code-block:: text
+``{value_1,value_2,value_3,...,value_n}`` represents the return value. If there is no return value,
+``{}`` will be returned.
 
-  ​"could not understand:'Message name(Param1,Param2,Param3,..,Paramn)'"
+``Message name (Param_1,Param_2,Param_3,...,Param_n)`` reflects the content delivered.
 
-Communication Protocol - Dashboard Port
-=======================================
+For example, the command:
 
-The computer can directly send some simple instructions to the
-robot through port 29999. The table below is the Dashboard
-instruction list. The Dashboard commands can be used to control the
-robot, including enabling/disabling and resetting the robot.
+::
 
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| Commands            | Description                                                                                                                      |
-+=====================+==================================================================================================================================+
-| `EnableRobot`_      | enable the robot                                                                                                                 |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `DisableRobot`_     | disable the robot                                                                                                                |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `ClearError`_       | clear the error of the robot                                                                                                     |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `ResetRobot`_       | the robot stops its current action, and receives enabling again                                                                  |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `SpeedFactor`_      | set the global speed ratio                                                                                                       |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `User`_             | select the identified user coordinate system                                                                                     |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `Tool`_             | select the identified tool coordinate system                                                                                     |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `RobotMode`_        | mode of robot                                                                                                                    |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `PayLoad`_          | set the current load                                                                                                             |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `DO`_               | set the status of digital output port                                                                                            |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `DOExecute`_        | set the status of digital output port (immediate command)                                                                        |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `ToolDO`_           | set the status of digital output port of the tool                                                                                |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `ToolDOExecute`_    | set the status of digital output port of the tool (immediate command)                                                            |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `AO`_               | set the voltage of analog output port of controller                                                                              |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `AOExecute`_        | set the voltage of analog output port of controller (immediate command)                                                          |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `AccJ`_             | set the joint acceleration rate. This command is valid only when the motion mode is MovJ, MovJIO, MovJR, JointMovJ               |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `AccL`_             | set the Cartesian acceleration rate. This command is valid only when the motion mode is MovL, MovLIO, MovLR, Jump, Arc, Circle   |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `SpeedJ`_           | set the joint velocity rate. This command is valid only when the motion mode is MovJ, MovJIO, MovJR, JointMovJ                   |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `SpeedL`_           | set the Cartesian velocity rate. This command is valid only when the motion mode is MovL, MovLIO, MovLR, Jump, Arc, Circle       |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `Arch`_             | set the index of arc parameters (StartHeight, zLimit, EndHeight) in the Jump mode                                                |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `CP`_               | set the continuous path rate during movement                                                                                     |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `LimZ`_             | set the maximum lifting height in Jump mode                                                                                      |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `SetArmOrientation`_| set the orientation of the arm                                                                                                   |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `PowerOn`_          | Power on the robot                                                                                                               |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `RunScript`_        | run the script                                                                                                                   |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `StopScript`_       | stop the script                                                                                                                  |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `PauseScript`_      | pause the script                                                                                                                 |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `ContinueScript`_   | continue the script                                                                                                              |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `GetHoldRegs`_      | read the holding register value                                                                                                  |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `SetHoldRegs`_      | write in the holding register                                                                                                    |
-+---------------------+----------------------------------------------------------------------------------------------------------------------------------+
+    MovL(-500,100,200,150,0,90)
+
+returns:
+
+::
+
+    "0,{},MovL(-500,100,200,150,0,90); //0"
+
+This return value indicates that the command was received successfully. If there is no return
+value, ``{}`` will be returned.
+
+The command:
+
+::
+
+    Mov(-500,100,200,150,0,90)
+
+returns:
+
+::
+
+    "-10000,{},Mov(-500,100,200,150,0,90); //-10000"
+
+This return value indicates a command error. If there is no return value, ``{}`` will be returned.
+
+Dashboard Port Commands
+=======================
+
+The upper computer can directly send some simple commands to the robot through port ``29999``.
+Dashboard commands can be used to control the robot like enabling/disabling the robot, resetting
+the robot, and setting some I/O statuses.
 
 EnableRobot
 -----------
 
--  Function: ``EnableRobot()``
--  Description: enable the robot
--  Parameters: None
--  Supporting port: 29999
+*   **Function**: ``EnableRobot()``
+*   **Description**: Enable the robot
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},EnableRobot();``
+*   **Optional parameters**: Number of optional parameters: 0, 1, or 4. A command with zero
+    parameters enables the robot without setting payload information. A command with one parameter
+    provides the payload weight. A command with four parameters provides the payload weight,
+    centerX, centerY, and centerZ respectively.
 
-.. code-block:: python
+.. list-table::
+    :header-rows: 1
+    :widths: 20 10 40
 
-  EnableRobot()
+    * - Parameter
+      - Type
+      - Description
+    * - load
+      - double
+      - Payload weight (kg):
+
+        * CR3/CR3L load range: 3kg
+        * CR5/CR5D load range: 5kg
+        * CR7 load range: 7kg
+        * CR10 load range: 10kg
+        * CR12 load range: 12kg
+        * CR16 load range: 16kg
+
+    * - centerX
+      - double
+      - Payload offset distance in X direction: -500mm - 500mm
+    * - centerY
+      - double
+      - Payload offset distance in Y direction: -500mm - 500mm
+    * - centerZ
+      - double
+      - Payload offset distance in Z direction: -500mm - 500mm
+
+Enable the robot without setting payload parameters.
+
+::
+
+    EnableRobot()
+
+Enable the robot with a payload weighing 3.5kg.
+
+::
+
+    EnableRobot(3.5)
+
+Enable the robot with a payload weighing 3.5kg and offsets of 0mm, 50mm, 100mm in the X, Y, and Z
+directions, respectively.
+
+::
+
+    EnableRobot(3.5,0,50,100)
 
 DisableRobot
 ------------
 
--  Function: ``DisableRobot()``
--  Description: disable the robot
--  Parameters: None
--  Supporting port: 29999
+*   **Function**: ``DisableRobot()``
+*   **Description**: Disable the robot
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},DisableRobot();``
+*   **Parameters**: None
 
-.. code-block:: python
-  
-  DisableRobot()
+Disable the robot.
+
+::
+
+    DisableRobot()
 
 ClearError
 ----------
 
--  Function: ``ClearError()``
--  Description: clear the error of the robot
--  Parameters: null
--  Supporting port: 29999
+*   **Function**: ``ClearError()``
+*   **Description**: Clear robot alarms. After clearing alarms, the user can check whether the
+    robot is still in the alarm state using `RobotMode`_. For alarms that cannot be cleared,
+    restart the control cabinet. (Refer to `GetErrorID`_)
+*   **Return**: ``ErrorID,{},ClearError();``
+*   **Supported Port**: ``29999``
+*   **Parameters**: None
 
-.. code-block:: python
+Clear all possible robot alarms.
 
-  ClearError()
+::
+
+    ClearError()
 
 ResetRobot
 ----------
 
--  Function: ``ResetRobot()``
--  Description: stop the robot
--  Parameters: None
--  Supporting port: 29999
+*   **Function**: ``ResetRobot()``
+*   **Description**: Stop the robot's current execution
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},ClearError();``
+*   **Parameters**: None
 
-.. code-block:: python
-  
-  ResetRobot()
+Stop robot's current execution.
+
+::
+
+    ResetRobot()
 
 SpeedFactor
 -----------
 
--  Function: ``SpeedFactor(ratio)``
--  Description: set the global speed ratio
--  Parameters:
+*   **Function**: ``SpeedFactor(ratio)``
+*   **Description**: Set the global speed ratio
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SpeedFactor(ratio);``
+*   **Parameters**:
 
-  +-------------+--------+-----------------------------------------------------+
-  | Parameter   | Type   | Description                                         |
-  +=============+========+=====================================================+
-  | ratio       | int    | speed ratio, range: 0~100 exclusive                 |
-  +-------------+--------+-----------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 15 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - ratio
+      - int
+      - speed ratio, range: 0 - 100 exclusive
 
-.. code-block:: python
+Set the global speed ratio to 80%.
 
-  SpeedFactor(80)
+::
+
+    SpeedFactor(80)
 
 User
 ----
 
--  Function: ``User(index)``
--  Description: select the identified user coordinate system
--  Parameters:
+*   **Function**: ``User(index)``
+*   **Description**: Select the specified user coordinate system
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},User(index); //ErrorID: -1 indicates that the user coordinate index
+    does not exist.``
+*   **Parameters**:
 
-  +-------------+--------+------------------------------------------------------------+
-  | Parameter   | Type   | Description                                                |
-  +=============+========+============================================================+
-  | index       | int    | select the identified user coordinate system, range: 0~9   |
-  +-------------+--------+------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 15 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Select the specified user coordinate system, range: 0 - 9
 
-.. code-block:: python
-  
-  User(1)
+Select the first user coordinate system for use.
+
+::
+
+    User(1)
 
 Tool
 ----
 
--  Function: ``Tool(index)``
--  Description: select the identified tool coordinate system
--  Parameters:
+*   **Function**: ``Tool(index)``
+*   **Description**: Select the specified tool coordinate system
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},Tool(index); //ErrorID: -1 indicates that the tool coordinate index
+    does not exist.``
+*   **Parameters**:
 
-  +-------------+--------+------------------------------------------------------------+
-  | Parameter   | Type   | Description                                                |
-  +=============+========+============================================================+
-  | index       | int    | select the identified tool coordinate system, range: 0~9   |
-  +-------------+--------+------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 15 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Select the specified tool coordinate system, range: 0 - 9
 
-.. code-block:: python
+Select the first tool coordinate system for use.
 
-  Tool(1)
+::
+
+    Tool(1)
 
 RobotMode
 ---------
 
--  Function: ``RobotMode()``
--  Description: mode of robot
--  Parameters: None
--  Supporting port: 29999
+*   **Function**: ``RobotMode()``
+*   **Description**: Get the current mode of robot
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{Value},RobotMode(); //Value is the robot mode value``
+*   **Parameters**: None
 
-.. code-block:: python
+Get the current mode of the robot.
 
-  RobotMode()
+::
 
--  Return:
+    RobotMode()
+    # 4 // Robot is disabled
 
-  +--------+------------------------------------+-------------------------------+
-  | Mode   | Description                        | Note                          |
-  +========+====================================+===============================+
-  | -1     | ROBOT\_MODE\_NO\_CONTROLLER        | No controller                 |
-  +--------+------------------------------------+-------------------------------+
-  | 0      | ROBOT\_MODE\_DISCONNECTED          | Disconnect                    |
-  +--------+------------------------------------+-------------------------------+
-  | 1      | ROBOT\_MODE\_CONFIRM\_SAFETY       | Configure safety parameters   |
-  +--------+------------------------------------+-------------------------------+
-  | 2      | ROBOT\_MODE\_BOOTING               | Start                         |
-  +--------+------------------------------------+-------------------------------+
-  | 3      | ROBOT\_MODE\_POWER\_OFF            | Power off                     |
-  +--------+------------------------------------+-------------------------------+
-  | 4      | ROBOT\_MODE\_POWER\_ON             | Power on                      |
-  +--------+------------------------------------+-------------------------------+
-  | 5      | ROBOT\_MODE\_IDLE                  | Idle                          |
-  +--------+------------------------------------+-------------------------------+
-  | 6      | ROBOT\_MODE\_BACKDRIVE             | Drag                          |
-  +--------+------------------------------------+-------------------------------+
-  | 7      | ROBOT\_MODE\_RUNNING               | Run                           |
-  +--------+------------------------------------+-------------------------------+
-  | 8      | ROBOT\_MODE\_UPDATING\_FIRMWAREu   | Update firmware               |
-  +--------+------------------------------------+-------------------------------+
-  | 9      | ROBOT\_MODE\_ERROR                 | Alarm                         |
-  +--------+------------------------------------+-------------------------------+
+*   Return options:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 5 10 40
+
+    * - Mode
+      - Description
+      - Note
+    * - 1
+      - ROBOT_MODE_INIT
+      - Initialization
+    * - 2
+      - ROBOT_MODE_BRAKE_OPEN
+      - Brake is released
+    * - 3
+      -
+      - Reserved
+    * - 4
+      - ROBOT_MODE_DISABLED
+      - Robot is disabled (brake is not released)
+    * - 5
+      - ROBOT_MODE_ENABLE
+      - Robot is enable (idle)
+    * - 6
+      - ROBOT_MODE_BACKDRIVE
+      - Robot is in dragging state
+    * - 7
+      - ROBOT_MODE_RUNNING
+      - Robot is running
+    * - 8
+      - ROBOT_MODE_RECORDING
+      - Robot is in dragging recording mode
+    * - 9
+      - ROBOT_MODE_ERROR
+      - Robot is in alarm state
+    * - 10
+      - ROBOT_MODE_PAUSE
+      - Robot is paused
+    * - 11
+      - ROBOT_MODE_JOG
+      - Robot is in jogging state
+
+.. note::
+
+    In order to maintain compatibility with controller version 3.5.1, the return value of robot
+    status is not modified, such as: idle, drag, running, alarm state. Brake releasing, trajectory
+    recording, pause and jog are added.
 
 PayLoad
 -------
 
--  Function: ``PayLoad(weight,inertia)``
--  Description: set the current load
--  Parameters:
+*   **Function**: ``PayLoad(weight,inertia)``
+*   **Description**: Set the current payload
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},PayLoad(weight,inertia);``
+*   **Parameters**:
 
-  +-------------+----------+---------------------+
-  | Parameter   | Type     | Description         |
-  +=============+==========+=====================+
-  | weight      | double   | load weight kg      |
-  +-------------+----------+---------------------+
-  | inertia     | double   | load inertia kgm²   |
-  +-------------+----------+---------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 15 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - weight
+      - double
+      - load weight kg
+    * - inertia
+      - double
+      - load inertia kg*m^2
 
-.. code-block:: python
+Set the current payload to 3kg and an inertia of 0.4 kg*m^2.
 
-  PayLoad(3,0.4)
+::
+
+    PayLoad(3,0.4)
+
+.. note::
+
+    TCP commands LoadSet in Lua. Using LoadSet is the same as calling PayLoad. LoadSet should be
+    used with the LoadSwitch command
 
 DO
 --
 
--  Function: ``DO(index,0/1)``
--  Description: set the status of digital output port (queue command)
--  Parameters:
+*   **Function**: ``DO(index,status)``
+*   **Description**: Set the status of a digital output port on the controller (queue command)
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},DO(index,status);``
+*   **Parameters**:
 
-  +-------------+--------+------------------------------------------------------------------+
-  | Parameter   | Type   | Description                                                      |
-  +=============+========+==================================================================+
-  | index       | int    | digital output index, range: 1~24                                |
-  +-------------+--------+------------------------------------------------------------------+
-  | 0/1         | bool   | status of the digital output port. 1: High level; 0: Low level   |
-  +-------------+--------+------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - digital output index, range: 1 - 16 or 100 - 1000. The value ranges from 100 - 1000 with
+        the support of the hardware of the extended I/O module
+    * - status
+      - bool
+      - Status of the digital output port:
 
-.. code-block:: python
-  
-  DO(1,1)
+        *   1: Set status high
+        *   0: Set status low
+
+Set DO index 1 to high.
+
+::
+
+    DO(1,1)
 
 DOExecute
 ---------
 
--  Function: ``DOExecute(index,0/1)``
--  Description: set the status of digital output port (immediate
-   command)
--  Parameters:
+*   **Function**: ``DOExecute(index,status)``
+*   **Description**: Set the status of a digital output port on the controller (immediate execution)
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},DOExecute(index,status);``
+*   **Parameters**:
 
-  +-------------+--------+------------------------------------------------------------------+
-  | Parameter   | Type   | Description                                                      |
-  +=============+========+==================================================================+
-  | index       | int    | digital output index, range: 1~16                                |
-  +-------------+--------+------------------------------------------------------------------+
-  | 0/1         | boo    | status of the digital output port. 1: High level; 0: Low level   |
-  +-------------+--------+------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - digital output index, range: 1 to 16 or 100 to 1000. The value ranges from 100 to 1000 with
+        the support of the hardware of the extended I/O module
+    * - status
+      - bool
+      - Status of the digital output port. 1: High level; 0: Low level
 
-.. code-block:: python
+Immediately set DO index 1 to high.
 
-  DOExecute(1,1)
+::
+
+    DOExecute(1,1)
 
 ToolDO
 ------
 
--  Function: ``ToolDO(index,0/1)``
--  Description: set the status of digital output port of the tool (queue
-   command)
--  Parameters:
+*   **Function**: ``ToolDO(index,status)``
+*   **Description**: Set the status of a digital output port on the tool (queue command)
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},ToolDO(index,status);``
+*   **Parameters**:
 
-  +-------------+--------+--------------------------------------------------------------+
-  | Parameter   | Type   | Description                                                  |
-  +=============+========+==============================================================+
-  | index       | int    | digital output index, range: 1 or 2                          |
-  +-------------+--------+--------------------------------------------------------------+
-  | 0/1         | bool   | status of digital output port. 1: high level, 0: low level   |
-  +-------------+--------+--------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - digital output index, range: 1 to 16 or 100 to 1000. The value ranges from 100 to 1000 with
+        the support of the hardware of the extended I/O module
+    * - status
+      - bool
+      - status of digital output port. 1: high level, 0: low level
 
-.. code-block:: python
+Set ToolDO index 1 to high.
 
-  ToolDO(1,1)
+::
+
+    ToolDO(1,1)
 
 ToolDOExecute
 -------------
 
--  Function: ``ToolDOExecute(index,0/1)``
--  Description: set the status of digital output port of the tool
-   (immediate command)
--  Parameters:
+*   **Function**: ``ToolDOExecute(index,status)``
+*   **Description**: set the status of digital output port of the tool (immediate command)
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},ToolDOExecute(index,status);``
+*   **Parameters**:
 
-  +-------------+--------+------------------------------------------------------------------+
-  | Parameter   | Type   | Description                                                      |
-  +=============+========+==================================================================+
-  | index       | int    | digital output index, range: 1 or 2                              |
-  +-------------+--------+------------------------------------------------------------------+
-  | 0/1         | bool   | status of the digital output port. 1: high level; 0: low level   |
-  +-------------+--------+------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - digital output index, range: 1 or 2
+    * - 0/1
+      - bool
+      - status of the digital output port. 1: high level; 0: low level
 
-.. code-block:: python
-  
-  ToolDOExecute(1,1)
+Immediately set ToolDO index 1 to high.
+
+::
+
+    ToolDOExecute(1,1)
 
 AO
 --
 
--  Function: ``AO(index,value)``
--  Description: set the voltage of analog output port of controller
-   (queue command)
--  Parameters:
+*   **Function**: ``AO(index,value)``
+*   **Description**: Set the voltage of an analog output port on the controller (queue command)
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},AO(index,value);``
+*   **Parameters**:
 
-  +-------------+----------+-----------------------------------------------+
-  | Parameter   | Type     | Description                                   |
-  +=============+==========+===============================================+
-  | index       | int      | analog output index, range: 1 or 2            |
-  +-------------+----------+-----------------------------------------------+
-  | value       | double   | voltage of corresponding index, range: 0~10   |
-  +-------------+----------+-----------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - analog output index, range: 1 or 2
+    * - value
+      - double
+      - voltage of corresponding index in volts, range: 0 - 10
 
-.. code-block:: python
+Set AO index 1 to 2V.
 
-  AO(1,2)
+::
+
+    AO(1,2)
 
 AOExecute
 ---------
 
--  Function: ``AOExecute(index,value)``
--  Description: set the voltage of analog output port of controller
-   (immediate command)
--  Parameters:
+*   **Function**: ``AOExecute(index,value)``
+*   **Description**: Set the voltage of an analog output port on the controller (immediate execution)
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},AOExecute(index,value);``
+*   **Parameters**:
 
-  +-------------+----------+-----------------------------------------------+
-  | Parameter   | Type     | Description                                   |
-  +=============+==========+===============================================+
-  | index       | int      | analog output index, range: 1 or 2            |
-  +-------------+----------+-----------------------------------------------+
-  | value       | double   | voltage of corresponding index, range: 0~10   |
-  +-------------+----------+-----------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - analog output index, range: 1 or 2
+    * - value
+      - double
+      - voltage of corresponding index, range: 0 - 10
 
-.. code-block:: python
-  
-  AOExecute(1,2)
+Immediately set AO index 1 to 2V.
+
+::
+
+    AOExecute(1,2)
 
 AccJ
 ----
 
--  Function: ``AccJ(R)``
+*   **Function**: ``AccJ(R)``
+*   **Description**: Set the joint acceleration rate. This command is valid only when the motion
+    mode is MovJ, MovJIO, MovJR, or JointMovJ
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},AccJ(R);``
+*   **Parameters**:
 
--  Description: set the joint acceleration rate. This command is valid
-   only when the motion mode is MovJ, MovJIO, MovJR, JointMovJ
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Parameters:
+    * - Parameter
+      - Type
+      - Description
+    * - R
+      - int
+      - joint acceleration rate, range: 1 - 100
 
-  +-------------+--------+-----------------------------------------+
-  | Parameter   | Type   | Description                             |
-  +=============+========+=========================================+
-  | R           | int    | joint acceleration rate, range: 1~100   |
-  +-------------+--------+-----------------------------------------+
+Set acceleration rate of joint movement commands to 50%.
 
--  Supporting port: 29999
+::
 
-.. code-block:: python
-  
-  AccJ(50)
+    AccJ(50)
 
 AccL
 ----
 
--  Function: ``AccL(R)``
--  Description: set the Cartesian acceleration rate. This command is
-   valid only when the motion mode is MovL, MovLIO, MovLR, Jump, Arc,
-   Circle
--  Parameters:
+*   **Function**: ``AccL(R)``
+*   **Description**: Set the Cartesian acceleration rate. This command is valid only when the
+    motion mode is MovL, MovLIO, MovLR, Jump, Arc, or Circle
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},AccL(R);``
+*   **Parameters**:
 
-  +-------------+--------+---------------------------------------------+
-  | Parameter   | Type   | Description                                 |
-  +=============+========+=============================================+
-  | R           | int    | Cartesian acceleration rate, range: 1~100   |
-  +-------------+--------+---------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - R
+      - int
+      - Cartesian acceleration rate, range: 1 - 100
 
-.. code-block:: python
+Set acceleration rate of Cartesian movement commands to 50%.
 
-  AccL(50)
+::
+
+    AccL(50)
 
 SpeedJ
 ------
 
--  Function: ``SpeedJ(R)``
--  Description: set the joint velocity rate. This command is valid only
-   when the motion mode is MovJ, MovJIO, MovJR, JointMovJ
--  Parameters:
+*   **Function**: ``SpeedJ(R)``
+*   **Description**: Set the joint velocity rate. This command is valid only when the motion mode
+    is MovJ, MovJIO, MovJR, or JointMovJ
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SpeedJ(R);``
+*   **Parameters**:
 
-  +-------------+--------+-------------------------------------+
-  | Parameter   | Type   | Description                         |
-  +=============+========+=====================================+
-  | R           | int    | joint velocity rate, range: 1~100   |
-  +-------------+--------+-------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - R
+      - int
+      - joint velocity rate, range: 1 - 100
 
-.. code-block:: python
-  
-  SpeedJ(50)
+Set velocity rate of joint movement commands to 50%.
+
+::
+
+    SpeedJ(50)
 
 SpeedL
 ------
 
--  Function: ``SpeedL(R)``
--  Description: set the Cartesian velocity rate. This command is valid
-   only when the motion mode is MovL, MovLIO, MovLR, Jump, Arc, Circle
--  Parameters:
+*   **Function**: ``SpeedL(R)``
+*   **Description**: Set the Cartesian velocity rate. This command is valid only when the motion
+    mode is MovL, MovLIO, MovLR, Jump, Arc, or Circle
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SpeedL(R);``
+*   **Parameters**:
 
-  +-------------+--------+-----------------------------------------+
-  | Parameter   | Type   | Description                             |
-  +=============+========+=========================================+
-  | R           | int    | Cartesian velocity rate, range: 1~100   |
-  +-------------+--------+-----------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - R
+      - int
+      - Cartesian velocity rate, range: 1 - 100
 
-.. code-block:: python
+Set velocity rate of Cartesian movement commands to 50%.
 
-  SpeedL(50)
+::
+
+    SpeedL(50)
 
 Arch
 ----
 
--  Function: ``Arch(Index)``
+*   **Function**: ``Arch(Index)``
+*   **Description**: Set the index of arc parameters (StartHeight, zLimit, EndHeight) for the Jump
+    motion mode
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},Arch(Index);``
+*   **Parameters**:
 
--  Description: set the index of arc parameters (StartHeight, zLimit,
-   EndHeight) in the Jump mode
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Parameters:
+    * - Parameter
+      - Type
+      - Description
+    * - Index
+      - int
+      - arc parameters index, range: 0 - 9
 
-  +-------------+--------+------------------------------------+
-  | Parameter   | Type   | Description                        |
-  +=============+========+====================================+
-  | Index       | int    | arc parameters index, range: 0~9   |
-  +-------------+--------+------------------------------------+
+::
 
--  Supporting port: 29999
-
-.. code-block:: python
-
-  Arch(1)
+    Arch(1)
 
 CP
 --
 
--  Function: ``CP(R)``
--  Description: set CP rate. CP means continuous path, that is, when the
-   robot arm reaches the end point from the starting point through the
-   intermediate point, it passes through the intermediate point in a
-   right angle or in a curve. This command is invalid for Jump mode.
--  Parameters:
+*   **Function**: ``CP(R)``
+*   **Description**: Set continuous path (CP) rate. When the robot arm reaches the end point from
+    the starting point through an intermediate point, it passes through the intermediate point in a
+    right angle or in a curve. This command is invalid for Jump mode.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},CP(R);``
+*   **Parameters**:
 
-  +-------------+--------+--------------------------------------+
-  | Parameter   | Type   | Description                          |
-  +=============+========+======================================+
-  | R           | int    | continuous path rate, range: 1~100   |
-  +-------------+--------+--------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - R
+      - int
+      - continuous path rate, range: 1 - 100
 
-.. code-block:: python
+Set the continuous path rate to 50%.
 
-  CP(50)
+::
 
-LimZ
-----
-
--  Function: ``LimZ(zValue)``
--  Description: set the maximum lifting height in Jump mode
--  Parameters:
-
-  +-------------+--------+----------------------------------------------------------------------------------------+
-  | Parameter   | Type   | Description                                                                            |
-  +=============+========+========================================================================================+
-  | zValue      | int    | maximum lifting height which cannot exceed the Z-axis limiting position of the robot   |
-  +-------------+--------+----------------------------------------------------------------------------------------+
-
--  Supporting port: 29999
-
-.. code-block:: python
-
-  LimZ(80)
+    CP(50)
 
 SetArmOrientation
 -----------------
 
--  Function: ``SetArmOrientation(LorR,UorD,ForN,Config6)``
--  Description: set the orientation of the arm
--  Parameters:
+*   **Function**: ``SetArmOrientation(LorR,UorD,ForN,Config6)``
+*   **Description**: Set the orientation of the arm
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SetArmOrientation(LorR,UorD,ForN,Config6);``
+*   **Parameters**:
 
-  +-------------+--------+-----------------------------------------------------+
-  | Parameter   | Type   | Description                                         |
-  +=============+========+=====================================================+
-  | LorR        | int    | Arm direction: forward/backward (1/-1)              |
-  +-------------+--------+-----------------------------------------------------+
-  | UorD        | int    | Arm direction: up the elbow/down the elbow (1/-1)   |
-  +-------------+--------+-----------------------------------------------------+
-  | ForN        | int    | Whether the wrist is reversed (1/-1)                |
-  +-------------+--------+-----------------------------------------------------+
-  | Config6     | int    | Sixth axis Angle sign                               |
-  +-------------+--------+-----------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 15 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - LorR
+      - int
+      - Arm direction: forward/backward (1/-1)
 
-.. code-block:: python
+        * 1: Forward
+        * -1: backward
 
-  SetArmOrientation(1,1,-1,1)
+    * - UorD
+      - int
+      - Arm direction: up the elbow/down the elbow (1/-1)
+
+        * 1: elbow up
+        * -1: elbow down
+
+    * - ForN
+      - int
+      - Whether the wrist is reversed (1/-1)
+
+        * 1: wrist is not reversed
+        * -1: wrist is reversed
+
+    * - Config6
+      - int
+      - Sixth axis angle sign
+
+        * -1,-2...
+
+            * -1: Axis 6 Angle is [0, -90], Config6 is -1;
+            * -2: Axis 6 Angle is [90, 180], and so on
+
+        * 1,2...
+
+            * 1: axis 6 Angle is [0, 90], Config6 is 1;
+            * 2: axis 6 Angle is [9, 180], Config6 is 2, and so on
+
+Set the arm orientation to forward, elbow up, wrist reversed, and J6 between degrees [0, 90].
+
+::
+
+    SetArmOrientation(1,1,-1,1)
 
 PowerOn
 -------
 
--  Function: ``PowerOn()``
--  Description: Power on the robot
--  Parameters: None
--  Supporting port: 29999
+*   **Function**: ``PowerOn()``
+*   **Description**: Power on the robot
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},PowerOn();``
+*   **Parameters**: None
 
-.. note:: 
-  
+Power the robot on.
+
+::
+
+    PowerOn()
+
+.. note::
+
   Once the robot is powered on, you can enable the robot after about 10 seconds.
-
-.. code-block:: python
-
-  PowerOn()
 
 RunScript
 ---------
 
--  Function: ``RunScript(projectName)``
--  Description: run the script
--  Parameters:
+*   **Function**: ``RunScript(projectName)``
+*   **Description**: Run the named script
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},RunScript(projectName);``
+*   **Parameters**:
 
-  +---------------+----------+---------------+
-  | Parameter     | Type     | Description   |
-  +===============+==========+===============+
-  | projectName   | string   | script name   |
-  +---------------+----------+---------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - projectName
+      - string
+      - script name
 
-.. code-block:: python
+Run the script named "demo".
 
-  RunScript(demo)
+::
+
+    RunScript(demo)
 
 StopScript
 ----------
 
--  Function: ``StopScript()``
--  Description: stop the script
--  Parameters: None
--  Supporting port: 29999
+*   **Function**: ``StopScript()``
+*   **Description**: Stop the running script
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},StopScript();``
+*   **Parameters**: None
 
-.. code-block:: python
+Stop the running script.
 
-  StopScript()
+::
+
+    StopScript()
 
 PauseScript
 -----------
 
--  Function: ``PauseScript()``
--  Description: pause the script
--  Parameters: None
--  Supporting port: 29999
+*   **Function**: ``PauseScript()``
+*   **Description**: Pause the running script
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},PauseScript();``
+*   **Parameters**: None
 
-.. code-block:: python
+Pause the running script.
 
-  PauseScript()
+::
+
+    PauseScript()
 
 ContinueScript
 --------------
 
--  Function: ``ContinueScript()``
--  Description: continue the script
--  Parameters: None
--  Supporting port: 29999
+*   **Function**: ``ContinueScript()``
+*   **Description**: Continue the paused script
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},ContinueScript();``
+*   **Parameters**: None
 
-.. code-block:: python
+Continue the paused script.
 
-  ContinueScript()
+::
+
+    ContinueScript()
+
+SetSafeSkin
+-----------
+
+*   **Function**: ``SetSafeSkin(status)``
+*   **Description**: Set the state of safe skin if available.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SetSafeSkin(status));``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - status
+      - int
+      - safe skin status:
+
+        *   0: Turn off safe skin
+        *   1: Turn on safe skin
+
+Turn on the safe skin.
+
+::
+
+    SetSafeSkin(1)
+
+GetTraceStartPose
+-----------------
+
+*   **Function**: ``GetTraceStartPose(traceName)``
+*   **Description**: Get the first point of the named trajectory.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{x,y,z,a,b,c},GetTraceStartPose(traceName); //{x,y,z,a,b,c} refers to the
+    point coordinates``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - traceName
+      - string
+      - name of the trajectory file (with the suffix)
+
+Get the first point of the trajectory named "recv_string".
+
+::
+
+    GetTraceStartPose(recv_string)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above
+
+GetPathStartPose
+----------------
+
+*   **Function**: ``GetPathStartPose(traceName)``
+*   **Description**: Get the first point in the named trajectory playback.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{j1,j2,j3,j4,j5,j6},GetTraceStartPose(traceName); //{j1,j2,j3,j4,j5,j6}
+    is the coordinates of joints``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - traceName
+      - string
+      - name of the trajectory file (with the suffix)
+
+Get the first point in the trajectory playback called "recv_string".
+
+::
+
+    GetPathStartPose(recv_string)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+PositiveSolution
+----------------
+
+*   **Function**: ``PositiveSolution(J1,J2,J3,J4,J5,J6,User,Tool)``
+*   **Description**: Get the positive solution. Calculate the spatial position of the end of the
+    robot based on the given angle of each joint of the robot. The arm direction of the robot is
+    required to be known by `SetArmOrientation`_
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{x,y,z,a,b,c},PositiveSolution(J1,J2,J3,J4,J5,J6,User,Tool);
+    //{x,y,z,a,b,c} refers to the returned spatial position``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - J1
+      - double
+      - Position of axis J1 in degrees
+    * - J2
+      - double
+      - Position of axis J2 in degrees
+    * - J3
+      - double
+      - Position of axis J3 in degrees
+    * - J4
+      - double
+      - Position of axis J4 in degrees
+    * - J5
+      - double
+      - Position of axis J5 in degrees
+    * - J6
+      - double
+      - Position of axis J6 in degrees
+    * - User
+      - int
+      - Select the calibrated user coordinate system
+    * - Tool
+      - int
+      - Select the calibrated tool coordinate system
+
+Do forward kinematics to find the pose of the end of the robot with joint positions
+[0,0,-90,0,90,0] using User coordinate system 1 and Tool coordinate system 1.
+
+::
+
+    PositiveSolution(0,0,-90,0,90,0,1,1)
+    # 0,{473.000000,-141.000000,469.000000,-180.000000,-0.000000,-90.000000},PositiveSolution(0,0,-90,0,90,0,0,0);
+
+InverseSolution
+---------------
+
+*   **Function**: ``InverseSolution(X,Y,Z,Rx,Ry,Rz,User,Tool,isJointNear,JointNear)``
+*   **Description**: Get the inverse solution. Calculate the angle values of each joint of the
+    robot based on the position and attitude of the end of the robot
+*   **Supported Port**: ``29999``
+*   **Return**:
+    ``ErrorID,{J1,J2,J3,J4,J5,J6},InverseSolution(X,Y,Z,Rx,Ry,Rz,User,Tool,isJointNear,JointNear);
+    //{J1,J2,J3,J4,J5,J6} is the angle values of each joint. isJointNear,JointNear will be returned
+    if there are values delivered``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis position in mm
+    * - Y
+      - double
+      - Y-axis position in mm
+    * - Z
+      - double
+      - Z-axis position in mm
+    * - Rx
+      - double
+      - Position of the Rx axis, units: degrees
+    * - Ry
+      - double
+      - Position of the Ry axis, units: degrees
+    * - Rz
+      - double
+      - Position of the Rx axis, units: degrees
+    * - User
+      - int
+      - Select the calibrated user coordinate system
+    * - Tool
+      - int
+      - Select the calibrated tool coordinate system
+
+*   **Optional Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - isJointNear
+      - int
+      - Whether to choose the Angle solution. If the value is 1, JointNear data is valid. If the
+        value is 0, JointNear data is invalid. The algorithm selects solutions according to the
+        current Angle. The default value is 0.
+    * - JointNear
+      - string
+      - Select the Angle values of six joints
+
+Get the Cartesian coordinate value without the selected joint angle to return the joint angle value of the robot.
+
+::
+
+    InverseSolution(473.000000,-141.000000,469.000000,-180.000000,0.000,-90.000,0,0)
+    # 0,{0,0,-90,0,90,0},InverseSolution(473.000000,-141.000000,469.000000,-180.000000,0.000,-90.000,0,0);
+
+Get the Cartesian coordinate value of the selected joint angle to return the joint angle value of the robot:
+
+::
+
+    InverseSolution(473.000000,-141.000000,469.000000,-180.000000,0.000,-90.000,0,0,1,{0,0,-90,0,90,0})
+    # 0,{0,0,-90,0,90,0},InverseSolution(0,-247,1050,-90,0,180,0,0,1,{0,0,-90,0,90,0});
+
+SetCollisionLevel
+-----------------
+
+*   **Function**: ``SetCollisionLevel(level)``
+*   **Description**: Set the collision level.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SetCollisionLevel(level);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - level
+      - int
+      - collision level
+
+        *   0: turn collision detection off
+        *   1 - 5: level of sensitivity
+
+Set collision sensitivity to 1.
+
+::
+
+    SetCollisionLevel(1)
+
+HandleTrajPoints
+----------------
+
+*   **Function**: ``HandleTrajPoints(traceName)``
+*   **Description**: Preprocessing of trajectory files.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},HandleTrajPoints(traceName);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - traceName
+      - string
+      - name of the trajectory file (with the suffix)
+
+Deliver ``recv_string`` for preprocessing, and query the preprocessing result at a certain period.
+
+::
+
+    HandleTrajPoints(recv_string)
+    HandleTrajPoints()
+
+.. note::
+
+    As the trajectory preprocessing results vary according to the size of the file, and the
+    processing time of algorithms will be different. If the user sends this command without
+    parameters, it refers to querying the result of the current command. Return: -3 indicates that
+    the file content is incorrect; -2 indicates that the file does not exist; -1 indicates that the
+    preprocessing is not completed; 0 indicates that preprocessing is completed with no errors; and
+    a value greater than 0 indicates that the point corresponding to the current result is fault.
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+GetSixForceData
+---------------
+
+*   **Function**: ``GetSixForceData()``
+*   **Description**: Get six-axis force data
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{Fx,Fy,Fz,Mx,My,Mz},GetSixForceData(); //{Fx,Fy,Fz,Mx,My,Mz} represents
+    the original value of six-axis force.``
+*   **Parameters**: None
+
+Get the current six-axis force values.
+
+::
+
+    GetSixForceData()
+    # Return: 0,{0.0,0.0,0.0,0.0,0.0,0.0},GetSixForceData();
+
+.. note::
+
+    This may require a six-axis force sensor end tool.
+
+GetAngle
+--------
+
+*   **Function**: ``GetAngle()``
+*   **Description**: Get the current joint angles in degrees
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{J1,J2,J3,J4,J5,J6},GetAngle(); //{J1,J2,J3,J4,J5,J6} refers to the joint
+    coordinate of the current pose``
+*   **Parameters**: None
+
+Get the current joint angles in degrees.
+
+::
+
+    GetAngle()
+    # 0,{0.0,0.0,90.0,0.0,-90.0,0.0},GetAngle();
+
+GetPose
+-------
+
+*   **Function**: ``GetPose(user,tool)``
+*   **Description**: Get the current pose of the robot in the Cartesian coordinate system
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{X,Y,Z,Rx,Ry,Rz},GetPose(); //{X,Y,Z,Rx,Ry,Rz} represents the coordinates
+    of the current pose under the Cartesian coordinate system``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - user
+      - int
+      - index of User coordinate system
+    * - tool
+      - int
+      - index of Tool coordinate system
+
+Get the current pose of the robot in the default coordinate system.
+
+::
+
+    GetPose()
+    # 0,{-473.0,-141.0,469.0,-180.0,0.0,90.0},GetPose();
+
+.. note::
+
+    If you specify a User or Tool coordinate system, the returned pose will be used that coordinate
+    system.
+
+EmergencyStop
+-------------
+
+*   **Function**: ``EmergencyStop()``
+*   **Description**: Trigger an emergency stop
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},EmergencyStop();``
+*   **Parameters**: None
+
+Trigger an emergency stop.
+
+::
+
+    EmergencyStop()
+
+ModbusCreate
+------------
+
+*   **Function**: ``ModbusCreate(ip,port,slave_id,isRTU)``
+*   **Description**: Create a Modbus master, establish connection with the slave.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{index},ModbusCreate(ip,port,slave_id,isRTU);``
+*   **Parameters**:
+
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - ip
+      - string
+      - IP address of slave station
+    * - port
+      - int
+      - slave station port
+    * - slave_id
+      - int
+      - ID of slave station
+    * - isRTU
+      - int
+      - This parameter is optional. The value range is 0/1.
+
+        * If the value is null or 0, establish modbusTCP communication.
+        * If it is 1, establish modbusRTU communication.
+
+ErrorID: 0 indicates that the Modbus master station is created successfully. -1 indicates that the
+Modbus master station failed to be created. For other values, refer to `Error Code Descriptions`_.
+
+The returned index indicated the master station index, which supports a maximum of 5 devices,
+ranging from 0 - 4.
+
+Establish RTU communication master station (60000 terminal transparent port).
+
+::
+
+    ModbusCreate(127.0.0.1,60000,1,1)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+ModbusClose
+-----------
+
+*   **Function**: ``ModbusClose(index)``
+*   **Description**: Disconnect from Modbus slave station
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},ModbusClose(index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Internal index
+
+Close the Modbus connection to station 0.
+
+::
+
+    ModbusClose(0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+GetInBits
+---------
+
+*   **Function**: ``GetInBits(index,addr,count)``
+*   **Description**: Read discrete input data
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value_1,value_2,...,value_n},GetInBits(index,addr,count); //table, it
+    gets results {value_1,value_2...,value_n} by bit``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Internal index
+    * - addr
+      - int
+      - Depending on the slave station configuration
+    * - count
+      - int
+      - The value ranges from 1 to 16
+
+From device 0 at addr 3000, read 5 bits.
+
+::
+
+    GetInBits(0,3000,5)
+    # Normal return: 0,{1,0,1,1,0},GetInBits(0,3000,5);
+    # If error: -1,{},GetInBits(0,3000,5);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+GetInRegs
+---------
+
+*   **Function**: ``GetInRegs(index,addr,count,valType)``
+*   **Description**: Read from the input register value
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value_1,value_2,...,value_n},GetInRegs(index,addr,count,valType); //
+    ErrorID 0 means normal, -1 means failure to be read; For table, it returns
+    {value_1,value_2...,value_n} by variable type``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Internal index
+    * - addr
+      - int
+      - Depending on the slave station configuration
+    * - count
+      - int
+      - The value ranges from 1 - 4
+    * - valType
+      - string
+      - Optional parameters:
+
+        *   U16: read 16-bit unsigned integer ( two bytes, occupy one register)
+        *   U32: read 32-bit unsigned integer (four bytes, occupy two registers)
+        *   F32: read 32-bit single-precision floating-point number (four bytes, occupy two
+            registers)
+        *   F64: read 64-bit double-precision floating-point number (eight bytes, occupy four
+            registers)
+
+From device 0 at address 4000, read 3.
+
+::
+
+    GetInRegs(0,4000,3)
+    # Normal: 0,{5,18,12},GetInRegs(0,4000,3);
+    # Error: -1,{},GetInRegs(0,4000,3);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+GetCoils
+--------
+
+*   **Function**: ``GetCoils(index,addr,count)``
+*   **Description**: Read from a coil register
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value_1,value_2,…,value_n},GetCoils(index,addr,count); // ErrorID 0
+    means normal, -1 means failure to be read; For table, it returns {value_1,value_2...,value_n}
+    by variable type``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Internal index
+    * - addr
+      - int
+      - Depending on the slave station configuration
+    * - count
+      - int
+      - The value ranges from 1 to 16
+
+From device 0 at address 1000, read 3.
+
+::
+
+    GetCoils(0,1000,3)
+    # Normal: 0,{1,1,0},GetCoils(0,1000,3);
+    # Error: -1,{},GetCoils(0,1000,3);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+SetCoils
+--------
+
+*   **Function**: ``SetCoils(index,addr,count,valTab)``
+*   **Description**: Write to the coil register.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SetCoils(index,addr,count,valTab); // ErrorID 0 means normal, -1 means
+    failure to be set``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Internal index
+    * - addr
+      - int
+      - Depending on the slave station configuration
+    * - count
+      - int
+      - The value ranges from 1 - 16
+    * - valTab
+      - string
+      - address of the coils
+
+To device 0 at address 1000, write 3 {1,0,1}.
+
+::
+
+    SetCoils(0,1000,3,{1,0,1})
+    # Normal: 0,{},SetCoils(0,1000,3,{1,0,1});
+    # Error: -1,{},SetCoils(0,1000,3,{1,0,1});
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
 
 GetHoldRegs
 -----------
 
--  Function: ``GetHoldRegs(id,addr,count,type)``
--  Description: read the holding register value
--  Parameters:
+*   **Function**: ``GetHoldRegs(index,addr, count,valType)``
+*   **Description**: Read from a holding register value
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value_1,value_2,…,value_n},GetHoldRegs(index,addr, count,valType);
+    //ErrorID 0 means normal, -1 means failure to be read; For table, it returns
+    {value_1,value_2...,value_n} by variable type``
+*   **Parameters**:
 
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Parameter   | Type     | Description                                                                                                                                                                                                                                                                                                                                                                                                                          |
-  +=============+==========+======================================================================================================================================================================================================================================================================================================================================================================================================================================+
-  | id          | int      | device ID of slave station, supporting at most five devices, range: 0~4. You should set it to 0 when accessing the internal slave of controller                                                                                                                                                                                                                                                                                      |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | addr        | int      | starting address of the holding registers. range: 3095~4095                                                                                                                                                                                                                                                                                                                                                                          |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | count       | int      | read the specified amount of data of type, range: 1~16                                                                                                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | type        | string   | data type: If it is empty, read 16-bit unsigned integer ( two bytes, occupy one register) “U16”：read 16-bit unsigned integer ( two bytes, occupy one register) “U32”：read 32-bit unsigned integer (four bytes, occupy two registers) “F32”：read 32-bit single-precision floating-point number (four bytes, occupy two registers) “F64”：read 64-bit double-precision floating-point number (eight bytes, occupy four registers)   |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Internal index, supporting at most five devices, range: 0 - 4
+    * - addr
+      - int
+      - address of the holding registers. Depending on the slave station configuration
+    * - count
+      - int
+      - number of the holding registers
+    * - valType
+      - string
 
-.. code-block:: python
+      - *   U16: read 16-bit unsigned integer ( two bytes, occupy one register)
+        *   U32: read 32-bit unsigned integer (four bytes, occupy two registers)
+        *   F32: read 32-bit single-precision floating-point number (four bytes, occupy two
+            registers)
+        *   F64: read 64-bit double-precision floating-point number (eight bytes, occupy four
+            registers)
 
-  data = GetHoldRegs(0,3095,1)
-  # Read a 16-bit unsigned integer starting at address 3095.
+Read a 16-bit unsigned integer starting at address 3095
+
+::
+
+    GetHoldRegs(0,3095,1)
+    # Normal: 0,{13},GetHoldRegs(0,3095,1);
+    # Error: -1,{},GetHoldRegs(0,3095,1);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
 
 SetHoldRegs
 -----------
 
--  Function: ``SetHoldRegs(id,addr,count,table,type)``
--  Description: write in the holding register
--  Parameters:
+*   **Function**: ``SetHoldRegs(index,addr, count,valTab,valType)``
+*   **Description**: Write to a holding register
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SetHoldRegs(index,addr, count,valTab,valType);// ErrorID 0 means
+    normal, -1 means failure to be set``
+*   **Parameters**:
 
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Parameter   | Type     | Description                                                                                                                                                                                                                                                                                                                                                                                                                          |
-  +=============+==========+======================================================================================================================================================================================================================================================================================================================================================================================================================================+
-  | id          | int      | device ID of slave station, supporting at most five devices, range: 0~4. You should set it to 0 when accessing the internal slave of controller                                                                                                                                                                                                                                                                                      |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | addr        | int      | starting address of the holding registers. range: 3095~4095                                                                                                                                                                                                                                                                                                                                                                          |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | count       | int      | write the specified amount of data of type, range: 1~16                                                                                                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | table       | int      | holding register value                                                                                                                                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | type        | string   | data type: If it is empty, read 16-bit unsigned integer ( two bytes, occupy one register) “U16”：read 16-bit unsigned integer ( two bytes, occupy one register) “U32”：read 32-bit unsigned integer (four bytes, occupy two registers) “F32”：read 32-bit single-precision floating-point number (four bytes, occupy two registers) “F64”：read 64-bit double-precision floating-point number (eight bytes, occupy four registers)   |
-  +-------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 29999
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - Internal index, supporting at most five devices, range: 0 - 4
+    * - addr
+      - int
+      - address of the holding registers. Depending on the slave station configuration
+    * - count
+      - int
+      - number of the holding registers to read. The value ranges from 1 to 4.
+    * - valTab
+      - int
+      - number of the holding registers
+    * - valType
+      - string
+      - *   U16: read 16-bit unsigned integer ( two bytes, occupy one register)
+        *   U32: read 32-bit unsigned integer (four bytes, occupy two registers)
+        *   F32: read 32-bit single-precision floating-point number (four bytes, occupy two
+            registers)
+        *   F64: read 64-bit double-precision floating-point number (eight bytes, occupy four
+            registers)
+
+
+Starting at address 3095, write two 16-bit unsigned integer values 6000,300
 
 .. code-block:: text
 
-  SetHoldRegs(0,3095,2,{6000,300}, “U16”)
-  # Write two 16-bit unsigned integers: 6000 and 300, starting at address 3095.
+    SetHoldRegs(0,3095,2,{6000,300}, U16)
+    # Normal: 0,{},SetHoldRegs(0,3095,2,{6000,300}, U16);
+    # Error: -1,{},SetHoldRegs(0,3095,2,{6000,300}, U16);
 
-Communication Protocol — Real-time Feedback Port
-================================================
+.. note::
 
-Port 30003 (real-time feedback port) is not only used to send
-motion-related protocols, but has other functions. The client can
-receive the robot information every 20ms, as shown in the following
-table. Each packet received through the real-time feedback port has 1440
-bytes, which are arranged in a standard format. The following table
-shows the order of the bytes.
+    This command is supported in CR controller version 3.5.2 and above.
 
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Meaning                     | Type             | Number of values   | Size in bytes   | Byte position value   | Notes                                                                                                                                         |
-+=============================+==================+====================+=================+=======================+===============================================================================================================================================+
-| Message Size                | unsigned short   | 1                  | 2               | 0000 ~ 0001           | Total message length in bytes                                                                                                                 |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-|                             | unsigned short   | 3                  | 6               | 0002 ~ 0007           | Reserved bits                                                                                                                                 |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Digital input bits          | double           | 1                  | 8               | 0008 ~ 0015           | Current state of the digital inputs                                                                                                           |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Digital outputs             | double           | 1                  | 8               | 0016 ~ 0023           | digital output                                                                                                                                |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Robot Mode                  | double           | 1                  | 8               | 0024 ~ 0031           | Robot mode                                                                                                                                    |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Controller Timer            | double           | 1                  | 8               | 0032 ~ 0039           | Controller realtime thread execution time                                                                                                     |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Time                        | double           | 1                  | 8               | 0040 ~ 0047           | Time elapsed since the controller was started                                                                                                 |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| test\_value                 | double           | 1                  | 8               | 0048 ~ 0055           | Standard values for memory structure test: 0x0123 4567 89AB CDEF                                                                              |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Safety Mode                 | double           | 1                  | 8               | 0056 ~ 0063           | Safety mode                                                                                                                                   |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Speed scaling               | double           | 1                  | 8               | 0064 ~ 0071           | Speed scaling of the trajectory limiter                                                                                                       |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Linear momentum norm        | double           | 1                  | 8               | 0072 ~ 0079           | Norm of Cartesian linear momentum                                                                                                             |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| V main                      | double           | 1                  | 8               | 0080 ~ 0087           | Masterboard: Main voltage                                                                                                                     |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| V robot                     | double           | 1                  | 8               | 0088 ~ 0095           | Masterboard: Robot voltage (48V)                                                                                                              |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| I robot                     | double           | 1                  | 8               | 0096 ~ 0103           | Masterboard: Robot current                                                                                                                    |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Program state               | double           | 1                  | 8               | 0104 ~ 0111           | Program state                                                                                                                                 |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Safety Status               | double           | 1                  | 8               | 0112 ~ 0119           | Safety status                                                                                                                                 |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Tool Accelerometer values   | double           | 3                  | 24              | 0120 ~ 0143           | Tool x,y and z accelerometer values                                                                                                           |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Elbow position              | double           | 3                  | 24              | 0144 ~ 0167           | Elbow position                                                                                                                                |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Elbow velocity              | double           | 3                  | 24              | 0168 ~ 0191           | Elbow velocity                                                                                                                                |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| q target                    | double           | 6                  | 48              | 0192 ~ 0239           | Target joint positions                                                                                                                        |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| qd target                   | double           | 6                  | 48              | 0240 ~ 0287           | Target joint velocities                                                                                                                       |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| qdd target                  | double           | 6                  | 48              | 0288 ~ 0335           | Target joint accelerations                                                                                                                    |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| I target                    | double           | 6                  | 48              | 0336 ~ 0383           | Target joint currents                                                                                                                         |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| M target                    | double           | 6                  | 48              | 0384 ~ 0431           | Target joint moments (torques)                                                                                                                |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| q actual                    | double           | 6                  | 48              | 0432 ~ 0479           | Actual joint positions                                                                                                                        |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| qd actual                   | double           | 6                  | 48              | 0480 ~ 0527           | Actual joint velocities                                                                                                                       |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| I actual                    | double           | 6                  | 48              | 0528 ~ 0575           | Actual joint currents                                                                                                                         |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| I control                   | double           | 6                  | 48              | 0576 ~ 0623           | Joint control currents(temporally replaced by 0)                                                                                              |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Tool vector actual          | double           | 6                  | 48              | 0624 ~ 0671           | Actual Cartesian coordinates of the tool: (x,y,z,rx,ry,rz), where rx, ry and rz is a rotation vector representation of the tool orientation   |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| TCP speed actual            | double           | 6                  | 48              | 0672 ~ 0719           | Actual speed of the tool given in Cartesian coordinates                                                                                       |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| TCP force                   | double           | 6                  | 48              | 0720 ~ 0767           | Generalised forces in the TCP                                                                                                                 |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Tool vector target          | double           | 6                  | 48              | 0768 ~ 0815           | Target Cartesian coordinates of the tool: (x,y,z,rx,ry,rz), where rx, ry and rz is a rotation vector representation of the tool orientation   |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| TCP speed target            | double           | 6                  | 48              | 0816 ~ 0863           | Target speed of the tool given in Cartesian coordinates                                                                                       |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Motor temperatures          | double           | 6                  | 48              | 0864 ~ 0911           | Temperature of each joint in degrees celsius                                                                                                  |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Joint Modes                 | double           | 6                  | 48              | 0912 ~ 0959           | Joint control modes                                                                                                                           |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| V actual                    | double           | 6                  | 48              | 960 ~ 1007            | Actual joint voltages                                                                                                                         |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-|                             | double           | 54                 | 432             | 1008 ~ 1439           | Reserved bits                                                                                                                                 |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| TOTAL                       |                  | 183                | 1440            |                       | 183 values in a 1440-byte package                                                                                                             |
-+-----------------------------+------------------+--------------------+-----------------+-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
+GetErrorID
+----------
 
-Robot Mode returns the mode of robo as follows:
+*   **Function**: ``GetErrorID()``
+*   **Description**: Get robot error codes
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{[[id,…,id], [id], [id], [id], [id], [id], [id]]},GetErrorID();//[id,...,
+    id] is the alarm information of the controller and algorithm, where the collision detection
+    value is -2, the safe skin collision detection value is -3. The last six [id] represent the
+    alarm information of six servos respectively.``
+*   **Parameters**: None
 
-  +--------+-----------------------------------+------------------------------+
-  | Mode   | Description                       | Note                         |
-  +========+===================================+==============================+
-  | -1     | ROBOT\_MODE\_NO\_CONTROLLER       | No controller                |
-  +--------+-----------------------------------+------------------------------+
-  | 0      | ROBOT\_MODE\_DISCONNECTED         | Disconnect                   |
-  +--------+-----------------------------------+------------------------------+
-  | 1      | ROBOT\_MODE\_CONFIRM\_SAFETY      | Configure safety parameter   |
-  +--------+-----------------------------------+------------------------------+
-  | 2      | ROBOT\_MODE\_BOOTING              | Start                        |
-  +--------+-----------------------------------+------------------------------+
-  | 3      | ROBOT\_MODE\_POWER\_OFF           | Power off                    |
-  +--------+-----------------------------------+------------------------------+
-  | 4      | ROBOT\_MODE\_POWER\_ON            | Power on                     |
-  +--------+-----------------------------------+------------------------------+
-  | 5      | ROBOT\_MODE\_IDLE                 | Idle                         |
-  +--------+-----------------------------------+------------------------------+
-  | 6      | ROBOT\_MODE\_BACKDRIVE            | Drag                         |
-  +--------+-----------------------------------+------------------------------+
-  | 7      | ROBOT\_MODE\_RUNNING              | Run                          |
-  +--------+-----------------------------------+------------------------------+
-  | 8      | ROBOT\_MODE\_UPDATING\_FIRMWARE   | Update firmware              |
-  +--------+-----------------------------------+------------------------------+
-  | 9      | ROBOT\_MODE\_ERROR                | Alarm                        |
-  +--------+-----------------------------------+------------------------------+
+Get robot error codes.
 
-- Description:
+::
 
-  - If the robot is powered off, the mode is 3.
-  - If the robot is powered on but not enabled, the mode is 4;
-  - If the robot is enabled successfully, the mode is 5.
-  - If the robot enters drag mode (enabled state), the mode is 6;
-  - If the robot moves, the mode is 7;
-  - Priority: Power on < Idle < Drag = Run < Power off < Alarm
-  - Alarm is the top priority. When other modes exist simultaneously, if there is an alarm, the mode is set to 9 first;
+    GetErrorID()
+    # 0,{[[-2],[],[],[],[],[]]},GetErrorId();
 
-The following table shows the motion command protocols supported by the
-real-time feedback port. The real-time feedback port only receives
-commands but does not give feedback.
+.. note::
 
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| Command     | Description                                                                                                 |
-+=============+=============================================================================================================+
-| `MovJ`_     | point to point movement, the target point is Cartesian point                                                |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `MovL`_     | linear movement, the target point is Cartesian point                                                        |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `JointMovJ`_| point to point movement, the target point is joint point                                                    |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `Jump`_     | Jump movement, only supports Cartesian points                                                               |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `RelMovJ`_  | move to the Cartesian offset position in a point-to-point mode                                              |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `RelMovL`_  | move to the Cartesian offset position in a straight line                                                    |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `MovLIO`_   | set the status of digital output port in straight line movement (can set several groups)                    |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `MovJIO`_   | set the status of digital output port in point-to-point movement, and the target point is Cartesian point   |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `Arc`_      | arc movement, needs to combine with other motion commands                                                   |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `Circle`_   | circular movement, needs to combine with other motion commands                                              |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `ServoJ`_   | dynamic following command based on joint space                                                              |
-+-------------+-------------------------------------------------------------------------------------------------------------+
-| `ServoP`_   | dynamic following command based on Cartesian space                                                          |
-+-------------+-------------------------------------------------------------------------------------------------------------+
+    Note: For error code description, see `Error Code Descriptions`_.
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+DI
+--
+
+*   **Function**: ``DI(index)``
+*   **Description**: Get the status of a digital input port
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value},DI(index);//value: the current index status value. The value
+    range is 0/1.``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - digital input index, range: 1 - 32 or 100 - 1000. The value range is 100 - 1000 only when
+        you configure the extended I/O module
+
+Get the status of DI index 1.
+
+::
+
+    DI(1)
+    # 0,{0},DI(1);
+
+ToolDI
+------
+
+*   **Function**: ``ToolDI(index)``
+*   **Description**: Get the status of a tool digital input port
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value},ToolDI(index); //value: port status of corresponding index,
+    range: 1 or 0``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - digital input index, range: 1 or 2
+
+Get the status of ToolDI index 2.
+
+::
+
+    ToolDI(2)
+    # 0,{1},ToolDI(2);
+
+AI
+--
+
+*   **Function**: ``AI(index)``
+*   **Description**: Get the voltage of controller analog input port (immediate command).
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value},AI(index); //value: voltage of corresponding index``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - index of controller, range: 1 or 2
+
+Get the voltage of controller AI index 2.
+
+::
+
+    AI(2)
+    # 0,{3.5},AI(2);
+
+ToolAI
+------
+
+*   **Function**: ``ToolAI(index)``
+*   **Description**: Get the voltage of tool analog input (immediate command).
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value},ToolAI(index); //value: voltage of corresponding index``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index
+      - int
+      - index of tool analog input, range: 1 or 2
+
+Get the voltage of tool AI index 1.
+
+::
+
+    ToolAI(1)
+    # 0,{1.5},ToolAI(1);
+
+DIGroup
+-------
+
+*   **Function**: ``DIGroup(index_1,index_2,...,index_n)``
+*   **Description**: Get the state of a group of digital input ports
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{value_1,value_2,...,value_n},DIGroup(index_1,index_2,...,index_n);
+    //value_1...value_n: current voltage from index_1 to index_n``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 5 5 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index_1
+      - int
+      - index of digital input port, range: 1 - 32 or 100 - 1000. The value range is 100 - 1000
+        only when you configure the extended I/O module
+    * - ...
+      - ...
+      - ...
+    * - index_n
+      - int
+      - index of digit input port, range: 1 - 32 or 100 - 1000. The value range is 100 - 1000 only
+        when you configure the extended I/O module
+
+Get the state of DI indices [4,6,2,7].
+
+::
+
+    DIGroup(4,6,2,7)
+    # 0,{1,0,1,1},DIGroup(4,6,2,7);
+
+The obtained level of input ports [4, 6, 2, 7] is [1, 0, 1, 1] respectively
+
+DOGroup
+--------------
+
+*   **Function**: ``DOGroup(index_1,value_1,index2,value2,...,index_n,value_n)``
+*   **Description**: set the state of a group of digital output ports
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},DOGroup(index_1,value_1,index2,value2,...,index_n,value_n);``
+*   **Parameters**: the maximum number of parameters is 64
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - index_1
+      - int
+      - index of digit output port, range: 1 - 16 or 100 - 1000.
+    * - value_1
+      - int
+      - the status of the digital output port. The value is 0 or 1
+    * - ...
+      - ...
+      - ...
+    * - index_n
+      - int
+      - index of digit output port, range: 1 - 16 or 100 - 1000.
+    * - value_n
+      - int
+      - the status of the digital output port. The value is 0 or 1
+
+Set output ports 4, 6, 2, and 7 to 1, 0, 1 and 0 respectively
+
+::
+
+    DOGroup(4,1,6,0,2,1,7,0)
+    # 0,{},DOGroup(4,1,6,0,2,1,7,0);
+
+BrakeControl
+------------
+
+*   **Function**: ``BrakeControl(axisID,value)``
+*   **Description**: Control brake. The control of the brake should be carried out under the
+    condition that the robot is enabled, otherwise the robot will return -1 by error.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},BrakeControl(axisID,value);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - axisID
+      - int
+      - ID of the joint axis
+    * - value
+      - int
+      - brake status:
+
+        *   0: disable the brake
+        *   1: enable the brake
+
+Enable the brake on joint 1.
+
+::
+
+    BrakeControl(1,1)
+    # 0,{},BrakeControl(1,1);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+StartDrag
+---------
+
+*   **Function**: ``StartDrag()``
+*   **Description**: Enter drag mode.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},StartDrag();``
+*   **Parameters**: None
+
+Enable drag mode.
+
+::
+
+    StartDrag()
+
+.. note::
+
+    Drag mode cannot be enabled when the robot is in an error state.
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+StopDrag
+--------------
+
+*   **Function**: ``StopDrag()``
+*   **Description**: Stop Drag mode
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},StopDrag();``
+*   **Parameters**: None
+
+Disable drag mode.
+
+::
+
+    StopDrag()
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+SetCollideDrag
+--------------
+
+*   **Function**: ``SetCollideDrag(status)``
+*   **Description**: Set whether drag is forced to enter (can enter drag even in error state).
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SetCollideDrag(status);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - status
+      - int
+      - force drag switch state:
+
+        *   0: disables the brake
+        *   1: enable the brake
+
+Forcibly entry drag mode.
+
+::
+
+    SetCollideDrag(0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+SetTerminalKeys
+---------------
+
+*   **Function**: ``SetTerminalKeys(status)``
+*   **Description**: Set the terminal button to enable.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SetTerminalKeys(status);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - status
+      - int
+      - status of terminal button:
+
+        *   0: disable
+        *   1: enable
+
+Disable terminal buttons
+
+::
+
+    SetTerminalKeys(0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+SetTerminal485
+--------------
+
+*   **Function**: ``SetTerminal485(baudRate, dataLen, parityBit, stopBit)``
+*   **Description**: Set the terminal 485 parameter
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},SetTerminal485(status);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - baudRate
+      - int
+      - baud rate
+    * - dataLen
+      - int
+      - data bit, currently fixed to 8
+    * - parityBit
+      - string
+      - it is fixed to N, indicating no parity
+    * - stopBit
+      - int
+      - stop bit, currently fixed to 1
+
+Set the baud rate to 115200
+
+::
+
+    SetTerminal485(115200, 8, N, 1)
+
+.. note::
+
+    This command is supported only in certain versions.
+
+GetTerminal485
+--------------
+
+*   **Function**: ``GetTerminal485()``
+*   **Description**: Get the terminal 485 interface parameters
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{baudRate, dataLen, parityBit, stopBit},GetPose(); //{baudRate, dataLen,
+    parityBit, stopBit} represents baud rate, data bit, parity check bit and stop bit
+    respectively.``
+*   **Parameters**: None
+
+Get the parameters of the terminal 485 interface.
+
+::
+
+    GetTerminal485()
+    # 0,{115200, 8, N, 1},GetTerminal485();
+
+.. note::
+
+    This command is supported only in certain versions.
+
+LoadSwitch
+--------------
+
+*   **Function**: ``LoadSwitch(status)``
+*   **Description**: Set the load setting state.
+*   **Supported Port**: ``29999``
+*   **Return**: ``ErrorID,{},LoadSwitch(status);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - status
+      - int
+      - Set the load setting state:
+
+        *   0: off
+        *   1: on. Enabling load Settings increases collision sensitivity
+
+Enable load settings.
+
+::
+
+    LoadSwitch(1)
+
+
+Real-time Feedback Port Commands
+================================
+
+``30004`` port is the real-time feedback port (``30004``, ``30005``, and ``30006`` ports are
+supported by controller 3.5.2 or later). The slave can receive information from the robot every
+8ms, as shown in the following table. ``30005`` port feedback robot information every 200ms.
+``30006`` port is a configurable port for robot information feedback (default: 50ms feedback). Each
+packet received through the real-time feedback port has 1440 bytes, which are arranged in a
+standard format. The following table shows the order of the bytes.
+
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Meaning              | Type           | Number of values | Size in bytes | Byte position value | Notes                                                                                                                                       |
++======================+================+==================+===============+=====================+=============================================================================================================================================+
+| MessageSize          | unsigned short | 1                | 2             | 0000 - 0001         | Total message length in bytes                                                                                                               |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+|                      | unsigned short | 3                | 6             | 0002 - 0007         | Reserved                                                                                                                                    |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| DigitalInputs        | uint64         | 1                | 8             | 0008 - 0015         | Current state of the digital inputs.                                                                                                        |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| DigitalOutputs       | uint64         | 1                | 8             | 0016 - 0023         | Digital output                                                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| RobotMode            | uint64         | 1                | 8             | 0024 - 0031         | Robot mode                                                                                                                                  |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| TimeStamp            | uint64         | 1                | 8             | 0032 - 0039         | Time stamp (ms)                                                                                                                             |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+|                      | uint64         | 1                | 8             | 0040 - 0047         | Reserved                                                                                                                                    |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| TestValue            | uint64         | 1                | 8             | 0048 - 0055         | test standard value                                                                                                                         |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+|                      | double         | 1                | 8             | 0056 - 0063         | Reserved                                                                                                                                    |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| SpeedScaling         | double         | 1                | 8             | 0064 - 0071         | Speed scaling of the trajectory limiter                                                                                                     |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| LinearMomentumNorm   | double         | 1                | 8             | 0072 - 0079         | Norm of Cartesian linear momentum(specific hardware version )                                                                               |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| VMain                | double         | 1                | 8             | 0080 - 0087         | Masterboard: Main voltage                                                                                                                   |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| VRobot               | double         | 1                | 8             | 0088 - 0095         | Masterboard: Robot voltage (48V)                                                                                                            |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| IRobot               | double         | 1                | 8             | 0096 - 0103         | Masterboard: Robot current                                                                                                                  |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+|                      | double         | 1                | 8             | 0104 - 0111         | Reserved                                                                                                                                    |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+|                      | double         | 1                | 8             | 0112 - 0119         | Reserved                                                                                                                                    |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ToolAcceleroMeter    | double         | 3                | 24            | 0120 - 0143         | Tool x,y and z accelerometer values(specific hardware version)                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ElbowPosition        | double         | 3                | 24            | 0144 - 0167         | Elbow position(specific hardware version)                                                                                                   |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ElbowVelocity        | double         | 3                | 24            | 0168 - 0191         | Elbow velocity(specific hardware version)                                                                                                   |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| QTarget              | double         | 6                | 48            | 0192 - 0239         | Target joint positions                                                                                                                      |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| QDTarget             | double         | 6                | 48            | 0240 - 0287         | Target joint velocities                                                                                                                     |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| QDDTarget            | double         | 6                | 48            | 0288 - 0335         | Target joint accelerations                                                                                                                  |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ITarget              | double         | 6                | 48            | 0336 - 0383         | Target joint currents                                                                                                                       |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| MTarget              | double         | 6                | 48            | 0384 - 0431         | Target joint moments (torques)                                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| QActual              | double         | 6                | 48            | 0432 - 0479         | Actual joint positions                                                                                                                      |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| QDActual             | double         | 6                | 48            | 0480 - 0527         | Actual joint velocities                                                                                                                     |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| IActual              | double         | 6                | 48            | 0528 - 0575         | Actual joint currents                                                                                                                       |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ActualTCPForce       | double         | 6                | 48            | 0576 - 0623         | TCP sensor value (calculated by six-axis force)                                                                                             |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ToolVectorActual     | double         | 6                | 48            | 0624 - 0671         | Actual Cartesian coordinates of the tool: (x,y,z,rx,ry,rz), where rx, ry and rz is a rotation vector representation of the tool orientation |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| TCPSpeedActual       | double         | 6                | 48            | 0672 - 0719         | Actual speed of the tool given in Cartesian coordinates                                                                                     |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| TCPForce             | double         | 6                | 48            | 0720 - 0767         | TCP force value (calculated by joint current)                                                                                               |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ToolVectorTarget     | double         | 6                | 48            | 0768 - 0815         | Target Cartesian coordinates of the tool: (x,y,z,rx,ry,rz), where rx, ry and rz is a rotation vector representation of the tool orientation |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| TCPSpeedTarget       | double         | 6                | 48            | 0816 - 0863         | Target speed of the tool given in Cartesian coordinates                                                                                     |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| MotorTemperatures    | double         | 6                | 48            | 0864 - 0911         | Temperature of each joint in degrees celsius                                                                                                |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| JointModes           | double         | 6                | 48            | 0912 - 0959         | Joint control modes                                                                                                                         |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| VActual              | double         | 6                | 48            | 960  - 1007         | Actual joint voltages                                                                                                                       |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| HandType             | char           | 4                | 4             | 1008 - 1011         | Hand Type                                                                                                                                   |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| User                 | char           | 1                | 1             | 1012                | User coordinate                                                                                                                             |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Tool                 | char           | 1                | 1             | 1013                | Tool coordinate                                                                                                                             |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| RunQueuedCmd         | char           | 1                | 1             | 1014                | Queue running flag                                                                                                                          |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| PauseCmdFlag         | char           | 1                | 1             | 1015                | Queue pause flag                                                                                                                            |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| VelocityRatio        | char           | 1                | 1             | 1016                | Joint velocity ratio(0 - 100)                                                                                                               |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| AccelerationRatio    | char           | 1                | 1             | 1017                | Joint acceleration ratio(0 - 100)                                                                                                           |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| JerkRatio            | char           | 1                | 1             | 1018                | Joint jerk ratio(0 - 100)                                                                                                                   |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| XYZVelocityRatio     | char           | 1                | 1             | 1019                | Cartesian position velocity ratio(0 - 100)                                                                                                  |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| RVelocityRatio       | char           | 1                | 1             | 1020                | Cartesian pose velocity ratio(0 - 100)                                                                                                      |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| XYZAccelerationRatio | char           | 1                | 1             | 1021                | Cartesian position acceleration ratio(0 - 100)                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| RAccelerationRatio   | char           | 1                | 1             | 1022                | Cartesian attitude acceleration ratio(0 - 100)                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| XYZJerkRatio         | char           | 1                | 1             | 1023                | Cartesian position jerk ratio(0 - 100)                                                                                                      |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| RJerkRatio           | char           | 1                | 1             | 1024                | Cartesian pose jerk ratio(0 - 100)                                                                                                          |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| BrakeStatus          | char           | 1                | 1             | 1025                | Brake status                                                                                                                                |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| EnableStatus         | char           | 1                | 1             | 1026                | Enable status                                                                                                                               |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| DragStatus           | char           | 1                | 1             | 1027                | Drag status                                                                                                                                 |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| RunningStatus        | char           | 1                | 1             | 1028                | Running status                                                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ErrorStatus          | char           | 1                | 1             | 1029                | Alarm status                                                                                                                                |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| JogStatusCR          | char           | 1                | 1             | 1030                | Jogging status                                                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| CRRobotType          | char           | 1                | 1             | 1031                | Robot type                                                                                                                                  |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| DragButtonSignal     | char           | 1                | 1             | 1032                | Drag signal                                                                                                                                 |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| EnableButtonSignal   | char           | 1                | 1             | 1033                | Enable signal                                                                                                                               |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| RecordButtonSignal   | char           | 1                | 1             | 1034                | Record the signal                                                                                                                           |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ReappearButtonSignal | char           | 1                | 1             | 1035                | Repetition signal                                                                                                                           |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| JawButtonSignal      | char           | 1                | 1             | 1036                | Grip control signal                                                                                                                         |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| SixForceOnline       | char           | 1                | 1             | 1037                | Six - axis force online status                                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Reserve2[82]         | char           | 1                | 82            | 1038 - 1119         | Reserved                                                                                                                                    |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| MActual[6]           | double         | 6                | 48            | 1120 - 1167         | Actual torque                                                                                                                               |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Load                 | double         | 1                | 8             | 1168 - 1175         | Payload weight                                                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| CenterX              | double         | 1                | 8             | 1176 - 1183         | Eccentric distance in X direction                                                                                                           |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| CenterY              | double         | 1                | 8             | 1184 - 1191         | Eccentric distance in Y direction                                                                                                           |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| CenterZ              | double         | 1                | 8             | 1192 - 1199         | Eccentric distance in Z direction                                                                                                           |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| User[6]              | double         | 6                | 48            | 1200 - 1247         | User coordinate                                                                                                                             |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Tool[6]              | double         | 6                | 48            | 1248 - 1295         | Tool coordinate                                                                                                                             |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| TraceIndex           | double         | 1                | 8             | 1296 - 1303         | Track playback running index                                                                                                                |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| SixForceValue[6]     | double         | 6                | 48            | 1304 - 1351         | Six - axis force original value                                                                                                             |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| TargetQuaternion[4]  | double         | 4                | 32            | 1352 - 1383         | Target quaternion [qw,qx,qy,qz]                                                                                                             |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ActualQuaternion[4]  | double         | 4                | 32            | 1384 - 1415         | Actual quaternion[qw,qx,qy,qz]                                                                                                              |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Reserve3[24]         | char           | 1                | 24            | 1416 - 1440         | Reserved                                                                                                                                    |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| TOTAL                |                |                  | 1440          |                     | 1440byte package                                                                                                                            |
++----------------------+----------------+------------------+---------------+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+
+Robot Mode returns the mode of robot as follows:
+
++------+-----------------------+----------------------------------+
+| Mode | Description           | Note                             |
++======+=======================+==================================+
+| 1    | ROBOT_MODE_INIT       | Initialization                   |
++------+-----------------------+----------------------------------+
+| 2    | ROBOT_MODE_BRAKE_OPEN | Brake release                    |
++------+-----------------------+----------------------------------+
+| 3    |                       | Reserved                         |
++------+-----------------------+----------------------------------+
+| 4    | ROBOT_MODE_DISABLED   | Disabled (brake is not released) |
++------+-----------------------+----------------------------------+
+| 5    | ROBOT_MODE_ENABLE     | Enable (idle)                    |
++------+-----------------------+----------------------------------+
+| 6    | ROBOT_MODE_BACKDRIVE  | Drag                             |
++------+-----------------------+----------------------------------+
+| 7    | ROBOT_MODE_RUNNING    | Run                              |
++------+-----------------------+----------------------------------+
+| 8    | ROBOT_MODE_RECORDING  | Drag record                      |
++------+-----------------------+----------------------------------+
+| 9    | ROBOT_MODE_ERROR      | Alarm                            |
++------+-----------------------+----------------------------------+
+| 10   | ROBOT_MODE_PAUSE      | Pause state                      |
++------+-----------------------+----------------------------------+
+| 11   | ROBOT_MODE_JOG        | Jogging                          |
++------+-----------------------+----------------------------------+
+
+*   Description:
+
+    *   If the brake is released, the mode is 2.
+    *   If the robot is powered on but not enabled, the mode is 4.
+    *   If the robot is enabled successfully, the mode is 5.
+    *   If the robot runs, the mode is 7.
+    *   If the robot pauses, the mode is 10.
+    *   If the robot enters drag mode (enabled state), the mode is 6.
+    *   If the robot is dragging and recording, the mode is 8.
+    *   If the robot is jogging, the mode is 11.
+    *   Alarm is the top priority. When other modes exist simultaneously, if there is an alarm, the
+        mode is set to 9 first.
+
+*   BrakeStatus:
+
+  *     0x01: indicates that the sixth axle brake is released.
+  *     0x02: indicates that the fifth axle brake is released.
+  *     0x03: indicates that the fifth and sixth axles brake is released.
+  *     0x04: indicates that the forth axle brake is released.
+
+*   The following bits indicate the locking state:
+
++----------+----------+---------+---------+---------+---------+---------+---------+
+| 7        | 6        | 5       | 4       | 3       | 2       | 1       | 0       |
++==========+==========+=========+=========+=========+=========+=========+=========+
+| Reserved | Reserved | Joint 1 | Joint 2 | Joint 3 | Joint 4 | Joint 5 | Joint 6 |
++----------+----------+---------+---------+---------+---------+---------+---------+
+
+*   JointModes:
+
+    *   8: position mode.
+    *   10: torque mode.
+
+*   HandType contains four char parameters, which are LorR, UorD, ForN, and Config6 for the CR series.
+
+*   RobotType:
+
++-----------+---------+
+| RobotType | Product |
++===========+=========+
+| 3         | CR3     |
++-----------+---------+
+| 31        | CR3L    |
++-----------+---------+
+| 5         | CR5     |
++-----------+---------+
+| 7         | CR7     |
++-----------+---------+
+| 10        | CR10    |
++-----------+---------+
+| 12        | CR12    |
++-----------+---------+
+| 16        | CR16    |
++-----------+---------+
+| 113       | CR3V2   |
++-----------+---------+
+| 115       | CR5V2   |
++-----------+---------+
+| 120       | CR10V2  |
++-----------+---------+
+
+Motion Port Commands
+====================
+
+The following commands are supported by the Motion ``30003`` port.
+
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | Parameter       | Description                                                                                                                      |
+.. +=================+==================================================================================================================================+
+.. | `MovJ`_         | point to point movement, the target point is Cartesian point                                                                     |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `MovL`_         | linear movement, the target point is Cartesian point                                                                             |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `JointMovJ`_    | point to point movement, the target point is joint point                                                                         |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `MovLIO`_       | set the status of digital output port in straight line movement (can set several groups)                                         |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `MovJIO`_       | set the status of digital output port in point-to-point movement, and the target point is Cartesian point                        |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `Arc`_          | arc movement, needs to combine with other motion commands                                                                        |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `ServoJ`_       | dynamic following command based on joint space                                                                                   |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `ServoP`_       | dynamic following command based on Cartesian space                                                                               |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `MoveJog`_      | Jogging                                                                                                                          |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `StartTrace`_   | Trajectory fitting                                                                                                               |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `StartPath`_    | Trajectory playback                                                                                                              |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | StartFCTrace    | Trajectory fitting with force control NOT IMPLEMENTED                                                                            |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `Sync`_         | Blocking program execution                                                                                                       |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelMovJTool`_  | Relative motion is performed along the tool coordinate system, and the end motion is joint motion                                |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelMovLTool`_  | Relative motion is performed along the tool coordinate system, and the end motion is linear motion                               |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelMovJUser`_  | Relative motion is performed along the user coordinate system, and the end motion mode is the joint motion                       |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelMovLUser`_  | Relative motion performed along the user coordinate system, and the end motion mode is a linear motion                           |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelJointMovJ`_ | Relative motion instruction is conducted along the joint coordinate system of each axis, and the end motion mode is joint motion |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 
 MovJ
 ----
 
--  Function: ``MovJ(X,Y,Z,A,B,C)``
--  Description: point to point movement, the target point is Cartesian
-   point
--  Parameters:
+*   **Function**: ``MovJ(X,Y,Z,Rx,Ry,Rz,User=index,Tool=index,SpeedJ=R,AccJ=R)``
+*   **Description**: Point to point movement provided a Cartesian target with smooth movement in
+    joint space
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MovJ(X,Y,Z,Rx,Ry,Rz);``
+*   **Parameters**:
 
-  +-------------+----------+--------------------------------+
-  | Parameter   | Type     | Description                    |
-  +=============+==========+================================+
-  | X           | double   | X-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | Y           | double   | Y-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | Z           | double   | Z-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | A           | double   | A-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
-  | B           | double   | B-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
-  | C           | double   | C-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 30003
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis coordinates in mm
+    * - Y
+      - double
+      - Y-axis coordinates in mm
+    * - Z
+      - double
+      - Z-axis coordinates in mm
+    * - Rx
+      - double
+      - Rx-axis coordinates in degrees
+    * - Ry
+      - double
+      - Ry-axis coordinates in degrees
+    * - Rz
+      - double
+      - Rz-axis coordinates in degrees
 
-.. code-block:: python
+User, Tool, SpeedJ, AccJ are optional parameters, indicate setting user coordinate system, tool
+coordinate system, joint velocity ratio and acceleration ratio values respectively. The value has
+the same meaning as SpeedJ and AccJ setting by port ``29999``.
 
-  MovJ(-500,100,200,150,0,90)
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+Move to X=-500mm, Y=100mm, Z=200mm, Rx=150°, Ry=0°, Rz=90°, with a 50% acceleration ratio. Movement
+will be done smoothly in the joint space.
+
+::
+
+    MovJ(-500,100,200,150,0,90,AccJ=50)
+    # ErrorID,{},MovJ(-500,100,200,150,0,90,AccJ=50);
 
 MovL
 ----
 
--  Function: ``MovL(X,Y,Z,A,B,C)``
--  Description: linear movement, the target point is Cartesian point
--  Parameters:
+*   **Function**: ``MovL(X,Y,Z,Rx,Ry,Rz,User=index,Tool=index,SpeedL=R,AccL=R)``
+*   **Description**: Point to point movement provided a Cartesian target with smooth movement in
+    Cartesian space, i.e. movement will be linear.
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MovL(X,Y,Z,Rx,Ry,Rz,SpeedL=R,AccL=R);``
+*   **Parameters**:
 
-  +-------------+----------+--------------------------------+
-  | Parameter   | Type     | Description                    |
-  +=============+==========+================================+
-  | X           | double   | X-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | Y           | double   | Y-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | Z           | double   | Z-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | A           | double   | A-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
-  | B           | double   | B-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
-  | C           | double   | C-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 30003
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis coordinates in mm
+    * - Y
+      - double
+      - Y-axis coordinates in mm
+    * - Z
+      - double
+      - Z-axis coordinates in mm
+    * - Rx
+      - double
+      - Rx-axis coordinates in degrees
+    * - Ry
+      - double
+      - Ry-axis coordinates in degrees
+    * - Rz
+      - double
+      - Rz-axis coordinates in degrees
 
-.. code-block:: python
+User, Tool, SpeedJ, AccJ are optional setting parameters, indicate setting user coordinate system,
+tool coordinate system, joint velocity ratio and acceleration ratio values respectively. The value
+has the same meaning as SpeedJ and AccJ setting by port ``29999``.
 
-  MovL(-500,100,200,150,0,90)
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+Move to X=-500mm, Y=100mm, Z=200mm, Rx=150°, Ry=0°, Rz=90°, with a 50% velocity ratio. Movement
+will be done smoothly in the Cartesian space.
+
+::
+
+    MovL(-500,100,200,150,0,90,SpeedL=60)
+    # ErrorID,{},MovL(-500,100,200,150,0,90,SpeedL=60);
 
 JointMovJ
 ---------
 
--  Function: ``JointMovJ(J1,J2,J3,J4,J5,J6)``
--  Description: point to point movement, the target point is joint point
--  Parameters:
+*   **Function**: ``JointMovJ(J1,J2,J3,J4,J5,J6)``
+*   **Description**: Point to point movement with joint position targets
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},JointMovJ(J1,J2,J3,J4,J5,J6,SpeedJ=R,AccJ=R);``
+*   **Parameters**:
 
-  +-------------+----------+---------------------------+
-  | Parameter   | Type     | Description               |
-  +=============+==========+===========================+
-  | J1          | double   | J1 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J2          | double   | J2 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J3          | double   | J3 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J4          | double   | J4 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J5          | double   | J5 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J6          | double   | J6 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 30003
+    * - Parameter
+      - Type
+      - Description
+    * - J1
+      - double
+      - J1 coordinates in degrees
+    * - J2
+      - double
+      - J2 coordinates in degrees
+    * - J3
+      - double
+      - J3 coordinates in degrees
+    * - J4
+      - double
+      - J4 coordinates in degrees
+    * - J5
+      - double
+      - J5 coordinates in degrees
+    * - J6
+      - double
+      - J6 coordinates in degrees
 
-.. code-block:: python
+SpeedJ and AccJ are optional parameters, indicating setting joint velocity ratio and acceleration
+ratio respectively. The value has the same meaning as SpeedJ and AccJ setting by port ``29999``.
 
-  JointMovJ(0,0,-90,0,90,0)
+Move joints to position [0,0,-90,0,90,0], with a 50% acceleration ratio.
 
-Jump
-----
+::
 
-Not yet implemented!
-
-RelMovJ
--------
-
--  Function: ``RelMovJ(offset1,offset2,offset3,offset4,offset5,offset6)``
--  Description: move to the Cartesian offset position in a
-   point-to-point mode
--  Parameters:
-
-  +-------------+----------+---------------------------+
-  | Parameter   | Type     | Description               |
-  +=============+==========+===========================+
-  | offset1     | double   | J1-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset2     | double   | J2-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset3     | double   | J3-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset4     | double   | J4-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset5     | double   | J5-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset6     | double   | J6-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-
--  Supporting port: 30003
-
-.. code-block:: python
-
-  RelMovJ(10,10,10,10,10,10)
-
-RelMovL
--------
-
--  Function: ``RelMovL(offsetX,offsetY,offsetZ)``
--  Description: move to the Cartesian offset position in a straight line
--  Parameters:
-
-  +-------------+----------+--------------------------------------------------------------+
-  | Parameter   | Type     | Description                                                  |
-  +=============+==========+==============================================================+
-  | offsetX     | double   | X-axis offset in the Cartesian coordinate system; unit: mm   |
-  +-------------+----------+--------------------------------------------------------------+
-  | offsetY     | double   | Y-axis offset in the Cartesian coordinate system; unit: mm   |
-  +-------------+----------+--------------------------------------------------------------+
-  | offsetZ     | double   | Z-axis offset in the Cartesian coordinate system; unit: mm   |
-  +-------------+----------+--------------------------------------------------------------+
-
--  Supporting port: 30003
-
-.. code-block:: python
-
-  RelMovL(10,10,10)
+    JointMovJ(0,0,-90,0,90,0)
+    # ErrorID,{},JointMovJ(0,0,-90,0,90,0,SpeedJ=60,AccJ=50);
 
 MovLIO
 ------
 
--  Function: ``MovLIO(X,Y,Z,A,B,C,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status})``
--  Description: set the status of digital output port in straight line
-   movement, and the target point is Cartesian point
--  Parameters:
+*   **Function**: ``MovLIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
+    ,{Mode,Distance,Index,Status},User=index,Tool=index,SpeedL=R,AccL=R)``
+*   **Description**: Point to point movement provided a Cartesian target with smooth movement in
+    Cartesian space, i.e. movement will be linear, while simultaneously setting IO status.
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MovLIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
+    ,{Mode,Distance,Index,Status},SpeedL=R,AccL=R);``
+*   **Parameters**:
 
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Parameter   | Type     | Description                                                                                                                                                                                                                                                                                                               |
-  +=============+==========+===========================================================================================================================================================================================================================================================================================================================+
-  | X           | double   | X-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Y           | double   | Y-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Z           | double   | Z-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | A           | double   | A-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | B           | double   | B-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | C           | double   | C-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Mode        | int      | mode of Distance. 0: distance percentage; 1: distance away from the starting point or target point                                                                                                                                                                                                                        |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Distance    | int      | move specified distance. If Mode is 0, Distance refers to the distance percentage between the starting point and target point; range: 0~100. If Distance value is positive, it refers to the distance away from the starting point; If Distance value is negative, it refers to the distance away from the target point   |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Index       | int      | digital output index, range: 1~24                                                                                                                                                                                                                                                                                         |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Status      | int      | digital output status, range: 0 or 1                                                                                                                                                                                                                                                                                      |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 30003
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis coordinates in mm
+    * - Y
+      - double
+      - Y-axis coordinates in mm
+    * - Z
+      - double
+      - Z-axis coordinates in mm
+    * - Rx
+      - double
+      - A-axis coordinates in degrees
+    * - Ry
+      - double
+      - Ry-axis coordinates in degrees
+    * - Rz
+      - double
+      - Rz-axis coordinates in degrees
+    * - Mode
+      - int
+      - mode of Distance:
 
-.. code-block:: python
+        *   0: distance percentage
+        *   1: distance away from the starting point or target point
 
-  MovLIO(-500,100,200,150,0,90,{0,50,1,0})
+    * - Distance
+      - int
+      - move specified distance:
+
+        *   Mode is 0, Distance refers to the distance percentage between the starting point and
+            target point; range: 0 - 100
+        *   If Distance value is positive, it refers to the distance away from the starting point
+        *   If Distance value is negative, it refers to the distance away from the target point
+
+    * - Index
+      - int
+      - digital output index, range: 1 - 24
+    * - Status
+      - int
+      - digital output status, range: 0 or 1
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+::
+
+    MovLIO(-500,100,200,150,0,90,{0,50,1,0})
 
 MovJIO
 ------
 
--  Function: ``MovJIO(X,Y,Z,A,B,C,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status})``
--  Description: set the status of digital output port in point-to-point
-   movement, and the target point is Cartesian point
--  Parameters:
+*   **Function**: ``MovJIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
+    ,{Mode,Distance,Index,Status},User=index,Tool=index,SpeedJ=R,AccJ=R)``
+*   **Description**: Point to point movement provided a Cartesian target with smooth movement in
+    joint space, while simultaneously setting IO status.
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MovJIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status},SpeedJ=R,AccJ=R);``
+*   **Parameters**:
 
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Parameter   | Type     | Description                                                                                                                                                                                                                                                                                                               |
-  +=============+==========+===========================================================================================================================================================================================================================================================================================================================+
-  | X           | double   | X-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Y           | double   | Y-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Z           | double   | Z-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | A           | double   | A-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | B           | double   | B-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | C           | double   | C-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Mode        | int      | mode of Distance. 0: distance percentage; 1: distance away from the starting point or target point                                                                                                                                                                                                                        |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Distance    | int      | move specified distance. If Mode is 0, Distance refers to the distance percentage between the starting point and target point; range: 0~100. If Distance value is positive, it refers to the distance away from the starting point; If Distance value is negative, it refers to the distance away from the target point   |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Index       | int      | digital output index, range: 1~24                                                                                                                                                                                                                                                                                         |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Status      | int      | digital output status, range: 0 or 1                                                                                                                                                                                                                                                                                      |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 30003
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis coordinates in mm
+    * - Y
+      - double
+      - Y-axis coordinates in mm
+    * - Z
+      - double
+      - Z-axis coordinates in mm
+    * - Rx
+      - double
+      - Rx-axis coordinates in degrees
+    * - Ry
+      - double
+      - Ry-axis coordinates in degrees
+    * - Rz
+      - double
+      - Rz-axis coordinates in degrees
+    * - Mode
+      - int
+      - mode of Distance:
 
-.. code-block:: python
+        *   0: distance percentage
+        *   1: distance away from the starting point or target point
 
-  MovJIO(-500,100,200,150,0,90,{0,50,1,0})
+    * - Distance
+      - int
+      - move specified distance:
+
+        *   If Mode is 0, Distance refers to the distance percentage between the starting point and
+            target point; range: 0 - 100.
+        *   If Distance value is positive, it refers to the distance away from the starting point;
+        *   If Distance value is negative, it refers to the distance away from the target point
+
+    * - Index
+      - int
+      - digital output index, range: 1 - 24
+    * - Status
+      - int
+      - digital output status, range: 0 or 1
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+::
+
+    MovJIO(-500,100,200,150,0,90,{0,50,1,0})
 
 Arc
 ---
 
--  Function: ``Arc(X1,Y1,Z1,A1,B1,C1,X2,Y2,Z2,A2,B2,C2)``
--  Description: move from the current position to a target position in
-   an arc interpolated mode under the Cartesian coordinate system
-   This command needs to combine with other motion commands to obtain
-   the starting point of an arc trajectory
+*   **Function**: ``Arc(X1,Y1,Z1,Rx1,Ry1,Rz1,X2,Y2,Z2,Rx2,Ry2,Rz2,User=index,Tool=index,SpeedL=R,AccL=R)``
+*   **Description**: Move from the current position to a target position in an arc-interpolated
+    mode under the Cartesian coordinate system. This command needs to combine with other motion
+    commands to obtain the starting point of an arc trajectory
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},Arc(X1,Y1,Z1,Rx1,Ry1,Rz1,X2,Y2,Z2,Rx2,Ry2,Rz2,SpeedL=R,AccL=R);``
+*   **Parameters**:
 
--  Parameters:
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-  +-------------+----------+-----------------------------------------------------+
-  | Parameter   | Type     | Description                                         |
-  +=============+==========+=====================================================+
-  | X1          | double   | X1-axis coordinates of arc center point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | Y1          | double   | Y1-axis coordinates of arc center point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | Z1          | double   | Z1-axis coordinates of arc center point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | A1          | double   | A1-axis coordinates of arc center point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | B1          | double   | B1-axis coordinates of arc center point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | C1          | double   | C1-axis coordinates of arc center point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | X2          | double   | X2-axis coordinates of arc ending point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | Y2          | double   | Y2-axis coordinates of arc ending point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | Z2          | double   | Z2-axis coordinates of arc ending point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | A2          | double   | A2-axis coordinates of arc ending point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | B2          | double   | B2-axis coordinates of arc ending point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | C2          | double   | C2-axis coordinates of arc ending point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
+    * - Parameter
+      - Type
+      - Description
+    * - X1
+      - double
+      - X1-axis coordinates of arc center point in mm
+    * - Y1
+      - double
+      - Y1-axis coordinates of arc center point in mm
+    * - Z1
+      - double
+      - Z1-axis coordinates of arc center point in mm
+    * - Rx1
+      - double
+      - Rx1-axis coordinates of arc center point in degrees
+    * - Ry1
+      - double
+      - Ry1-axis coordinates of arc center point in degrees
+    * - Rz1
+      - double
+      - Rz1-axis coordinates of arc center point in degrees
+    * - X2
+      - double
+      - X2-axis coordinates of arc ending point in mm
+    * - Y2
+      - double
+      - Y2-axis coordinates of arc ending point in mm
+    * - Z2
+      - double
+      - Z2-axis coordinates of arc ending point in mm
+    * - Rx2
+      - double
+      - Rx2-axis coordinates of arc ending point in degrees
+    * - Ry2
+      - double
+      - Ry2-axis coordinates of arc ending point in degrees
+    * - Rz2
+      - double
+      - Rz2-axis coordinates of arc ending point in degrees
 
--  Supporting port: 30003
+::
 
-Circle
-------
-
--  Function: ``Circle(count,X1,Y1,Z1,A1,B1,C1,X2,Y2,Z2,A2,B2,C2)``
--  Description: circular movement. This command needs to combine with
-   other motion commands
--  Parameters:
-
-  +-------------+----------+---------------------------------+
-  | Parameter   | Type     | Description                     |
-  +=============+==========+=================================+
-  | count       | int      | number of circles               |
-  +-------------+----------+---------------------------------+
-  | X1          | double   | X1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Y1          | double   | Y1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Z1          | double   | Z1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | A1          | double   | A1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | B1          | double   | B1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | C1          | double   | C1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | X2          | double   | X2-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Y2          | double   | Y2-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Z2          | double   | Z2-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | A2          | double   | A2-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | B2          | double   | B2-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | C2          | double   | C2-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-
--  Supporting port: 30003
+    MovL(-300,-150,200,150,0,90,SpeedL=100,AccL=100)
+    Arc(-350,-200,200,150,0,90,-300,-250,200,150,0,90)
 
 ServoJ
 ------
 
--  Function: ``ServoJ(J11,J12,J13,J14,J15,J16)``
--  Description: dynamic following command based on joint space
--  Parameters:
+*   **Function**: ``ServoJ(J11,J12,J13,J14,J15,J16)``
+*   **Description**: Dynamic movement command in the joint space. This command can be interrupted
+    by another ServoJ command.
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},ServoJ(J11,J12,J13,J14,J15,J16);``
+*   **Parameters**:
 
-  +-------------+----------+----------------------------------+
-  | Parameter   | Type     | Description                      |
-  +=============+==========+==================================+
-  | J11         | double   | J11 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J12         | double   | J12 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J13         | double   | J13 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J14         | double   | J14 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J15         | double   | J15 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J16         | double   | J16 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 30003
+    * - Parameter
+      - Type
+      - Description
+    * - J11
+      - double
+      - J11 coordinates of P1 in degrees
+    * - J12
+      - double
+      - J12 coordinates of P1 in degrees
+    * - J13
+      - double
+      - J13 coordinates of P1 in degrees
+    * - J14
+      - double
+      - J14 coordinates of P1 in degrees
+    * - J15
+      - double
+      - J15 coordinates of P1 in degrees
+    * - J16
+      - double
+      - J16 coordinates of P1 in degrees
 
-.. code-block:: python
+::
 
-  ServoJ(0,0,-90,0,90,0)
+    ServoJ(0,0,-90,0,90,0)
+
+.. attention::
+
+    You are advised to set the frequency of customer secondary development to 33Hz (30ms), that is,
+    set the cycle interval to at least 30ms.
 
 ServoP
 ------
 
--  Function: ``ServoP(X1,Y1,Z1,A1,B1,C1)``
--  Description: dynamic following command based on Cartesian space
--  Parameters:
+*   **Function**: ``ServoP(X1,Y1,Z1,A1,B1,C1)``
+*   **Description**: Dynamic movement command in the Cartesian space. This command can be
+    interrupted by another ServoP command.
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},ServoP(X1,Y1,Z1,A1,B1,C1);``
+*   **Parameters**:
 
-  +-------------+----------+---------------------------------+
-  | Parameter   | Type     | Description                     |
-  +=============+==========+=================================+
-  | X1          | double   | X1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Y1          | double   | Y1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Z1          | dou      | Z1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | A1          | double   | A1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | B1          | double   | B1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | C1          | double   | C1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
--  Supporting port: 30003
+    * - Parameter
+      - Type
+      - Description
+    * - X1
+      - double
+      - X1-axis coordinates in mm
+    * - Y1
+      - double
+      - Y1-axis coordinates in mm
+    * - Z1
+      - dou
+      - Z1-axis coordinates in mm
+    * - A1
+      - double
+      - A1-axis coordinates in degrees
+    * - B1
+      - double
+      - B1-axis coordinates in degrees
+    * - C1
+      - double
+      - C1-axis coordinates in degrees
 
-.. code-block:: python
+::
 
-  ServoP(-500,100,200,150,0,90)
+    ServoP(-500,100,200,150,0,90)
+
+.. attention::
+
+    You are advised to set the frequency of customer secondary development to 33Hz (30ms), that is,
+    set the cycle interval to at least 30ms.
+
+MoveJog
+-------
+
+*   **Function**: ``MoveJog(axisID,CoordType=typeValue,User=index,Tool=index)``
+*   **Description**: Command jogging movement
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MoveJog(axisID,CoordType=typeValue,User=index,Tool=index); If ErrorID
+    is -1, it indicates that the set user coordinate index or tool coordinate index does not
+    exist``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - axisID
+      - string
+      - *   J1+ means joint 1 is moving in the positive direction and J1- means joint 1 is moving
+            in the negative direction
+        *   J2+ means joint 2is moving in the positive direction and J2- means joint 2 is moving in
+            the negative direction
+        *   J3+ means joint 3 is moving in the positive direction and J3- means joint 3 is moving
+            in the negative direction
+        *   J4+ means joint 4 is moving in the positive direction and J4- means joint 4 is moving
+            in the negative direction
+        *   J5+ means joint 5 is moving in the positive direction and J5- means joint 5 is moving
+            in the negative direction
+        *   J6+ means joint 6 is moving in the positive direction and J6- means joint 6 is moving
+            in the negative direction
+        *   X+ means joint X is moving in the positive direction and X- means joint X is moving in
+            the negative direction
+        *   Y+ means joint Y is moving in the positive direction and Y- means joint Y is moving in
+            the negative direction
+        *   Z+ means joint Z is moving in the positive direction andZ- means joint Z is moving in
+            the negative direction
+        *   Rx+ means joint Rx is moving in the positive direction and Rx- means joint Rx is moving
+            in the negative direction
+        *   Ry+ means joint Ry is moving in the positive direction and Ry- means joint Ry is moving
+            in the negative direction
+        *   Rz+ means joint Rz is moving in the positive direction and Rz- means joint Rz is moving
+            in the negative direction
+
+CoordType, User, and Tool are optional parameters and retain the default values.
+
+CoordType:
+
+    *   0: user coordinate system
+    *   1: joint coordinate system
+    *   2: tool coordinate system. The default value is 1.
+
+User: User index 0 to 9. The default value is 0.
+Tool: Tool index 0 to 9. The default value is 0.
+
+The optional parameters CoordType, User, and Tool are ignored if the User sends the node to run
+again.
+
+
+Move J2 in the negative direction, and then stop.
+
+::
+
+    MoveJog(j2-)
+    # Return: 0,{},MoveJog(j2-);
+    MoveJog()
+    # 0,{},MoveJog();
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+StartTrace
+----------
+
+*   **Function**: ``StartTrace(traceName)``
+*   **Description**: Trajectory fitting. The trajectory file is a Cartesian point
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},StartTrace(traceName);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - traceName
+      - string
+      - Track file name (including suffix)
+
+Users can query the running status of robots by obtaining RobotMode:
+
+    *   ROBOT_MODE_RUNNING indicates that the robot is in the trajectory fitting operation
+    *   ROBOT_MODE_IDLE indicates that the trajectory fitting operation is completed
+    *   ROBOT_MODE_ERROR indicates that the robot is alarming.
+
+Get the first node {x,y,z,rx,ry,rz} of the trajectory file of recv_string. After the point-to-point
+movement reaches {x,y,z,rx,ry,rz}, the file recv_string is delivered for trajectory fitting.
+
+::
+
+    GetTraceStartPose(recv_string.json)
+    # 0,{x,y,z,rx,ry,rz},GetTraceStartPose(recv_string.json);
+
+    MovJ(x,y,z,rx,ry,rz)
+    # 0,{},MovJ(x,y,z,rx,ry,rz);
+
+    StartTrace(recv_string)
+    # 0,{},StartTrace(recv_string);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+StartPath
+---------
+
+*   **Function**: ``StartPath(traceName,const,cart)``
+*   **Description**: Trajectory playback (joint point in the trajectory file).
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},StartTrace(traceName);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - traceName
+      - string
+      - Track file name (including suffix)
+
+Users can query the running status of robots by obtaining RobotMode:
+
+    *   ROBOT_MODE_RUNNING indicates that the robot is in the trajectory fitting operation
+    *   ROBOT_MODE_IDLE indicates that the trajectory fitting operation is completed
+    *   ROBOT_MODE_ERROR indicates that the robot is alarming.
+
+
+
+Get the first node {x,y,z,rx,ry,rz} of the trajectory file of recv_string. After the point-to-point
+movement reaches {x,y,z,rx,ry,rz}, the file recv_string is delivered for trajectory fitting.
+
+::
+
+    GetTraceStartPose(recv_string.json)
+    # 0,{x,y,z,rx,ry,rz},GetTraceStartPose(recv_string.json);
+
+    MovJ(x,y,z,rx,ry,rz)
+    # 0,{},MovJ(x,y,z,rx,ry,rz);
+
+    StartTrace(recv_string)
+    # 0,{},StartTrace(recv_string);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+Sync
+----
+
+*   **Function**: ``Sync()``
+*   **Description**: A blocking command that executes queue commands and does not return until all
+    queue commands have been executed
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},Sync();``
+*   **Parameters**: None
+
+Block until all queue commands are executed.
+
+::
+
+    Sync()
+
+RelMovJTool
+-----------
+
+*   **Function**:
+    ``RelMovJTool(offsetX,offsetY,offsetZ,offsetRx,offsetRy,offsetRz,Tool,SpeedJ=R,AccJ=R,User=Index)``
+*   **Description**: Perform joint-interpolated relative motion in a tool coordinate system
+*   **Supported Port**: ``30003``
+*   **Return**:
+    ``ErrorID,{},RelMovJTool(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,Tool,SpeedJ=R,
+    AccJ=R,User=Index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - OffsetX
+      - double
+      - X-axis coordinates in mm
+    * - OffsetY
+      - double
+      - Y-axis coordinates in mm
+    * - OffsetZ
+      - double
+      - Z-axis coordinates in mm
+    * - OffsetRx
+      - double
+      - Rx-axis coordinates in degrees
+    * - OffsetRy
+      - double
+      - Ry-axis coordinates in degrees
+    * - OffsetRz
+      - double
+      - Rz-axis coordinates in degrees
+    * - Tool
+      - int
+      - Calibrated tool coordinate system, value range: 0 to 9
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+Move 10 mm relative to the current end position in the X, Y, and Z directions. Movement will be
+smooth in the joint space.
+
+::
+
+    RelMovJTool(10,10,10,0,0,0,0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+RelMovLTool
+-----------
+
+*   **Function**: ``RelMovLTool(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz, Tool,SpeedL=R,
+    AccL=R,User=Index)``
+*   **Description**: Perform relative motion along the tool coordinate system, and the end motion
+    is linear motion
+*   **Supported Port**: ``30003``
+*   **Return**:
+    ``ErrorID,{},RelMovLTool(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,Tool,SpeedL=R,
+    AccL=R,User=Index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - OffsetX
+      - double
+      - X-axis coordinates in mm
+    * - OffsetY
+      - double
+      - Y-axis coordinates in mm
+    * - OffsetZ
+      - double
+      - Z-axis coordinates in mm
+    * - OffsetRx
+      - double
+      - Rx-axis coordinates in degrees
+    * - OffsetRy
+      - double
+      - Ry-axis coordinates in degrees
+    * - OffsetRz
+      - double
+      - Rz-axis coordinates in degrees
+    * - Tool
+      - int
+      - Calibrated tool coordinate system, value range: 0 to 9
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+Move 10 mm relative to the current end position in the X, Y, and Z directions. Movement will be
+smooth in the Cartesian space.
+
+::
+
+    RelMovLTool(10,10,10,0,0,0,0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+RelMovJUser
+-----------
+
+*   **Function**: ``RelMovJUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,User,SpeedJ=R,AccJ=R,Tool=Index)``
+*   **Description**: Perform relative motion along the user coordinate system, and the end motion
+    mode is the joint motion
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},RelMovJUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,User,SpeedJ=R, AccJ=R,Tool=Index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - OffsetX
+      - double
+      - X-axis coordinates in mm
+    * - OffsetY
+      - double
+      - Y-axis coordinates in mm
+    * - OffsetZ
+      - double
+      - Z-axis coordinates in mm
+    * - OffsetRx
+      - double
+      - Rx-axis coordinates in degrees
+    * - OffsetRy
+      - double
+      - Ry-axis coordinates in degrees
+    * - OffsetRz
+      - double
+      - Rz-axis coordinates in degrees
+    * - User
+      - int
+      - Calibrated user coordinate system, value range: 0 to 9
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+::
+
+    RelMovLTool(10,10,10,0,0,0,0)
+
+RelMovLUser
+-----------
+
+*   **Function**: ``RelMovLUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz, User,SpeedL=R, AccL=R,Tool=Index)``
+*   **Description**: Perform relative motion along the user coordinate system, and the end motion mode is a linear motion
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},RelMovLUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,User,SpeedL=R, AccL=R,Tool=Index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - OffsetX
+      - double
+      - X-axis coordinates in mm
+    * - OffsetY
+      - double
+      - Y-axis coordinates in mm
+    * - OffsetZ
+      - double
+      - Z-axis coordinates in mm
+    * - OffsetRx
+      - double
+      - Rx-axis coordinates in degrees
+    * - OffsetRy
+      - double
+      - Ry-axis coordinates in degrees
+    * - OffsetRz
+      - double
+      - Rz-axis coordinates in degrees
+    * - User
+      - int
+      - Calibrated user coordinate system, value range: 0 to 9
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+::
+
+    RelMovLUser(10,10,10,0,0,0,0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+RelJointMovJ
+------------
+
+*   **Function**: ``RelJointMovJ(Offset1,Offset2,Offset3,Offset4,Offset5,Offset6,SpeedJ=R,AccJ=R)``
+*   **Description**: Perform relative motion along the joint coordinate system of each axis, and
+    the end motion mode is joint motion
+*   **Supported Port**: ``30003``
+*   **Return**:
+    ``ErrorID,{},RelJointMovJ(Offset1,Offset2,Offset3,Offset4,Offset5,Offset6,SpeedJ=R,AccJ=R);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - Offset1
+      - double
+      - J1-axis offset in degrees
+    * - Offset2
+      - double
+      - J2-axis offset in degrees
+    * - Offset3
+      - double
+      - J3-axis offset in degrees
+    * - Offset4
+      - double
+      - J4-axis offset in degrees
+    * - Offset5
+      - double
+      - J5-axis offset in degrees
+    * - Offset6
+      - double
+      - J6-axis offset in degrees
+
+SpeedJ and AccJ are optional parameters, which refer to setting joint speed ratio and acceleration
+ratio respectively. The meaning of SpeedJ and AccJ value is the same as that of SpeedJ and AccJ
+value set by port ``29999``.
+
+::
+
+    RelJointMovJ(10,10,10,0,0,0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+Error Code Descriptions
+=======================
+
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Error code | Description                                           | Note                                                                                                                                        |
++============+=======================================================+=============================================================================================================================================+
+| 0          | No error                                              | operate successfully                                                                                                                        |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -1         | fail to get                                           | Failed to receive or establish                                                                                                              |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ...        | ...                                                   | ...                                                                                                                                         |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -10000     | Command error                                         | The command does not exist                                                                                                                  |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -20000     | Parameter number error                                | The number of parameters in the command is incorrect                                                                                        |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -30001     | The first parameter has an incorrect parameter type   | 30000 indicates that the parameter type is incorrect.<br/>The last bit 1 indicates that the parameter type of the first parameter is wrong  |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -30002     | The second parameter has an incorrect parameter type  | 30000 indicates that the parameter type is incorrect.<br/>The last bit 2 indicates that the parameter type of the second parameter is wrong |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ...        | ...                                                   | ...                                                                                                                                         |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -40001     | The first parameter has an incorrect parameter range  | -40000 indicates that the parameter range is incorrect.<br/>The last bit of 1 indicates that the range of the first parameter is wrong      |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -40002     | The second parameter has an incorrect parameter range | -40000 indicates that the parameter range is incorrect.<br/>The last bit of 2 indicates that the range of the second parameter is wrong     |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ...        | ...                                                   | ...                                                                                                                                         |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+

@@ -9,13 +9,13 @@ CR3
 
     * - Product Weight
       - Maximum Payload
-      - Max Reach
+      - Working Radius
       - Rated Voltage
       - Repeatability
       - Communication
     * - 16.5kg
       - 3kg
-      - 795mm
+      - 620mm
       - 48VDC
       - ±0.02mm
       -

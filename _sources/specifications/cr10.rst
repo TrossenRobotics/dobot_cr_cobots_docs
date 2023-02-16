@@ -9,13 +9,13 @@ CR10
 
     * - Product Weight
       - Maximum Payload
-      - Max Reach
+      - Working Radius
       - Rated Voltage
       - Repeatability
       - Communication
     * - 38kg
       - 10kg
-      - 1525mm
+      - 1300mm
       - 48VDC
       - ±0.03mm
       -
