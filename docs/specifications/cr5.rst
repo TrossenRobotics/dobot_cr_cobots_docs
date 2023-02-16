@@ -9,13 +9,13 @@ CR5
 
     * - Product Weight
       - Maximum Payload
-      - Max Reach
+      - Working Radius
       - Rated Voltage
       - Repeatability
       - Communication
     * - 23kg
       - 5kg
-      - 1096mm
+      - 900mm
       - 48VDC
       - ±0.02mm
       -

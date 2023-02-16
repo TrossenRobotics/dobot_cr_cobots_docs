@@ -9,13 +9,13 @@ CR16
 
     * - Product Weight
       - Maximum Payload
-      - Max Reach
+      - Working Radius
       - Rated Voltage
       - Repeatability
       - Communication
     * - 38kg
       - 16kg
-      - 1525mm
+      - 1000mm
       - 48VDC
       - ±0.03mm
       -
