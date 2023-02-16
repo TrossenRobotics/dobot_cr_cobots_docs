@@ -597,7 +597,7 @@ SpeedL
 *   **Description**: Set the Cartesian velocity rate. This command is valid only when the motion
     mode is MovL, MovLIO, MovLR, Jump, Arc, or Circle
 *   **Supported Port**: ``29999``
-*   **Return**: ````
+*   **Return**: ``ErrorID,{},SpeedL(R);``
 *   **Parameters**:
 
 .. list-table::
@@ -957,13 +957,13 @@ InverseSolution
       - Description
     * - X
       - double
-      - X-axis position, unit: mm
+      - X-axis position in mm
     * - Y
       - double
-      - Y-axis position, unit: mm
+      - Y-axis position in mm
     * - Z
       - double
-      - Z-axis position, unit: mm
+      - Z-axis position in mm
     * - Rx
       - double
       - Position of the Rx axis, units: degrees
@@ -1228,6 +1228,7 @@ ModbusClose
     * - index
       - int
       - Internal index
+
 ::
 
     ModbusClose(0)
@@ -1514,7 +1515,7 @@ GetErrorID
     GetErrorID()
     # 0,{[[-2],[],[],[],[],[]]},GetErrorId();
 
-.. node::
+.. note::
 
     Note: For error code description, see `alarm_controller.json`_ and `alarm_servo.json`_
 
@@ -1594,6 +1595,7 @@ AI
     * - index
       - int
       - index of controller, range: 1 or 2
+
 ::
 
     AI(2)
@@ -1805,7 +1807,7 @@ Forcibly entry drag mode.
     This command is supported in CR controller version 3.5.2 and above.
 
 SetTerminalKeys
---------------
+---------------
 
 *   **Function**: ``SetTerminalKeys(status)``
 *   **Description**: Set the terminal button to enable.
@@ -1843,7 +1845,7 @@ SetTerminal485
 *   **Function**: ``SetTerminal485(baudRate, dataLen, parityBit, stopBit)``
 *   **Description**: set the terminal 485 parameter
 *   **Supported Port**: ``29999``
-*   **Return**: ````
+*   **Return**: ``ErrorID,{},SetTerminal485(status);``
 *   **Parameters**:
 
 .. list-table::
@@ -2195,201 +2197,245 @@ six coordinate values of CR series robot.
 | Parameter       | Description                                                                                                                      |
 +=================+==================================================================================================================================+
 | `MovJ`_         | point to point movement, the target point is Cartesian point                                                                     |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `MovL`_         | linear movement, the target point is Cartesian point                                                                             |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `JointMovJ`_    | point to point movement, the target point is joint point                                                                         |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `MovLIO`_       | set the status of digital output port in straight line movement (can set several groups)                                         |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `MovJIO`_       | set the status of digital output port in point-to-point movement, and the target point is Cartesian point                        |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `Arc`_          | arc movement, needs to combine with other motion commands                                                                        |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `ServoJ`_       | dynamic following command based on joint space                                                                                   |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `ServoP`_       | dynamic following command based on Cartesian space                                                                               |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `MoveJog`_      | Jogging                                                                                                                          |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `StartTrace`_   | Trajectory fitting                                                                                                               |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `StartPath`_    | Trajectory playback                                                                                                              |
-| `StartFCTrace`_ | Trajectory fitting with force control                                                                                            |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+| `StartFCTrace`_ | Trajectory fitting with force control NOT IMPLEMENTED                                                                            |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `Sync`_         | Blocking program execution                                                                                                       |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `RelMovJTool`_  | Relative motion is performed along the tool coordinate system, and the end motion is joint motion                                |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `RelMovLTool`_  | Relative motion is performed along the tool coordinate system, and the end motion is linear motion                               |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `RelMovJUser`_  | Relative motion is performed along the user coordinate system, and the end motion mode is the joint motion                       |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `RelMovLUser`_  | Relative motion performed along the user coordinate system, and the end motion mode is a linear motion                           |
++-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `RelJointMovJ`_ | Relative motion instruction is conducted along the joint coordinate system of each axis, and the end motion mode is joint motion |
 +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 
 MovJ
 ----
 
-*   **Function**: ``MovJ(X,Y,Z,A,B,C)``
+*   **Function**: ``MovJ(X,Y,Z,Rx,Ry,Rz,User=index,Tool=index,SpeedJ=R,AccJ=R)``
 *   **Description**: point to point movement, the target point is Cartesian point
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MovJ(X,Y,Z,Rx,Ry,Rz);``
 *   **Parameters**:
 
-  +-------------+----------+--------------------------------+
-  | Parameter   | Type     | Description                    |
-  +=============+==========+================================+
-  | X           | double   | X-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | Y           | double   | Y-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | Z           | double   | Z-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | A           | double   | A-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
-  | B           | double   | B-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
-  | C           | double   | C-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-*   **Supported Port**: ``30003``
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis coordinates in mm
+    * - Y
+      - double
+      - Y-axis coordinates in mm
+    * - Z
+      - double
+      - Z-axis coordinates in mm
+    * - Rx
+      - double
+      - Rx-axis coordinates in degrees
+    * - Ry
+      - double
+      - Ry-axis coordinates in degrees
+    * - Rz
+      - double
+      - Rz-axis coordinates in degrees
+
+User, Tool, SpeedJ, AccJ are optional parameters, indicate setting user coordinate system, tool
+coordinate system, joint velocity ratio and acceleration ratio values respectively. The value has
+the same meaning as SpeedJ and AccJ setting by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
 
 ::
 
-    MovJ(-500,100,200,150,0,90)
+    MovJ(-500,100,200,150,0,90,AccJ=50)
+    # ErrorID,{},MovJ(-500,100,200,150,0,90,AccJ=50);
 
 MovL
 ----
 
-*   **Function**: ``MovL(X,Y,Z,A,B,C)``
+*   **Function**: ``MovL(X,Y,Z,Rx,Ry,Rz,User=index,Tool=index,SpeedL=R,AccL=R)``
 *   **Description**: linear movement, the target point is Cartesian point
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MovL(X,Y,Z,Rx,Ry,Rz,SpeedL=R,AccL=R);``
 *   **Parameters**:
 
-  +-------------+----------+--------------------------------+
-  | Parameter   | Type     | Description                    |
-  +=============+==========+================================+
-  | X           | double   | X-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | Y           | double   | Y-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | Z           | double   | Z-axis coordinates, unit: mm   |
-  +-------------+----------+--------------------------------+
-  | A           | double   | A-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
-  | B           | double   | B-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
-  | C           | double   | C-axis coordinates, unit: °    |
-  +-------------+----------+--------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-*   **Supported Port**: ``30003``
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis coordinates in mm
+    * - Y
+      - double
+      - Y-axis coordinates in mm
+    * - Z
+      - double
+      - Z-axis coordinates in mm
+    * - Rx
+      - double
+      - Rx-axis coordinates in degrees
+    * - Ry
+      - double
+      - Ry-axis coordinates in degrees
+    * - Rz
+      - double
+      - Rz-axis coordinates in degrees
+
+User, Tool, SpeedJ, AccJ are optional setting parameters, indicate setting user coordinate system,
+tool coordinate system, joint velocity ratio and acceleration ratio values respectively. The value
+has the same meaning as SpeedJ and AccJ setting by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
 
 ::
 
-    MovL(-500,100,200,150,0,90)
+    MovL(-500,100,200,150,0,90,SpeedL=60)
+    # ErrorID,{},MovL(-500,100,200,150,0,90,SpeedL=60);
 
 JointMovJ
 ---------
 
 *   **Function**: ``JointMovJ(J1,J2,J3,J4,J5,J6)``
 *   **Description**: point to point movement, the target point is joint point
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},JointMovJ(J1,J2,J3,J4,J5,J6,SpeedJ=R,AccJ=R);``
 *   **Parameters**:
 
-  +-------------+----------+---------------------------+
-  | Parameter   | Type     | Description               |
-  +=============+==========+===========================+
-  | J1          | double   | J1 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J2          | double   | J2 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J3          | double   | J3 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J4          | double   | J4 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J5          | double   | J5 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
-  | J6          | double   | J6 coordinates, unit: °   |
-  +-------------+----------+---------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-*   **Supported Port**: ``30003``
+    * - Parameter
+      - Type
+      - Description
+    * - J1
+      - double
+      - J1 coordinates in degrees
+    * - J2
+      - double
+      - J2 coordinates in degrees
+    * - J3
+      - double
+      - J3 coordinates in degrees
+    * - J4
+      - double
+      - J4 coordinates in degrees
+    * - J5
+      - double
+      - J5 coordinates in degrees
+    * - J6
+      - double
+      - J6 coordinates in degrees
+
+SpeedJ and AccJ are optional parameters, indicating setting joint velocity ratio and acceleration
+ratio respectively. The value has the same meaning as SpeedJ and AccJ setting by port ``29999``.
 
 ::
 
     JointMovJ(0,0,-90,0,90,0)
-
-Jump
-----
-
-Not yet implemented!
-
-RelMovJ
--------
-
-*   **Function**: ``RelMovJ(offset1,offset2,offset3,offset4,offset5,offset6)``
-*   **Description**: move to the Cartesian offset position in a point-to-point mode
-*   **Parameters**:
-
-  +-------------+----------+---------------------------+
-  | Parameter   | Type     | Description               |
-  +=============+==========+===========================+
-  | offset1     | double   | J1-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset2     | double   | J2-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset3     | double   | J3-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset4     | double   | J4-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset5     | double   | J5-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-  | offset6     | double   | J6-axis offset, unit: °   |
-  +-------------+----------+---------------------------+
-
-*   **Supported Port**: ``30003``
-
-::
-
-    RelMovJ(10,10,10,10,10,10)
-
-RelMovL
--------
-
-*   **Function**: ``RelMovL(offsetX,offsetY,offsetZ)``
-*   **Description**: move to the Cartesian offset position in a straight line
-*   **Parameters**:
-
-  +-------------+----------+--------------------------------------------------------------+
-  | Parameter   | Type     | Description                                                  |
-  +=============+==========+==============================================================+
-  | offsetX     | double   | X-axis offset in the Cartesian coordinate system; unit: mm   |
-  +-------------+----------+--------------------------------------------------------------+
-  | offsetY     | double   | Y-axis offset in the Cartesian coordinate system; unit: mm   |
-  +-------------+----------+--------------------------------------------------------------+
-  | offsetZ     | double   | Z-axis offset in the Cartesian coordinate system; unit: mm   |
-  +-------------+----------+--------------------------------------------------------------+
-
-*   **Supported Port**: ``30003``
-
-::
-
-    RelMovL(10,10,10)
+    # ErrorID,{},JointMovJ(0,0,-90,0,90,0,SpeedJ=60,AccJ=50);
 
 MovLIO
 ------
 
-*   **Function**: ``MovLIO(X,Y,Z,A,B,C,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status})``
-*   **Description**: set the status of digital output port in straight line movement, and the target point is Cartesian point
+*   **Function**: ``MovLIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
+    ,{Mode,Distance,Index,Status},User=index,Tool=index,SpeedL=R,AccL=R)``
+*   **Description**: set the status of digital output port in straight line movement, and the
+    target point is Cartesian point
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MovLIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
+    ,{Mode,Distance,Index,Status},SpeedL=R,AccL=R);``
 *   **Parameters**:
 
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Parameter   | Type     | Description                                                                                                                                                                                                                                                                                                               |
-  +=============+==========+===========================================================================================================================================================================================================================================================================================================================+
-  | X           | double   | X-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Y           | double   | Y-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Z           | double   | Z-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | A           | double   | A-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | B           | double   | B-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | C           | double   | C-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Mode        | int      | mode of Distance. 0: distance percentage; 1: distance away from the starting point or target point                                                                                                                                                                                                                        |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Distance    | int      | move specified distance. If Mode is 0, Distance refers to the distance percentage between the starting point and target point; range: 0~100. If Distance value is positive, it refers to the distance away from the starting point; If Distance value is negative, it refers to the distance away from the target point   |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Index       | int      | digital output index, range: 1~24                                                                                                                                                                                                                                                                                         |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Status      | int      | digital output status, range: 0 or 1                                                                                                                                                                                                                                                                                      |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-*   **Supported Port**: ``30003``
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis coordinates in mm
+    * - Y
+      - double
+      - Y-axis coordinates in mm
+    * - Z
+      - double
+      - Z-axis coordinates in mm
+    * - Rx
+      - double
+      - A-axis coordinates in degrees
+    * - Ry
+      - double
+      - Ry-axis coordinates in degrees
+    * - Rz
+      - double
+      - Rz-axis coordinates in degrees
+    * - Mode
+      - int
+      - mode of Distance:
+
+        *   0: distance percentage
+        *   1: distance away from the starting point or target point
+
+    * - Distance
+      - int
+      - move specified distance:
+
+        *   Mode is 0, Distance refers to the distance percentage between the starting point and
+            target point; range: 0 - 100
+        *   If Distance value is positive, it refers to the distance away from the starting point
+        *   If Distance value is negative, it refers to the distance away from the target point
+
+    * - Index
+      - int
+      - digital output index, range: 1 - 24
+    * - Status
+      - int
+      - digital output status, range: 0 or 1
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
 
 ::
 
@@ -2398,36 +2444,68 @@ MovLIO
 MovJIO
 ------
 
-*   **Function**: ``MovJIO(X,Y,Z,A,B,C,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status})``
+*   **Function**: ``MovJIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
+    ,{Mode,Distance,Index,Status},User=index,Tool=index,SpeedJ=R,AccJ=R)``
 *   **Description**: set the status of digital output port in point-to-point movement, and the
     target point is Cartesian point
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MovJIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status},SpeedJ=R,AccJ=R);``
 *   **Parameters**:
 
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Parameter   | Type     | Description                                                                                                                                                                                                                                                                                                               |
-  +=============+==========+===========================================================================================================================================================================================================================================================================================================================+
-  | X           | double   | X-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Y           | double   | Y-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Z           | double   | Z-axis coordinates, unit: mm                                                                                                                                                                                                                                                                                              |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | A           | double   | A-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | B           | double   | B-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | C           | double   | C-axis coordinates, unit: °                                                                                                                                                                                                                                                                                               |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Mode        | int      | mode of Distance. 0: distance percentage; 1: distance away from the starting point or target point                                                                                                                                                                                                                        |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Distance    | int      | move specified distance. If Mode is 0, Distance refers to the distance percentage between the starting point and target point; range: 0~100. If Distance value is positive, it refers to the distance away from the starting point; If Distance value is negative, it refers to the distance away from the target point   |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Index       | int      | digital output index, range: 1~24                                                                                                                                                                                                                                                                                         |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | Status      | int      | digital output status, range: 0 or 1                                                                                                                                                                                                                                                                                      |
-  +-------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-*   **Supported Port**: ``30003``
+    * - Parameter
+      - Type
+      - Description
+    * - X
+      - double
+      - X-axis coordinates in mm
+    * - Y
+      - double
+      - Y-axis coordinates in mm
+    * - Z
+      - double
+      - Z-axis coordinates in mm
+    * - Rx
+      - double
+      - Rx-axis coordinates in degrees
+    * - Ry
+      - double
+      - Ry-axis coordinates in degrees
+    * - Rz
+      - double
+      - Rz-axis coordinates in degrees
+    * - Mode
+      - int
+      - mode of Distance:
+
+        *   0: distance percentage
+        *   1: distance away from the starting point or target point
+
+    * - Distance
+      - int
+      - move specified distance:
+
+        *   If Mode is 0, Distance refers to the distance percentage between the starting point and
+            target point; range: 0 - 100.
+        *   If Distance value is positive, it refers to the distance away from the starting point;
+        *   If Distance value is negative, it refers to the distance away from the target point
+
+    * - Index
+      - int
+      - digital output index, range: 1 - 24
+    * - Status
+      - int
+      - digital output status, range: 0 or 1
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
 
 ::
 
@@ -2436,136 +2514,591 @@ MovJIO
 Arc
 ---
 
-*   **Function**: ``Arc(X1,Y1,Z1,A1,B1,C1,X2,Y2,Z2,A2,B2,C2)``
+*   **Function**: ``Arc(X1,Y1,Z1,Rx1,Ry1,Rz1,X2,Y2,Z2,Rx2,Ry2,Rz2,User=index,Tool=index,SpeedL=R,AccL=R)``
 *   **Description**: move from the current position to a target position in an arc interpolated
     mode under the Cartesian coordinate system This command needs to combine with other motion
     commands to obtain the starting point of an arc trajectory
-
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},Arc(X1,Y1,Z1,Rx1,Ry1,Rz1,X2,Y2,Z2,Rx2,Ry2,Rz2,SpeedL=R,AccL=R);``
 *   **Parameters**:
 
-  +-------------+----------+-----------------------------------------------------+
-  | Parameter   | Type     | Description                                         |
-  +=============+==========+=====================================================+
-  | X1          | double   | X1-axis coordinates of arc center point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | Y1          | double   | Y1-axis coordinates of arc center point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | Z1          | double   | Z1-axis coordinates of arc center point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | A1          | double   | A1-axis coordinates of arc center point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | B1          | double   | B1-axis coordinates of arc center point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | C1          | double   | C1-axis coordinates of arc center point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | X2          | double   | X2-axis coordinates of arc ending point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | Y2          | double   | Y2-axis coordinates of arc ending point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | Z2          | double   | Z2-axis coordinates of arc ending point, unit: mm   |
-  +-------------+----------+-----------------------------------------------------+
-  | A2          | double   | A2-axis coordinates of arc ending point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | B2          | double   | B2-axis coordinates of arc ending point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
-  | C2          | double   | C2-axis coordinates of arc ending point, unit: °    |
-  +-------------+----------+-----------------------------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-*   **Supported Port**: ``30003``
+    * - Parameter
+      - Type
+      - Description
+    * - X1
+      - double
+      - X1-axis coordinates of arc center point in mm
+    * - Y1
+      - double
+      - Y1-axis coordinates of arc center point in mm
+    * - Z1
+      - double
+      - Z1-axis coordinates of arc center point in mm
+    * - Rx1
+      - double
+      - Rx1-axis coordinates of arc center point in degrees
+    * - Ry1
+      - double
+      - Ry1-axis coordinates of arc center point in degrees
+    * - Rz1
+      - double
+      - Rz1-axis coordinates of arc center point in degrees
+    * - X2
+      - double
+      - X2-axis coordinates of arc ending point in mm
+    * - Y2
+      - double
+      - Y2-axis coordinates of arc ending point in mm
+    * - Z2
+      - double
+      - Z2-axis coordinates of arc ending point in mm
+    * - Rx2
+      - double
+      - Rx2-axis coordinates of arc ending point in degrees
+    * - Ry2
+      - double
+      - Ry2-axis coordinates of arc ending point in degrees
+    * - Rz2
+      - double
+      - Rz2-axis coordinates of arc ending point in degrees
 
-Circle
-------
+::
 
-*   **Function**: ``Circle(count,X1,Y1,Z1,A1,B1,C1,X2,Y2,Z2,A2,B2,C2)``
-*   **Description**: circular movement. This command needs to combine with other motion commands
-*   **Parameters**:
-
-  +-------------+----------+---------------------------------+
-  | Parameter   | Type     | Description                     |
-  +=============+==========+=================================+
-  | count       | int      | number of circles               |
-  +-------------+----------+---------------------------------+
-  | X1          | double   | X1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Y1          | double   | Y1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Z1          | double   | Z1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | A1          | double   | A1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | B1          | double   | B1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | C1          | double   | C1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | X2          | double   | X2-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Y2          | double   | Y2-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Z2          | double   | Z2-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | A2          | double   | A2-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | B2          | double   | B2-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | C2          | double   | C2-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-
-*   **Supported Port**: ``30003``
+    MovL(-300,-150,200,150,0,90,SpeedL=100,AccL=100)
+    Arc(-350,-200,200,150,0,90,-300,-250,200,150,0,90)
 
 ServoJ
 ------
 
 *   **Function**: ``ServoJ(J11,J12,J13,J14,J15,J16)``
-*   **Description**: dynamic following command based on joint space
+*   **Description**: dynamic following command based on joint space. This command can be
+    interrupted by another ServoJ command.
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},ServoJ(J11,J12,J13,J14,J15,J16);``
 *   **Parameters**:
 
-  +-------------+----------+----------------------------------+
-  | Parameter   | Type     | Description                      |
-  +=============+==========+==================================+
-  | J11         | double   | J11 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J12         | double   | J12 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J13         | double   | J13 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J14         | double   | J14 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J15         | double   | J15 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
-  | J16         | double   | J16 coordinates of P1, unit: °   |
-  +-------------+----------+----------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-*   **Supported Port**: ``30003``
+    * - Parameter
+      - Type
+      - Description
+    * - J11
+      - double
+      - J11 coordinates of P1 in degrees
+    * - J12
+      - double
+      - J12 coordinates of P1 in degrees
+    * - J13
+      - double
+      - J13 coordinates of P1 in degrees
+    * - J14
+      - double
+      - J14 coordinates of P1 in degrees
+    * - J15
+      - double
+      - J15 coordinates of P1 in degrees
+    * - J16
+      - double
+      - J16 coordinates of P1 in degrees
 
 ::
 
     ServoJ(0,0,-90,0,90,0)
 
+.. attention::
+
+    You are advised to set the frequency of customer secondary development to 33Hz (30ms), that is,
+    set the cycle interval to at least 30ms.
+
 ServoP
 ------
 
 *   **Function**: ``ServoP(X1,Y1,Z1,A1,B1,C1)``
-*   **Description**: dynamic following command based on Cartesian space
+*   **Description**: dynamic following command based on Cartesian space. This command can be
+    interrupted by another ServoP command.
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},ServoP(X1,Y1,Z1,A1,B1,C1);``
 *   **Parameters**:
 
-  +-------------+----------+---------------------------------+
-  | Parameter   | Type     | Description                     |
-  +=============+==========+=================================+
-  | X1          | double   | X1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Y1          | double   | Y1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | Z1          | dou      | Z1-axis coordinates, unit: mm   |
-  +-------------+----------+---------------------------------+
-  | A1          | double   | A1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | B1          | double   | B1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
-  | C1          | double   | C1-axis coordinates, unit: °    |
-  +-------------+----------+---------------------------------+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
 
-*   **Supported Port**: ``30003``
+    * - Parameter
+      - Type
+      - Description
+    * - X1
+      - double
+      - X1-axis coordinates in mm
+    * - Y1
+      - double
+      - Y1-axis coordinates in mm
+    * - Z1
+      - dou
+      - Z1-axis coordinates in mm
+    * - A1
+      - double
+      - A1-axis coordinates in degrees
+    * - B1
+      - double
+      - B1-axis coordinates in degrees
+    * - C1
+      - double
+      - C1-axis coordinates in degrees
 
 ::
 
     ServoP(-500,100,200,150,0,90)
+
+.. attention::
+
+    You are advised to set the frequency of customer secondary development to 33Hz (30ms), that is,
+    set the cycle interval to at least 30ms.
+
+MoveJog
+-------
+
+*   **Function**: ``MoveJog(axisID,CoordType=typeValue,User=index,Tool=index)``
+*   **Description**: Jogging movement. The movement is not fixed distance. CR controller v3.5.2 and MG400/M1Pro controller v1.5.6 and later support this command.
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},MoveJog(axisID,CoordType=typeValue,User=index,Tool=index); If ErrorID is -1, it indicates that the set user coordinate index or tool coordinate index does not exist``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - axisID
+      - string
+      - *   J1+ means joint 1 is moving in the positive direction and J1- means joint 1 is moving
+            in the negative direction
+        *   J2+ means joint 2is moving in the positive direction and J2- means joint 2 is moving in
+            the negative direction
+        *   J3+ means joint 3 is moving in the positive direction and J3- means joint 3 is moving
+            in the negative direction
+        *   J4+ means joint 4 is moving in the positive direction and J4- means joint 4 is moving
+            in the negative direction
+        *   J5+ means joint 5 is moving in the positive direction and J5- means joint 5 is moving
+            in the negative direction
+        *   J6+ means joint 6 is moving in the positive direction and J6- means joint 6 is moving
+            in the negative direction
+        *   X+ means joint X is moving in the positive direction and X- means joint X is moving in
+            the negative direction
+        *   Y+ means joint Y is moving in the positive direction and Y- means joint Y is moving in
+            the negative direction
+        *   Z+ means joint Z is moving in the positive direction andZ- means joint Z is moving in
+            the negative direction
+        *   Rx+ means joint Rx is moving in the positive direction and Rx- means joint Rx is moving
+            in the negative direction
+        *   Ry+ means joint Ry is moving in the positive direction and Ry- means joint Ry is moving
+            in the negative direction
+        *   Rz+ means joint Rz is moving in the positive direction and Rz- means joint Rz is moving
+            in the negative direction
+
+CoordType, User, and Tool are optional parameters and retain the default values.
+
+CoordType:
+
+    *   0: user coordinate system
+    *   1: joint coordinate system
+    *   2: tool coordinate system. The default value is 1.
+
+User: User index 0 to 9. The default value is 0.
+Tool: Tool index 0 to 9. The default value is 0.
+
+The optional parameters CoordType, User, and Tool are ignored if the User sends the node to run
+again.
+
+
+Joint 2 is moving in the negative direction, and then it stops.
+
+::
+
+    MoveJog(j2-)
+    # Return: 0,{},MoveJog(j2-);
+
+::
+
+    MoveJog()
+    # 0,{},MoveJog();
+
+
+
+StartTrace
+----------
+
+*   **Function**: ``StartTrace(traceName)``
+*   **Description**: trajectory fitting, the trajectory file is a Cartesian point
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},StartTrace(traceName);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - traceName
+      - string
+      - Track file name (including suffix)
+
+Users can query the running status of robots by obtaining RobotMode:
+
+    *   ROBOT_MODE_RUNNING indicates that the robot is in the trajectory fitting operation
+    *   ROBOT_MODE_IDLE indicates that the trajectory fitting operation is completed
+    *   ROBOT_MODE_ERROR indicates that the robot is alarming.
+
+Get the first node {x,y,z,rx,ry,rz} of the trajectory file of recv_string. After the point-to-point
+movement reaches {x,y,z,rx,ry,rz}, the file recv_string is delivered for trajectory fitting.
+
+::
+
+    GetTraceStartPose(recv_string.json)
+    # 0,{x,y,z,rx,ry,rz},GetTraceStartPose(recv_string.json);
+
+    MovJ(x,y,z,rx,ry,rz)
+    # 0,{},MovJ(x,y,z,rx,ry,rz);
+
+    StartTrace(recv_string)
+    # 0,{},StartTrace(recv_string);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+StartPath
+---------
+
+*   **Function**: ``StartPath(traceName,const,cart)``
+*   **Description**: trajectory playback (joint point in the trajectory file).
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},StartTrace(traceName);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - traceName
+      - string
+      - Track file name (including suffix)
+
+Users can query the running status of robots by obtaining RobotMode:
+
+    *   ROBOT_MODE_RUNNING indicates that the robot is in the trajectory fitting operation
+    *   ROBOT_MODE_IDLE indicates that the trajectory fitting operation is completed
+    *   ROBOT_MODE_ERROR indicates that the robot is alarming.
+
+
+
+Get the first node {x,y,z,rx,ry,rz} of the trajectory file of recv_string. After the point-to-point
+movement reaches {x,y,z,rx,ry,rz}, the file recv_string is delivered for trajectory fitting.
+
+::
+
+    GetTraceStartPose(recv_string.json)
+    # 0,{x,y,z,rx,ry,rz},GetTraceStartPose(recv_string.json);
+
+    MovJ(x,y,z,rx,ry,rz)
+    # 0,{},MovJ(x,y,z,rx,ry,rz);
+
+    StartTrace(recv_string)
+    # 0,{},StartTrace(recv_string);
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+Sync
+----
+
+*   **Function**: ``Sync()``
+*   **Description**: The blocking program executes queue commands and does not return until all queue commands have been executed
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},Sync();``
+*   **Parameters**: None
+
+::
+
+    Sync()
+
+RelMovJTool
+-----------
+
+*   **Function**: ``RelMovJTool(offsetX, offsetY,offsetZ, offsetRx,offsetRy,offsetRz, Tool,SpeedJ=R, AccJ=R,User=Index)``
+*   **Description**: Perform relative motion along the tool coordinate system, and the end motion is joint motion
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},RelMovJTool(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,Tool,SpeedJ=R, AccJ=R,User=Index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - OffsetX
+      - double
+      - X-axis coordinates in mm
+    * - OffsetY
+      - double
+      - Y-axis coordinates in mm
+    * - OffsetZ
+      - double
+      - Z-axis coordinates in mm
+    * - OffsetRx
+      - double
+      - Rx-axis coordinates in degrees
+    * - OffsetRy
+      - double
+      - Ry-axis coordinates in degrees
+    * - OffsetRz
+      - double
+      - Rz-axis coordinates in degrees
+    * - Tool
+      - int
+      - Calibrated tool coordinate system, value range: 0 to 9
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+::
+
+    RelMovJTool(10,10,10,0,0,0,0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+RelMovLTool
+-----------
+
+*   **Function**: ``RelMovLTool(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz, Tool,SpeedL=R,
+    AccL=R,User=Index)``
+*   **Description**: Perform relative motion along the tool coordinate system, and the end motion
+    is linear motion
+*   **Supported Port**: ``30003``
+*   **Return**:
+    ``ErrorID,{},RelMovLTool(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,Tool,SpeedL=R,
+    AccL=R,User=Index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - OffsetX
+      - double
+      - X-axis coordinates in mm
+    * - OffsetY
+      - double
+      - Y-axis coordinates in mm
+    * - OffsetZ
+      - double
+      - Z-axis coordinates in mm
+    * - OffsetRx
+      - double
+      - Rx-axis coordinates in degrees
+    * - OffsetRy
+      - double
+      - Ry-axis coordinates in degrees
+    * - OffsetRz
+      - double
+      - Rz-axis coordinates in degrees
+    * - Tool
+      - int
+      - Calibrated tool coordinate system, value range: 0 to 9
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+::
+
+    RelMovLTool(10,10,10,0,0,0,0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+RelMovJUser
+-----------
+
+*   **Function**: ``RelMovJUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz, User,SpeedJ=R,
+    AccJ=R,Tool=Index)``
+*   **Description**: Perform relative motion along the user coordinate system, and the end motion
+    mode is the joint motion
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},RelMovJUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,User,SpeedJ=R, AccJ=R,Tool=Index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - OffsetX
+      - double
+      - X-axis coordinates in mm
+    * - OffsetY
+      - double
+      - Y-axis coordinates in mm
+    * - OffsetZ
+      - double
+      - Z-axis coordinates in mm
+    * - OffsetRx
+      - double
+      - Rx-axis coordinates in degrees
+    * - OffsetRy
+      - double
+      - Ry-axis coordinates in degrees
+    * - OffsetRz
+      - double
+      - Rz-axis coordinates in degrees
+    * - User
+      - int
+      - Calibrated user coordinate system, value range: 0 to 9
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+::
+
+    RelMovLTool(10,10,10,0,0,0,0)
+
+RelMovLUser
+-----------
+
+*   **Function**: ``RelMovLUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz, User,SpeedL=R, AccL=R,Tool=Index)``
+*   **Description**: Perform relative motion along the user coordinate system, and the end motion mode is a linear motion
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},RelMovLUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,User,SpeedL=R, AccL=R,Tool=Index);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - OffsetX
+      - double
+      - X-axis coordinates in mm
+    * - OffsetY
+      - double
+      - Y-axis coordinates in mm
+    * - OffsetZ
+      - double
+      - Z-axis coordinates in mm
+    * - OffsetRx
+      - double
+      - Rx-axis coordinates in degrees
+    * - OffsetRy
+      - double
+      - Ry-axis coordinates in degrees
+    * - OffsetRz
+      - double
+      - Rz-axis coordinates in degrees
+    * - User
+      - int
+      - Calibrated user coordinate system, value range: 0 to 9
+
+SpeedL and AccL are optional parameters, indicating setting user coordinate system, tool coordinate
+system, Cartesian speed ratio and acceleration ratio values respectively. The value is the same as
+the value of SpeedL and AccL set by port ``29999``.
+
+User: indicates the User index 0 to 9. The default value is the last used value.
+Tool: Tool index 0 to 9. The default value is the last used value.
+
+::
+
+    RelMovLUser(10,10,10,0,0,0,0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+RelJointMovJ
+------------
+
+*   **Function**: ``RelJointMovJ(Offset1,Offset2,Offset3,Offset4,Offset5,Offset6,SpeedJ=R,
+    AccJ=R)``
+*   **Description**: Perform relative motion along the joint coordinate system of each axis, and
+    the end motion mode is joint motion
+*   **Supported Port**: ``30003``
+*   **Return**: ``ErrorID,{},RelJointMovJ(Offset1,Offset2,Offset3,Offset4,Offset5,Offset6,SpeedJ=R,
+    AccJ=R);``
+*   **Parameters**:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 10 10 40
+
+    * - Parameter
+      - Type
+      - Description
+    * - Offset1
+      - double
+      - J1-axis offset in degrees
+    * - Offset2
+      - double
+      - J2-axis offset in degrees
+    * - Offset3
+      - double
+      - J3-axis offset in degrees
+    * - Offset4
+      - double
+      - J4-axis offset in degrees
+    * - Offset5
+      - double
+      - J5-axis offset in degrees
+    * - Offset6
+      - double
+      - J6-axis offset in degrees
+
+SpeedJ and AccJ are optional parameters, which refer to setting joint speed ratio and acceleration
+ratio respectively. The meaning of SpeedJ and AccJ value is the same as that of SpeedJ and AccJ
+value set by port ``29999``.
+
+::
+
+    RelJointMovJ(10,10,10,0,0,0)
+
+.. note::
+
+    This command is supported in CR controller version 3.5.2 and above.
+
+Error Code Descriptions
+=======================
