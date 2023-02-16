@@ -12,18 +12,17 @@ cobot through a remote workstation over a network.
 Message Format
 ==============
 
-According to the design, CR robots will use ports ``29999``, ``30003``, ``30004``, ``30005`` and
-``30006``.
+CR robots use ports ``29999``, ``30003``, ``30004``, ``30005`` and ``30006``.
 
-*   Server port ``29999`` (hereinafter referred to as Dashboard port) is responsible for receiving
+*   Server port ``29999`` (hereinafter referred to as Dashboard Port) is responsible for receiving
     some simple commands by sending and receiving one by one. That is, after receiving the agreed
-    message format from the client, the Dashboard port will give feedback to the client.
-*   Server port ``30003`` (hereinafter referred to as the real-time feedback port) feeds back the
+    message format from the client, the Dashboard Port will give feedback to the client.
+*   Server port ``30003`` (hereinafter referred to as the Real-time Feedback Port) feeds back the
     robot information. It only receives the agreed message format from the client but does not give
     feedback. (Note: Port ``30003`` port is split into port ``30003`` and port ``30004``, which is
     expected to be implemented in controller version 3.5.2. Controller version 3.5.1 currently has
     only one ``30003`` port for real-time feedback or sending motion commands.)
-*   Server port ``30004`` (hereinafter referred to as real-time feedback port) feeds back robot
+*   Server port ``30004`` (hereinafter referred to as Real-time Feedback Port) feeds back robot
     information every 8ms. Port ``30005`` provides robot information every 200ms. Port ``30006`` is
     a configurable port to feed back robot information. By default, port ``30006`` provides
     feedback every 50ms.
@@ -38,7 +37,7 @@ Format When Sending Messages
 
 ::
 
-    Message name(Param1,Param2,Param3,...Paramn)
+    Message name(Param_1,Param_2,Param_3,...Param_n)
 
 The message format is shown as above. It consists of a message name with parameters in a bracket.
 Each parameter is separated by an English comma “,”. A complete message ends with a right
@@ -51,16 +50,16 @@ Format When Receiving Messages
 
 ::
 
-    "ErrorID,{value,...,valuen},Message name(Param1,Param2,Param3,...Paramn);"
+    "ErrorID,{value,...,value_n},Message name(Param_1,Param_2,Param_3,...Param_n);"
 
 The return message format is shown above. An ``ErrorID`` of zero indicates that the command was
 received successfully. If the ErrorID is non-zero value, it indicates an error has occurred in the
 command. See `Error Code Descriptions`_ for a detailed description.
 
-``{value1,value2,value3,...Valuen}`` represents the return value. If there is no return value,
+``{value_1,value_2,value_3,...,value_n}`` represents the return value. If there is no return value,
 ``{}`` will be returned.
 
-``Message name (Param1,Param2,Param3......Paramn)`` reflects the content delivered.
+``Message name (Param_1,Param_2,Param_3,...,Param_n)`` reflects the content delivered.
 
 For example, the command:
 
@@ -94,9 +93,9 @@ This return value indicates a command error. If there is no return value, ``{}``
 Dashboard Port Commands
 =======================
 
-The upper computer can directly send some simple commands to the robot through port ``29999``. The
+The upper computer can directly send some simple commands to the robot through port ``29999``.
 Dashboard commands can be used to control the robot like enabling/disabling the robot, resetting
-the robot, and setting I/O statuses.
+the robot, and setting some I/O statuses.
 
 EnableRobot
 -----------
@@ -105,9 +104,10 @@ EnableRobot
 *   **Description**: Enable the robot
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},EnableRobot();``
-*   **Optional parameters**: Number of optional parameters: 0, 1, or 4. The one parameter command
-    provides the payload weight. The four parameters command provides the payload weight, centerX,
-    centerY, and centerZ respectively.
+*   **Optional parameters**: Number of optional parameters: 0, 1, or 4. A command with zero
+    parameters enables the robot without setting payload information. A command with one parameter
+    provides the payload weight. A command with four parameters provides the payload weight,
+    centerX, centerY, and centerZ respectively.
 
 .. list-table::
     :header-rows: 1
@@ -126,6 +126,7 @@ EnableRobot
         * CR10 load range: 10kg
         * CR12 load range: 12kg
         * CR16 load range: 16kg
+
     * - centerX
       - double
       - Payload offset distance in X direction: -500mm - 500mm
@@ -136,9 +137,24 @@ EnableRobot
       - double
       - Payload offset distance in Z direction: -500mm - 500mm
 
+Enable the robot without setting payload parameters.
+
 ::
 
     EnableRobot()
+
+Enable the robot with a payload weighing 3.5kg.
+
+::
+
+    EnableRobot(3.5)
+
+Enable the robot with a payload weighing 3.5kg and offsets of 0mm, 50mm, 100mm in the X, Y, and Z
+directions, respectively.
+
+::
+
+    EnableRobot(3.5,0,50,100)
 
 DisableRobot
 ------------
@@ -148,6 +164,8 @@ DisableRobot
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},DisableRobot();``
 *   **Parameters**: None
+
+Disable the robot.
 
 ::
 
@@ -164,6 +182,8 @@ ClearError
 *   **Supported Port**: ``29999``
 *   **Parameters**: None
 
+Clear all possible robot alarms.
+
 ::
 
     ClearError()
@@ -176,6 +196,8 @@ ResetRobot
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},ClearError();``
 *   **Parameters**: None
+
+Stop robot's current execution.
 
 ::
 
@@ -200,6 +222,8 @@ SpeedFactor
     * - ratio
       - int
       - speed ratio, range: 0 - 100 exclusive
+
+Set the global speed ratio to 80%.
 
 ::
 
@@ -226,6 +250,8 @@ User
       - int
       - Select the specified user coordinate system, range: 0 - 9
 
+Select the first user coordinate system for use.
+
 ::
 
     User(1)
@@ -251,6 +277,8 @@ Tool
       - int
       - Select the specified tool coordinate system, range: 0 - 9
 
+Select the first tool coordinate system for use.
+
 ::
 
     Tool(1)
@@ -264,11 +292,14 @@ RobotMode
 *   **Return**: ``ErrorID,{Value},RobotMode(); //Value is the robot mode value``
 *   **Parameters**: None
 
+Get the current mode of the robot.
+
 ::
 
     RobotMode()
+    # 4 // Robot is disabled
 
-*   Return:
+*   Return options:
 
 .. list-table::
     :header-rows: 1
@@ -340,6 +371,8 @@ PayLoad
       - double
       - load inertia kg*m^2
 
+Set the current payload to 3kg and an inertia of 0.4 kg*m^2.
+
 ::
 
     PayLoad(3,0.4)
@@ -367,11 +400,16 @@ DO
       - Description
     * - index
       - int
-      - digital output index, range: 1 to 16 or 100 to 1000. The value ranges from 100 to 1000 with
+      - digital output index, range: 1 - 16 or 100 - 1000. The value ranges from 100 - 1000 with
         the support of the hardware of the extended I/O module
     * - status
       - bool
-      - Status of the digital output port. 1: High level; 0: Low level
+      - Status of the digital output port:
+
+        *   1: Set status high
+        *   0: Set status low
+
+Set DO index 1 to high.
 
 ::
 
@@ -401,6 +439,8 @@ DOExecute
       - bool
       - Status of the digital output port. 1: High level; 0: Low level
 
+Immediately set DO index 1 to high.
+
 ::
 
     DOExecute(1,1)
@@ -429,6 +469,8 @@ ToolDO
       - bool
       - status of digital output port. 1: high level, 0: low level
 
+Set ToolDO index 1 to high.
+
 ::
 
     ToolDO(1,1)
@@ -456,6 +498,8 @@ ToolDOExecute
       - bool
       - status of the digital output port. 1: high level; 0: low level
 
+Immediately set ToolDO index 1 to high.
+
 ::
 
     ToolDOExecute(1,1)
@@ -481,7 +525,9 @@ AO
       - analog output index, range: 1 or 2
     * - value
       - double
-      - voltage of corresponding index, range: 0 - 10
+      - voltage of corresponding index in volts, range: 0 - 10
+
+Set AO index 1 to 2V.
 
 ::
 
@@ -510,6 +556,8 @@ AOExecute
       - double
       - voltage of corresponding index, range: 0 - 10
 
+Immediately set AO index 1 to 2V.
+
 ::
 
     AOExecute(1,2)
@@ -534,6 +582,8 @@ AccJ
     * - R
       - int
       - joint acceleration rate, range: 1 - 100
+
+Set acceleration rate of joint movement commands to 50%.
 
 ::
 
@@ -560,6 +610,8 @@ AccL
       - int
       - Cartesian acceleration rate, range: 1 - 100
 
+Set acceleration rate of Cartesian movement commands to 50%.
+
 ::
 
     AccL(50)
@@ -585,6 +637,8 @@ SpeedJ
       - int
       - joint velocity rate, range: 1 - 100
 
+Set velocity rate of joint movement commands to 50%.
+
 ::
 
     SpeedJ(50)
@@ -609,6 +663,8 @@ SpeedL
     * - R
       - int
       - Cartesian velocity rate, range: 1 - 100
+
+Set velocity rate of Cartesian movement commands to 50%.
 
 ::
 
@@ -661,6 +717,8 @@ CP
       - int
       - continuous path rate, range: 1 - 100
 
+Set the continuous path rate to 50%.
+
 ::
 
     CP(50)
@@ -692,8 +750,8 @@ SetArmOrientation
       - int
       - Arm direction: up the elbow/down the elbow (1/-1)
 
-        * 1: up the elbow
-        * -1: down the elbow
+        * 1: elbow up
+        * -1: elbow down
 
     * - ForN
       - int
@@ -708,13 +766,15 @@ SetArmOrientation
 
         * -1,-2...
 
-            * -1: Axis 6 Angle is [0,-90], Config6 is -1;
+            * -1: Axis 6 Angle is [0, -90], Config6 is -1;
             * -2: Axis 6 Angle is [90, 180], and so on
 
         * 1,2...
 
-            * 1: axis 6 Angle is [0,90], Config6 is 1;
-            * 2: axis 6 Angle is [90180], Config6 is 2, and so on
+            * 1: axis 6 Angle is [0, 90], Config6 is 1;
+            * 2: axis 6 Angle is [9, 180], Config6 is 2, and so on
+
+Set the arm orientation to forward, elbow up, wrist reversed, and J6 between degrees [0, 90].
 
 ::
 
@@ -729,13 +789,15 @@ PowerOn
 *   **Return**: ``ErrorID,{},PowerOn();``
 *   **Parameters**: None
 
-.. note::
-
-  Once the robot is powered on, you can enable the robot after about 10 seconds.
+Power the robot on.
 
 ::
 
     PowerOn()
+
+.. note::
+
+  Once the robot is powered on, you can enable the robot after about 10 seconds.
 
 RunScript
 ---------
@@ -757,6 +819,8 @@ RunScript
       - string
       - script name
 
+Run the script named "demo".
+
 ::
 
     RunScript(demo)
@@ -769,6 +833,8 @@ StopScript
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},StopScript();``
 *   **Parameters**: None
+
+Stop the running script.
 
 ::
 
@@ -783,6 +849,8 @@ PauseScript
 *   **Return**: ``ErrorID,{},PauseScript();``
 *   **Parameters**: None
 
+Pause the running script.
+
 ::
 
     PauseScript()
@@ -796,6 +864,8 @@ ContinueScript
 *   **Return**: ``ErrorID,{},ContinueScript();``
 *   **Parameters**: None
 
+Continue the paused script.
+
 ::
 
     ContinueScript()
@@ -804,7 +874,7 @@ SetSafeSkin
 -----------
 
 *   **Function**: ``SetSafeSkin(status)``
-*   **Description**: Set the state of safe skin
+*   **Description**: Set the state of safe skin if available.
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},SetSafeSkin(status));``
 *   **Parameters**:
@@ -822,6 +892,8 @@ SetSafeSkin
 
         *   0: Turn off safe skin
         *   1: Turn on safe skin
+
+Turn on the safe skin.
 
 ::
 
@@ -847,6 +919,8 @@ GetTraceStartPose
     * - traceName
       - string
       - name of the trajectory file (with the suffix)
+
+Get the first point of the trajectory named "recv_string".
 
 ::
 
@@ -876,6 +950,8 @@ GetPathStartPose
     * - traceName
       - string
       - name of the trajectory file (with the suffix)
+
+Get the first point in the trajectory playback called "recv_string".
 
 ::
 
@@ -928,6 +1004,9 @@ PositiveSolution
     * - Tool
       - int
       - Select the calibrated tool coordinate system
+
+Do forward kinematics to find the pose of the end of the robot with joint positions
+[0,0,-90,0,90,0] using User coordinate system 1 and Tool coordinate system 1.
 
 ::
 
@@ -1034,6 +1113,8 @@ SetCollisionLevel
         *   0: turn collision detection off
         *   1 - 5: level of sensitivity
 
+Set collision sensitivity to 1.
+
 ::
 
     SetCollisionLevel(1)
@@ -1088,20 +1169,28 @@ GetSixForceData
     the original value of six-axis force.``
 *   **Parameters**: None
 
+Get the current six-axis force values.
+
 ::
 
     GetSixForceData()
     # Return: 0,{0.0,0.0,0.0,0.0,0.0,0.0},GetSixForceData();
 
+.. note::
+
+    This may require a six-axis force sensor end tool.
+
 GetAngle
 --------
 
 *   **Function**: ``GetAngle()``
-*   **Description**: Get the current pose of the robot under the Joint coordinate system
+*   **Description**: Get the current joint angles in degrees
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{J1,J2,J3,J4,J5,J6},GetAngle(); //{J1,J2,J3,J4,J5,J6} refers to the joint
     coordinate of the current pose``
 *   **Parameters**: None
+
+Get the current joint angles in degrees.
 
 ::
 
@@ -1112,9 +1201,7 @@ GetPose
 -------
 
 *   **Function**: ``GetPose(user,tool)``
-*   **Description**: get the current pose of the robot under the Cartesian coordinate system
-
-
+*   **Description**: Get the current pose of the robot in the Cartesian coordinate system
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{X,Y,Z,Rx,Ry,Rz},GetPose(); //{X,Y,Z,Rx,Ry,Rz} represents the coordinates
     of the current pose under the Cartesian coordinate system``
@@ -1134,8 +1221,7 @@ GetPose
       - int
       - index of Tool coordinate system
 
-Get the default parameter to the upper computer. Select the pose of the coordinate system. Pass the
-index values of user and tool, and return the pose under the specified coordinate system
+Get the current pose of the robot in the default coordinate system.
 
 ::
 
@@ -1144,8 +1230,8 @@ index values of user and tool, and return the pose under the specified coordinat
 
 .. note::
 
-    If you have set the User or Tool coordinate system, the current pose is under the current User
-    or Tool coordinate system
+    If you specify a User or Tool coordinate system, the returned pose will be used that coordinate
+    system.
 
 EmergencyStop
 -------------
@@ -1155,6 +1241,8 @@ EmergencyStop
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},EmergencyStop();``
 *   **Parameters**: None
+
+Trigger an emergency stop.
 
 ::
 
@@ -1194,11 +1282,12 @@ ModbusCreate
         * If it is 1, establish modbusRTU communication.
 
 ErrorID: 0 indicates that the Modbus master station is created successfully. -1 indicates that the
-Modbus master station fails to be created. For other values, refer to the error code description
+Modbus master station failed to be created. For other values, refer to `Error Code Descriptions`_.
 
-index: master station index, which supports a maximum of 5 devices, ranging from 0 to 4.
+The returned index indicated the master station index, which supports a maximum of 5 devices,
+ranging from 0 - 4.
 
-Establish RTU communication master station (60000 terminal transparent port)
+Establish RTU communication master station (60000 terminal transparent port).
 
 ::
 
@@ -1228,6 +1317,8 @@ ModbusClose
       - int
       - Internal index
 
+Close the Modbus connection to station 0.
+
 ::
 
     ModbusClose(0)
@@ -1242,8 +1333,8 @@ GetInBits
 *   **Function**: ``GetInBits(index,addr,count)``
 *   **Description**: Read discrete input data
 *   **Supported Port**: ``29999``
-*   **Return**: ``ErrorID,{value1,value2,...,valuen},GetInBits(index,addr,count); //table, it gets
-    results {value1,value2...,valuen} by bit``
+*   **Return**: ``ErrorID,{value_1,value_2,...,value_n},GetInBits(index,addr,count); //table, it
+    gets results {value_1,value_2...,value_n} by bit``
 *   **Parameters**:
 
 .. list-table::
@@ -1262,6 +1353,8 @@ GetInBits
     * - count
       - int
       - The value ranges from 1 to 16
+
+From device 0 at addr 3000, read 5 bits.
 
 ::
 
@@ -1277,11 +1370,11 @@ GetInRegs
 ---------
 
 *   **Function**: ``GetInRegs(index,addr,count,valType)``
-*   **Description**: read the input register value
+*   **Description**: Read from the input register value
 *   **Supported Port**: ``29999``
-*   **Return**: ``ErrorID,{value1,value2,...,valuen},GetInRegs(index,addr,count,valType); //For
-    ErrorID, 0 means normal, and -1 means failing to be obtained; For table, it returns
-    {value1,value2...,valuen} by variable type``
+*   **Return**: ``ErrorID,{value_1,value_2,...,value_n},GetInRegs(index,addr,count,valType); //
+    ErrorID 0 means normal, -1 means failure to be read; For table, it returns
+    {value_1,value_2...,value_n} by variable type``
 *   **Parameters**:
 
 .. list-table::
@@ -1299,7 +1392,7 @@ GetInRegs
       - Depending on the slave station configuration
     * - count
       - int
-      - The value ranges from 1 to 4
+      - The value ranges from 1 - 4
     * - valType
       - string
       - Optional parameters:
@@ -1310,6 +1403,8 @@ GetInRegs
             registers)
         *   F64: read 64-bit double-precision floating-point number (eight bytes, occupy four
             registers)
+
+From device 0 at address 4000, read 3.
 
 ::
 
@@ -1325,11 +1420,11 @@ GetCoils
 --------
 
 *   **Function**: ``GetCoils(index,addr,count)``
-*   **Description**: read the coil register
+*   **Description**: Read from a coil register
 *   **Supported Port**: ``29999``
-*   **Return**: ``ErrorID,{value1,value2,…,valuen},GetCoils(index,addr,count); //For ErrorID, 0
-    means normal, and -1 means failing to be obtained; For table, it returns
-    {value1,value2...,valuen} by variable type``
+*   **Return**: ``ErrorID,{value_1,value_2,…,value_n},GetCoils(index,addr,count); // ErrorID 0
+    means normal, -1 means failure to be read; For table, it returns {value_1,value_2...,value_n}
+    by variable type``
 *   **Parameters**:
 
 .. list-table::
@@ -1348,6 +1443,8 @@ GetCoils
     * - count
       - int
       - The value ranges from 1 to 16
+
+From device 0 at address 1000, read 3.
 
 ::
 
@@ -1363,10 +1460,10 @@ SetCoils
 --------
 
 *   **Function**: ``SetCoils(index,addr,count,valTab)``
-*   **Description**: write the coil register.
+*   **Description**: Write to the coil register.
 *   **Supported Port**: ``29999``
-*   **Return**: ``ErrorID,{},SetCoils(index,addr,count,valTab); //For ErrorID, 0 means normal, and
-    -1 means failing to be set``
+*   **Return**: ``ErrorID,{},SetCoils(index,addr,count,valTab); // ErrorID 0 means normal, -1 means
+    failure to be set``
 *   **Parameters**:
 
 .. list-table::
@@ -1384,10 +1481,12 @@ SetCoils
       - Depending on the slave station configuration
     * - count
       - int
-      - The value ranges from 1 to 16
+      - The value ranges from 1 - 16
     * - valTab
       - string
       - address of the coils
+
+To device 0 at address 1000, write 3 {1,0,1}.
 
 ::
 
@@ -1403,11 +1502,11 @@ GetHoldRegs
 -----------
 
 *   **Function**: ``GetHoldRegs(index,addr, count,valType)``
-*   **Description**: read the holding register value
+*   **Description**: Read from a holding register value
 *   **Supported Port**: ``29999``
-*   **Return**: ``ErrorID,{value1,value2,…,valuen},GetHoldRegs(index,addr, count,valType); //For
-    ErrorID, 0 means normal, and -1 means failing to be obtained; For table, it returns
-    {value1,value2...,valuen} by variable type``
+*   **Return**: ``ErrorID,{value_1,value_2,…,value_n},GetHoldRegs(index,addr, count,valType);
+    //ErrorID 0 means normal, -1 means failure to be read; For table, it returns
+    {value_1,value_2...,value_n} by variable type``
 *   **Parameters**:
 
 .. list-table::
@@ -1419,8 +1518,7 @@ GetHoldRegs
       - Description
     * - index
       - int
-      - Internal index, supporting at most five devices, range: 0~4
-
+      - Internal index, supporting at most five devices, range: 0 - 4
     * - addr
       - int
       - address of the holding registers. Depending on the slave station configuration
@@ -1429,6 +1527,7 @@ GetHoldRegs
       - number of the holding registers
     * - valType
       - string
+
       - *   U16: read 16-bit unsigned integer ( two bytes, occupy one register)
         *   U32: read 32-bit unsigned integer (four bytes, occupy two registers)
         *   F32: read 32-bit single-precision floating-point number (four bytes, occupy two
@@ -1452,10 +1551,10 @@ SetHoldRegs
 -----------
 
 *   **Function**: ``SetHoldRegs(index,addr, count,valTab,valType)``
-*   **Description**: write to a holding register
+*   **Description**: Write to a holding register
 *   **Supported Port**: ``29999``
-*   **Return**: ``ErrorID,{},SetHoldRegs(index,addr, count,valTab,valType);//For ErrorID, 0 means
-    normal, and -1 means failing to be set``
+*   **Return**: ``ErrorID,{},SetHoldRegs(index,addr, count,valTab,valType);// ErrorID 0 means
+    normal, -1 means failure to be set``
 *   **Parameters**:
 
 .. list-table::
@@ -1481,8 +1580,10 @@ SetHoldRegs
       - string
       - *   U16: read 16-bit unsigned integer ( two bytes, occupy one register)
         *   U32: read 32-bit unsigned integer (four bytes, occupy two registers)
-        *   F32: read 32-bit single-precision floating-point number (four bytes, occupy two registers)
-        *   F64: read 64-bit double-precision floating-point number (eight bytes, occupy four registers)
+        *   F32: read 32-bit single-precision floating-point number (four bytes, occupy two
+            registers)
+        *   F64: read 64-bit double-precision floating-point number (eight bytes, occupy four
+            registers)
 
 
 Starting at address 3095, write two 16-bit unsigned integer values 6000,300
@@ -1501,13 +1602,15 @@ GetErrorID
 ----------
 
 *   **Function**: ``GetErrorID()``
-*   **Description**: Get the robot error code
+*   **Description**: Get robot error codes
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{[[id,…,id], [id], [id], [id], [id], [id], [id]]},GetErrorID();//[id,...,
     id] is the alarm information of the controller and algorithm, where the collision detection
     value is -2, the safe skin collision detection value is -3. The last six [id] represent the
     alarm information of six servos respectively.``
 *   **Parameters**: None
+
+Get robot error codes.
 
 ::
 
@@ -1516,7 +1619,7 @@ GetErrorID
 
 .. note::
 
-    Note: For error code description, see `alarm_controller.json`_ and `alarm_servo.json`_
+    Note: For error code description, see `Error Code Descriptions`_.
 
 .. note::
 
@@ -1526,7 +1629,7 @@ DI
 --
 
 *   **Function**: ``DI(index)``
-*   **Description**: get the status of the digital input port.
+*   **Description**: Get the status of a digital input port
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{value},DI(index);//value: the current index status value. The value
     range is 0/1.``
@@ -1544,6 +1647,8 @@ DI
       - digital input index, range: 1 - 32 or 100 - 1000. The value range is 100 - 1000 only when
         you configure the extended I/O module
 
+Get the status of DI index 1.
+
 ::
 
     DI(1)
@@ -1553,7 +1658,7 @@ ToolDI
 ------
 
 *   **Function**: ``ToolDI(index)``
-*   **Description**: get the status of tool digital input port
+*   **Description**: Get the status of a tool digital input port
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{value},ToolDI(index); //value: port status of corresponding index,
     range: 1 or 0``
@@ -1570,16 +1675,18 @@ ToolDI
       - int
       - digital input index, range: 1 or 2
 
+Get the status of ToolDI index 2.
+
 ::
 
     ToolDI(2)
     # 0,{1},ToolDI(2);
 
 AI
---------------
+--
 
 *   **Function**: ``AI(index)``
-*   **Description**: get the voltage of analog input port of controller (immediate command).
+*   **Description**: Get the voltage of controller analog input port (immediate command).
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{value},AI(index); //value: voltage of corresponding index``
 *   **Parameters**:
@@ -1595,16 +1702,18 @@ AI
       - int
       - index of controller, range: 1 or 2
 
+Get the voltage of controller AI index 2.
+
 ::
 
     AI(2)
     # 0,{3.5},AI(2);
 
 ToolAI
---------------
+------
 
 *   **Function**: ``ToolAI(index)``
-*   **Description**: get the voltage of terminal analog input (immediate command).
+*   **Description**: Get the voltage of tool analog input (immediate command).
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{value},ToolAI(index); //value: voltage of corresponding index``
 *   **Parameters**:
@@ -1618,7 +1727,9 @@ ToolAI
       - Description
     * - index
       - int
-      - index of terminal analog input, range: 1 or 2
+      - index of tool analog input, range: 1 or 2
+
+Get the voltage of tool AI index 1.
 
 ::
 
@@ -1626,13 +1737,13 @@ ToolAI
     # 0,{1.5},ToolAI(1);
 
 DIGroup
---------------
+-------
 
 *   **Function**: ``DIGroup(index_1,index_2,...,index_n)``
-*   **Description**: get the state of a group of digital input ports
+*   **Description**: Get the state of a group of digital input ports
 *   **Supported Port**: ``29999``
-*   **Return**: ``ErrorID,{value1,value2,...,valuen},DIGroup(index_1,index_2,...,index_n);
-    //value1...valuen: current voltage from index_1 to index_n``
+*   **Return**: ``ErrorID,{value_1,value_2,...,value_n},DIGroup(index_1,index_2,...,index_n);
+    //value_1...value_n: current voltage from index_1 to index_n``
 *   **Parameters**:
 
 .. list-table::
@@ -1653,6 +1764,8 @@ DIGroup
       - int
       - index of digit input port, range: 1 - 32 or 100 - 1000. The value range is 100 - 1000 only
         when you configure the extended I/O module
+
+Get the state of DI indices [4,6,2,7].
 
 ::
 
@@ -1701,7 +1814,7 @@ Set output ports 4, 6, 2, and 7 to 1, 0, 1 and 0 respectively
     # 0,{},DOGroup(4,1,6,0,2,1,7,0);
 
 BrakeControl
---------------
+------------
 
 *   **Function**: ``BrakeControl(axisID,value)``
 *   **Description**: Control brake. The control of the brake should be carried out under the
@@ -1727,7 +1840,7 @@ BrakeControl
         *   0: disable the brake
         *   1: enable the brake
 
-Open the brake on joint 1.
+Enable the brake on joint 1.
 
 ::
 
@@ -1739,17 +1852,23 @@ Open the brake on joint 1.
     This command is supported in CR controller version 3.5.2 and above.
 
 StartDrag
---------------
+---------
 
 *   **Function**: ``StartDrag()``
-*   **Description**: Enter drag mode(in error state, can not enter drag mode).
+*   **Description**: Enter drag mode.
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},StartDrag();``
 *   **Parameters**: None
 
+Enable drag mode.
+
 ::
 
     StartDrag()
+
+.. note::
+
+    Drag mode cannot be enabled when the robot is in an error state.
 
 .. note::
 
@@ -1763,6 +1882,8 @@ StopDrag
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},StopDrag();``
 *   **Parameters**: None
+
+Disable drag mode.
 
 ::
 
@@ -1828,7 +1949,7 @@ SetTerminalKeys
         *   0: disable
         *   1: enable
 
-The terminal button is disabled
+Disable terminal buttons
 
 ::
 
@@ -1842,7 +1963,7 @@ SetTerminal485
 --------------
 
 *   **Function**: ``SetTerminal485(baudRate, dataLen, parityBit, stopBit)``
-*   **Description**: set the terminal 485 parameter
+*   **Description**: Set the terminal 485 parameter
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},SetTerminal485(status);``
 *   **Parameters**:
@@ -1881,12 +2002,14 @@ GetTerminal485
 --------------
 
 *   **Function**: ``GetTerminal485()``
-*   **Description**: get the terminal 485 parameter
+*   **Description**: Get the terminal 485 interface parameters
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{baudRate, dataLen, parityBit, stopBit},GetPose(); //{baudRate, dataLen,
     parityBit, stopBit} represents baud rate, data bit, parity check bit and stop bit
     respectively.``
 *   **Parameters**: None
+
+Get the parameters of the terminal 485 interface.
 
 ::
 
@@ -1901,7 +2024,7 @@ LoadSwitch
 --------------
 
 *   **Function**: ``LoadSwitch(status)``
-*   **Description**: set the load setting state.
+*   **Description**: Set the load setting state.
 *   **Supported Port**: ``29999``
 *   **Return**: ``ErrorID,{},LoadSwitch(status);``
 *   **Parameters**:
@@ -1915,10 +2038,12 @@ LoadSwitch
       - Description
     * - status
       - int
-      - set the load setting state:
+      - Set the load setting state:
 
         *   0: off
         *   1: on. Enabling load Settings increases collision sensitivity
+
+Enable load settings.
 
 ::
 
@@ -2182,61 +2307,57 @@ Robot Mode returns the mode of robot as follows:
 | 120       | CR10V2  |
 +-----------+---------+
 
-
 Motion Port Commands
 ====================
 
-The following table shows the motion command supported by the ``30003`` port.
+The following commands are supported by the Motion ``30003`` port.
 
-CR series is a six-axis product. The parameters in the motion command are agreed according to the
-six coordinate values of CR series robot.
-
-
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| Parameter       | Description                                                                                                                      |
-+=================+==================================================================================================================================+
-| `MovJ`_         | point to point movement, the target point is Cartesian point                                                                     |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `MovL`_         | linear movement, the target point is Cartesian point                                                                             |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `JointMovJ`_    | point to point movement, the target point is joint point                                                                         |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `MovLIO`_       | set the status of digital output port in straight line movement (can set several groups)                                         |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `MovJIO`_       | set the status of digital output port in point-to-point movement, and the target point is Cartesian point                        |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `Arc`_          | arc movement, needs to combine with other motion commands                                                                        |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `ServoJ`_       | dynamic following command based on joint space                                                                                   |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `ServoP`_       | dynamic following command based on Cartesian space                                                                               |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `MoveJog`_      | Jogging                                                                                                                          |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `StartTrace`_   | Trajectory fitting                                                                                                               |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `StartPath`_    | Trajectory playback                                                                                                              |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| StartFCTrace    | Trajectory fitting with force control NOT IMPLEMENTED                                                                            |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `Sync`_         | Blocking program execution                                                                                                       |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `RelMovJTool`_  | Relative motion is performed along the tool coordinate system, and the end motion is joint motion                                |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `RelMovLTool`_  | Relative motion is performed along the tool coordinate system, and the end motion is linear motion                               |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `RelMovJUser`_  | Relative motion is performed along the user coordinate system, and the end motion mode is the joint motion                       |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `RelMovLUser`_  | Relative motion performed along the user coordinate system, and the end motion mode is a linear motion                           |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `RelJointMovJ`_ | Relative motion instruction is conducted along the joint coordinate system of each axis, and the end motion mode is joint motion |
-+-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | Parameter       | Description                                                                                                                      |
+.. +=================+==================================================================================================================================+
+.. | `MovJ`_         | point to point movement, the target point is Cartesian point                                                                     |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `MovL`_         | linear movement, the target point is Cartesian point                                                                             |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `JointMovJ`_    | point to point movement, the target point is joint point                                                                         |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `MovLIO`_       | set the status of digital output port in straight line movement (can set several groups)                                         |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `MovJIO`_       | set the status of digital output port in point-to-point movement, and the target point is Cartesian point                        |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `Arc`_          | arc movement, needs to combine with other motion commands                                                                        |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `ServoJ`_       | dynamic following command based on joint space                                                                                   |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `ServoP`_       | dynamic following command based on Cartesian space                                                                               |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `MoveJog`_      | Jogging                                                                                                                          |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `StartTrace`_   | Trajectory fitting                                                                                                               |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `StartPath`_    | Trajectory playback                                                                                                              |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | StartFCTrace    | Trajectory fitting with force control NOT IMPLEMENTED                                                                            |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `Sync`_         | Blocking program execution                                                                                                       |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelMovJTool`_  | Relative motion is performed along the tool coordinate system, and the end motion is joint motion                                |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelMovLTool`_  | Relative motion is performed along the tool coordinate system, and the end motion is linear motion                               |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelMovJUser`_  | Relative motion is performed along the user coordinate system, and the end motion mode is the joint motion                       |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelMovLUser`_  | Relative motion performed along the user coordinate system, and the end motion mode is a linear motion                           |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
+.. | `RelJointMovJ`_ | Relative motion instruction is conducted along the joint coordinate system of each axis, and the end motion mode is joint motion |
+.. +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 
 MovJ
 ----
 
 *   **Function**: ``MovJ(X,Y,Z,Rx,Ry,Rz,User=index,Tool=index,SpeedJ=R,AccJ=R)``
-*   **Description**: point to point movement, the target point is Cartesian point
+*   **Description**: Point to point movement provided a Cartesian target with smooth movement in
+    joint space
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},MovJ(X,Y,Z,Rx,Ry,Rz);``
 *   **Parameters**:
@@ -2274,6 +2395,9 @@ the same meaning as SpeedJ and AccJ setting by port ``29999``.
 User: indicates the User index 0 to 9. The default value is the last used value.
 Tool: Tool index 0 to 9. The default value is the last used value.
 
+Move to X=-500mm, Y=100mm, Z=200mm, Rx=150°, Ry=0°, Rz=90°, with a 50% acceleration ratio. Movement
+will be done smoothly in the joint space.
+
 ::
 
     MovJ(-500,100,200,150,0,90,AccJ=50)
@@ -2283,7 +2407,8 @@ MovL
 ----
 
 *   **Function**: ``MovL(X,Y,Z,Rx,Ry,Rz,User=index,Tool=index,SpeedL=R,AccL=R)``
-*   **Description**: linear movement, the target point is Cartesian point
+*   **Description**: Point to point movement provided a Cartesian target with smooth movement in
+    Cartesian space, i.e. movement will be linear.
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},MovL(X,Y,Z,Rx,Ry,Rz,SpeedL=R,AccL=R);``
 *   **Parameters**:
@@ -2321,6 +2446,9 @@ has the same meaning as SpeedJ and AccJ setting by port ``29999``.
 User: indicates the User index 0 to 9. The default value is the last used value.
 Tool: Tool index 0 to 9. The default value is the last used value.
 
+Move to X=-500mm, Y=100mm, Z=200mm, Rx=150°, Ry=0°, Rz=90°, with a 50% velocity ratio. Movement
+will be done smoothly in the Cartesian space.
+
 ::
 
     MovL(-500,100,200,150,0,90,SpeedL=60)
@@ -2330,7 +2458,7 @@ JointMovJ
 ---------
 
 *   **Function**: ``JointMovJ(J1,J2,J3,J4,J5,J6)``
-*   **Description**: point to point movement, the target point is joint point
+*   **Description**: Point to point movement with joint position targets
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},JointMovJ(J1,J2,J3,J4,J5,J6,SpeedJ=R,AccJ=R);``
 *   **Parameters**:
@@ -2364,6 +2492,8 @@ JointMovJ
 SpeedJ and AccJ are optional parameters, indicating setting joint velocity ratio and acceleration
 ratio respectively. The value has the same meaning as SpeedJ and AccJ setting by port ``29999``.
 
+Move joints to position [0,0,-90,0,90,0], with a 50% acceleration ratio.
+
 ::
 
     JointMovJ(0,0,-90,0,90,0)
@@ -2374,8 +2504,8 @@ MovLIO
 
 *   **Function**: ``MovLIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
     ,{Mode,Distance,Index,Status},User=index,Tool=index,SpeedL=R,AccL=R)``
-*   **Description**: set the status of digital output port in straight line movement, and the
-    target point is Cartesian point
+*   **Description**: Point to point movement provided a Cartesian target with smooth movement in
+    Cartesian space, i.e. movement will be linear, while simultaneously setting IO status.
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},MovLIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
     ,{Mode,Distance,Index,Status},SpeedL=R,AccL=R);``
@@ -2445,8 +2575,8 @@ MovJIO
 
 *   **Function**: ``MovJIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...
     ,{Mode,Distance,Index,Status},User=index,Tool=index,SpeedJ=R,AccJ=R)``
-*   **Description**: set the status of digital output port in point-to-point movement, and the
-    target point is Cartesian point
+*   **Description**: Point to point movement provided a Cartesian target with smooth movement in
+    joint space, while simultaneously setting IO status.
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},MovJIO(X,Y,Z,Rx,Ry,Rz,{Mode,Distance,Index,Status},...,{Mode,Distance,Index,Status},SpeedJ=R,AccJ=R);``
 *   **Parameters**:
@@ -2514,8 +2644,8 @@ Arc
 ---
 
 *   **Function**: ``Arc(X1,Y1,Z1,Rx1,Ry1,Rz1,X2,Y2,Z2,Rx2,Ry2,Rz2,User=index,Tool=index,SpeedL=R,AccL=R)``
-*   **Description**: move from the current position to a target position in an arc interpolated
-    mode under the Cartesian coordinate system This command needs to combine with other motion
+*   **Description**: Move from the current position to a target position in an arc-interpolated
+    mode under the Cartesian coordinate system. This command needs to combine with other motion
     commands to obtain the starting point of an arc trajectory
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},Arc(X1,Y1,Z1,Rx1,Ry1,Rz1,X2,Y2,Z2,Rx2,Ry2,Rz2,SpeedL=R,AccL=R);``
@@ -2574,8 +2704,8 @@ ServoJ
 ------
 
 *   **Function**: ``ServoJ(J11,J12,J13,J14,J15,J16)``
-*   **Description**: dynamic following command based on joint space. This command can be
-    interrupted by another ServoJ command.
+*   **Description**: Dynamic movement command in the joint space. This command can be interrupted
+    by another ServoJ command.
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},ServoJ(J11,J12,J13,J14,J15,J16);``
 *   **Parameters**:
@@ -2619,7 +2749,7 @@ ServoP
 ------
 
 *   **Function**: ``ServoP(X1,Y1,Z1,A1,B1,C1)``
-*   **Description**: dynamic following command based on Cartesian space. This command can be
+*   **Description**: Dynamic movement command in the Cartesian space. This command can be
     interrupted by another ServoP command.
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},ServoP(X1,Y1,Z1,A1,B1,C1);``
@@ -2664,9 +2794,11 @@ MoveJog
 -------
 
 *   **Function**: ``MoveJog(axisID,CoordType=typeValue,User=index,Tool=index)``
-*   **Description**: Jogging movement. The movement is not fixed distance. CR controller v3.5.2 and MG400/M1Pro controller v1.5.6 and later support this command.
+*   **Description**: Command jogging movement
 *   **Supported Port**: ``30003``
-*   **Return**: ``ErrorID,{},MoveJog(axisID,CoordType=typeValue,User=index,Tool=index); If ErrorID is -1, it indicates that the set user coordinate index or tool coordinate index does not exist``
+*   **Return**: ``ErrorID,{},MoveJog(axisID,CoordType=typeValue,User=index,Tool=index); If ErrorID
+    is -1, it indicates that the set user coordinate index or tool coordinate index does not
+    exist``
 *   **Parameters**:
 
 .. list-table::
@@ -2718,25 +2850,24 @@ The optional parameters CoordType, User, and Tool are ignored if the User sends 
 again.
 
 
-Joint 2 is moving in the negative direction, and then it stops.
+Move J2 in the negative direction, and then stop.
 
 ::
 
     MoveJog(j2-)
     # Return: 0,{},MoveJog(j2-);
-
-::
-
     MoveJog()
     # 0,{},MoveJog();
 
+.. note::
 
+    This command is supported in CR controller version 3.5.2 and above.
 
 StartTrace
 ----------
 
 *   **Function**: ``StartTrace(traceName)``
-*   **Description**: trajectory fitting, the trajectory file is a Cartesian point
+*   **Description**: Trajectory fitting. The trajectory file is a Cartesian point
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},StartTrace(traceName);``
 *   **Parameters**:
@@ -2780,7 +2911,7 @@ StartPath
 ---------
 
 *   **Function**: ``StartPath(traceName,const,cart)``
-*   **Description**: trajectory playback (joint point in the trajectory file).
+*   **Description**: Trajectory playback (joint point in the trajectory file).
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},StartTrace(traceName);``
 *   **Parameters**:
@@ -2826,10 +2957,13 @@ Sync
 ----
 
 *   **Function**: ``Sync()``
-*   **Description**: The blocking program executes queue commands and does not return until all queue commands have been executed
+*   **Description**: A blocking command that executes queue commands and does not return until all
+    queue commands have been executed
 *   **Supported Port**: ``30003``
 *   **Return**: ``ErrorID,{},Sync();``
 *   **Parameters**: None
+
+Block until all queue commands are executed.
 
 ::
 
@@ -2838,10 +2972,13 @@ Sync
 RelMovJTool
 -----------
 
-*   **Function**: ``RelMovJTool(offsetX, offsetY,offsetZ, offsetRx,offsetRy,offsetRz, Tool,SpeedJ=R, AccJ=R,User=Index)``
-*   **Description**: Perform relative motion along the tool coordinate system, and the end motion is joint motion
+*   **Function**:
+    ``RelMovJTool(offsetX,offsetY,offsetZ,offsetRx,offsetRy,offsetRz,Tool,SpeedJ=R,AccJ=R,User=Index)``
+*   **Description**: Perform joint-interpolated relative motion in a tool coordinate system
 *   **Supported Port**: ``30003``
-*   **Return**: ``ErrorID,{},RelMovJTool(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,Tool,SpeedJ=R, AccJ=R,User=Index);``
+*   **Return**:
+    ``ErrorID,{},RelMovJTool(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,Tool,SpeedJ=R,
+    AccJ=R,User=Index);``
 *   **Parameters**:
 
 .. list-table::
@@ -2879,6 +3016,9 @@ the value of SpeedL and AccL set by port ``29999``.
 
 User: indicates the User index 0 to 9. The default value is the last used value.
 Tool: Tool index 0 to 9. The default value is the last used value.
+
+Move 10 mm relative to the current end position in the X, Y, and Z directions. Movement will be
+smooth in the joint space.
 
 ::
 
@@ -2937,6 +3077,9 @@ the value of SpeedL and AccL set by port ``29999``.
 User: indicates the User index 0 to 9. The default value is the last used value.
 Tool: Tool index 0 to 9. The default value is the last used value.
 
+Move 10 mm relative to the current end position in the X, Y, and Z directions. Movement will be
+smooth in the Cartesian space.
+
 ::
 
     RelMovLTool(10,10,10,0,0,0,0)
@@ -2948,8 +3091,7 @@ Tool: Tool index 0 to 9. The default value is the last used value.
 RelMovJUser
 -----------
 
-*   **Function**: ``RelMovJUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz, User,SpeedJ=R,
-    AccJ=R,Tool=Index)``
+*   **Function**: ``RelMovJUser(OffsetX,OffsetY,OffsetZ,OffsetRx,OffsetRy,OffsetRz,User,SpeedJ=R,AccJ=R,Tool=Index)``
 *   **Description**: Perform relative motion along the user coordinate system, and the end motion
     mode is the joint motion
 *   **Supported Port**: ``30003``
@@ -3052,13 +3194,12 @@ Tool: Tool index 0 to 9. The default value is the last used value.
 RelJointMovJ
 ------------
 
-*   **Function**: ``RelJointMovJ(Offset1,Offset2,Offset3,Offset4,Offset5,Offset6,SpeedJ=R,
-    AccJ=R)``
+*   **Function**: ``RelJointMovJ(Offset1,Offset2,Offset3,Offset4,Offset5,Offset6,SpeedJ=R,AccJ=R)``
 *   **Description**: Perform relative motion along the joint coordinate system of each axis, and
     the end motion mode is joint motion
 *   **Supported Port**: ``30003``
-*   **Return**: ``ErrorID,{},RelJointMovJ(Offset1,Offset2,Offset3,Offset4,Offset5,Offset6,SpeedJ=R,
-    AccJ=R);``
+*   **Return**:
+    ``ErrorID,{},RelJointMovJ(Offset1,Offset2,Offset3,Offset4,Offset5,Offset6,SpeedJ=R,AccJ=R);``
 *   **Parameters**:
 
 .. list-table::
