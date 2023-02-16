@@ -55,8 +55,7 @@ Format When Receiving Messages
 
 The return message format is shown above. An ``ErrorID`` of zero indicates that the command was
 received successfully. If the ErrorID is non-zero value, it indicates an error has occurred in the
-command. See :ref:`Error Code Descriptions <tcpip-protocol-error-code-descriptions>` for a detailed
-description.
+command. See `Error Code Descriptions`_ for a detailed description.
 
 ``{value1,value2,value3,...Valuen}`` represents the return value. If there is no return value,
 ``{}`` will be returned.
@@ -1926,8 +1925,8 @@ LoadSwitch
     LoadSwitch(1)
 
 
-Real-time Feedback Port
-=======================
+Real-time Feedback Port Commands
+================================
 
 ``30004`` port is the real-time feedback port (``30004``, ``30005``, and ``30006`` ports are
 supported by controller 3.5.2 or later). The slave can receive information from the robot every
@@ -2184,8 +2183,8 @@ Robot Mode returns the mode of robot as follows:
 +-----------+---------+
 
 
-Motion Port
-===========
+Motion Port Commands
+====================
 
 The following table shows the motion command supported by the ``30003`` port.
 
@@ -2218,7 +2217,7 @@ six coordinate values of CR series robot.
 +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `StartPath`_    | Trajectory playback                                                                                                              |
 +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
-| `StartFCTrace`_ | Trajectory fitting with force control NOT IMPLEMENTED                                                                            |
+| StartFCTrace    | Trajectory fitting with force control NOT IMPLEMENTED                                                                            |
 +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
 | `Sync`_         | Blocking program execution                                                                                                       |
 +-----------------+----------------------------------------------------------------------------------------------------------------------------------+
@@ -3102,3 +3101,29 @@ value set by port ``29999``.
 
 Error Code Descriptions
 =======================
+
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Error code | Description                                           | Note                                                                                                                                        |
++============+=======================================================+=============================================================================================================================================+
+| 0          | No error                                              | operate successfully                                                                                                                        |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -1         | fail to get                                           | Failed to receive or establish                                                                                                              |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ...        | ...                                                   | ...                                                                                                                                         |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -10000     | Command error                                         | The command does not exist                                                                                                                  |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -20000     | Parameter number error                                | The number of parameters in the command is incorrect                                                                                        |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -30001     | The first parameter has an incorrect parameter type   | 30000 indicates that the parameter type is incorrect.<br/>The last bit 1 indicates that the parameter type of the first parameter is wrong  |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -30002     | The second parameter has an incorrect parameter type  | 30000 indicates that the parameter type is incorrect.<br/>The last bit 2 indicates that the parameter type of the second parameter is wrong |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ...        | ...                                                   | ...                                                                                                                                         |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -40001     | The first parameter has an incorrect parameter range  | -40000 indicates that the parameter range is incorrect.<br/>The last bit of 1 indicates that the range of the first parameter is wrong      |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| -40002     | The second parameter has an incorrect parameter range | -40000 indicates that the parameter range is incorrect.<br/>The last bit of 2 indicates that the range of the second parameter is wrong     |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| ...        | ...                                                   | ...                                                                                                                                         |
++------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
