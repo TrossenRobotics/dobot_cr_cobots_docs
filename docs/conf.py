@@ -130,7 +130,7 @@ html_context = {
     'display_github': True, # Integrate GitHub
     'github_user': 'TrossenRobotics', # Username
     'github_repo': 'dobot_cr_cobots_docs', # Repo name
-    'github_version': 'main/', # Version
+    'github_version': 'main/docs/', # Version
     'conf_py_path': '', # Path in the checkout to the docs root
     'source_suffix': '.rst', # Change source suffix to rst
 }
