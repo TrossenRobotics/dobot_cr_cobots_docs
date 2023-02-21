@@ -2,7 +2,7 @@
 DobotStudio Pro
 ================
 
-This section details how to use the DobotStudio Pro to control your CR-Series Cobot.
+This section details how to use DobotStudio Pro to control your CR-Series Cobot.
 
 .. toctree::
     :maxdepth: 1

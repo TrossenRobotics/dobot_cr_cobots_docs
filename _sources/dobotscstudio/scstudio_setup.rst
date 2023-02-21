@@ -2,6 +2,10 @@
 Setup
 =====
 
+.. attention::
+
+    DobotSCStudio has been deprecated in favor of :doc:`DobotStudio Pro <../dobotstudiopro>`.
+
 This section provides instructions on setting up DobotSCStudio on your remote terminal.
 
 .. note::
