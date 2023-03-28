@@ -26,7 +26,7 @@ Connecting to the Robot
 =======================
 
 1.  Make sure that your robot is turned on and that your remote terminal is connected to the cobot's
-    network. After launching the DobotSCStudio, set your IP settings to track the right address. See
+    network. After launching the DobotStudio Pro, set your IP settings to track the right address. See
     the :doc:`Networking <../getting_started/networking>` section for details.
 
 2.  Start DobotStudio Pro. Select your device from the dropdown menu and click **Connect**.
